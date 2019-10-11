@@ -1,11 +1,35 @@
 import React, { useState } from 'react'
-import NavigationService from '../../navigationService'
+import NavigationService from '~/navigationService'
 import { ImageBackground, Text, View, Image, TextInput, TouchableHighlight, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
 import * as firebase from 'firebase'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import AppText from '../../helpers/AppText'
-import styles from './styles'
+import AppText from '~/helpers/AppText'
+import styles from '../styles'
+
+const Error = ({ error }) => (
+  error && <AppText style={[styles.whiteText, { textAlign: 'center' }]}>
+  Combinación de email y constraseña no aceptada.
+  </AppText>
+)
+
+const Authenticating = ({ authenticating }) => (
+  authenticating && <ActivityIndicator />
+)
+
+const initialValues = {
+  email: '',
+  password: ''
+}
+
+const schema = Yup.object().shape({
+  email: Yup.string()
+    .email('Email inválido')
+    .required('Requerido'),
+  password: Yup.string()
+    .min(6, 'Contraseña muy corta')
+    .required('Requerido')
+})
 
 const SignUp = () => {
   const [authenticating, setAuthenticating] = useState(false)
@@ -13,6 +37,7 @@ const SignUp = () => {
 
   const handleSubmit = async (values) => {
     setAuthenticating(true)
+    setError(null)
     try {
       await firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
       NavigationService.navigate('Home')
@@ -22,43 +47,15 @@ const SignUp = () => {
     }
   }
 
-  if (authenticating) {
-    return <ActivityIndicator />
-  }
-
-  if (error) {
-    return (
-      <View>
-        <Text>
-          {error.message}
-        </Text>
-      </View>
-    )
-  }
-
-  const initialValues = {
-    email: '',
-    password: ''
-  }
-
-  const schema = Yup.object().shape({
-    email: Yup.string()
-      .email('Email inválido')
-      .required('Requerido'),
-    password: Yup.string()
-      .min(6, 'Contraseña muy corta')
-      .required('Requerido')
-  })
-
   return (
     <ImageBackground
       style={styles.backgroundImage}
-      source={require('./background.jpg')}
+      source={require('../resources/background.jpg')}
     >
       <View style={styles.container}>
         <Image
           style={styles.signUpImage}
-          source={require('./signUpIconWhite.png')}
+          source={require('../resources/signUpIconWhite.png')}
         />
         <Formik
           initialValues={initialValues}
@@ -89,22 +86,25 @@ const SignUp = () => {
               {formikProps.touched.password && formikProps.errors.password &&
                 <AppText style={[styles.whiteText, styles.errorMessage]}>{formikProps.errors.password}</AppText>
               }
+              <Error error={error} />
+              <Authenticating authenticating={authenticating} />
               <TouchableHighlight
                 style={styles.signUpButton}
                 onPress={formikProps.handleSubmit}
               >
                 <AppText style={styles.whiteText}>
-              Registrarme
+                  Registrarme
                 </AppText>
               </TouchableHighlight>
-
             </KeyboardAvoidingView>
           )}
         </Formik>
-        <AppText style={[styles.whiteText, styles.hasAccount]}>Ya tenés una cuenta? {' '}
-          <AppText style={styles.underLineText}>
-           Inicia sesión
-          </AppText>
+        <AppText style={[styles.whiteText, styles.haveAccount]}>Ya tenés una cuenta? {' '}
+          <Text
+            onPress={() => NavigationService.navigate('Login')}
+            style={styles.underlineText}>
+           Iniciá sesión
+          </Text>
         </AppText>
       </View>
     </ImageBackground>

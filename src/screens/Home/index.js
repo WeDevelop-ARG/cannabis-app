@@ -4,8 +4,12 @@ import NavigationService from '../../navigationService'
 import * as firebase from 'firebase'
 
 const LogOut = async () => {
-  await firebase.auth().signOut()
-  NavigationService.navigate('SignUp')
+  try {
+    await firebase.auth().signOut()
+    NavigationService.navigate('SignUp')
+  } catch (error) {
+    console.log(error.message)
+  }
 }
 
 const Home = () => {
