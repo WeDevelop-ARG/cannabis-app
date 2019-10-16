@@ -1,12 +1,12 @@
 import React from 'react'
 import { Text, View, Button } from 'react-native'
-import NavigationService from '../../navigationService'
+import NavigationService from '~/navigationService'
 import * as firebase from 'firebase'
 
 const LogOut = async () => {
   try {
     await firebase.auth().signOut()
-    NavigationService.navigate('SignUp')
+    NavigationService.navigate('Login')
   } catch (error) {
     console.log(error.message)
   }

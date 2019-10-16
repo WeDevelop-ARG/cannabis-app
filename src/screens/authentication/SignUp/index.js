@@ -1,28 +1,24 @@
 import React, { useState } from 'react'
 import NavigationService from '~/navigationService'
-import { ImageBackground, Text, View, Image, TextInput, TouchableHighlight, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import DatabaseService from '~/databaseService'
+import { View } from 'react-native'
 import * as firebase from 'firebase'
-import { Formik } from 'formik'
 import * as Yup from 'yup'
-import AppText from '~/helpers/AppText'
 import styles from '../styles'
-
-const Error = ({ error }) => (
-  error && <AppText style={[styles.whiteText, { textAlign: 'center' }]}>
-  Combinación de email y constraseña no aceptada.
-  </AppText>
-)
-
-const Authenticating = ({ authenticating }) => (
-  authenticating && <ActivityIndicator />
-)
+import AccountLink from './AccountLink'
+import Background from '../Background'
+import SignUpHeader from './SignUpHeader'
+import SignUpForm from './SignUpForm'
 
 const initialValues = {
+  username: '',
   email: '',
   password: ''
 }
 
 const schema = Yup.object().shape({
+  username: Yup.string()
+    .required('Requerido'),
   email: Yup.string()
     .email('Email inválido')
     .required('Requerido'),
@@ -39,8 +35,26 @@ const SignUp = () => {
     setAuthenticating(true)
     setError(null)
     try {
-      await firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
-      NavigationService.navigate('Home')
+      if (await DatabaseService.usernameAlreadyInUse(values.username)) {
+        throw new Error('Nombre de usuario no válido')
+      }
+
+      const userCredentials = await firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
+      const user = userCredentials.user
+
+      await user.updateProfile({
+        displayName: values.username
+      })
+
+      const newUserUID = user.uid
+      const newUserData = {
+        email: values.email,
+        username: values.username
+      }
+
+      await DatabaseService.set(`users/${newUserUID}`, newUserData)
+
+      NavigationService.navigate('MainApp')
     } catch (error) {
       setError(error)
       setAuthenticating(false)
@@ -48,66 +62,19 @@ const SignUp = () => {
   }
 
   return (
-    <ImageBackground
-      style={styles.backgroundImage}
-      source={require('../resources/background.jpg')}
-    >
+    <Background>
       <View style={styles.container}>
-        <Image
-          style={styles.signUpImage}
-          source={require('../resources/signUpIconWhite.png')}
-        />
-        <Formik
+        <SignUpHeader />
+        <SignUpForm
           initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={schema}
-        >
-          {formikProps => (
-            <KeyboardAvoidingView style={styles.signUpForm}>
-              <AppText style={[styles.whiteText, { fontSize: 18 }]}> Crear cuenta</AppText>
-              <TextInput
-                style={styles.label}
-                placeholder='email@ejemplo.com'
-                placeholderTextColor='white'
-                onChangeText={formikProps.handleChange('email')}
-                value={formikProps.values.email}
-              />
-              {formikProps.touched.email && formikProps.errors.email &&
-                <AppText style={[styles.whiteText, styles.errorMessage]}>{formikProps.errors.email}</AppText>
-              }
-              <TextInput
-                style={styles.label}
-                placeholder='contraseña'
-                placeholderTextColor='white'
-                secureTextEntry
-                onChangeText={formikProps.handleChange('password')}
-                value={formikProps.values.password}
-              />
-              {formikProps.touched.password && formikProps.errors.password &&
-                <AppText style={[styles.whiteText, styles.errorMessage]}>{formikProps.errors.password}</AppText>
-              }
-              <Error error={error} />
-              <Authenticating authenticating={authenticating} />
-              <TouchableHighlight
-                style={styles.signUpButton}
-                onPress={formikProps.handleSubmit}
-              >
-                <AppText style={styles.whiteText}>
-                  Registrarme
-                </AppText>
-              </TouchableHighlight>
-            </KeyboardAvoidingView>
-          )}
-        </Formik>
-        <AppText style={[styles.whiteText, styles.haveAccount]}>Ya tenés una cuenta? {' '}
-          <Text
-            onPress={() => NavigationService.navigate('Login')}
-            style={styles.underlineText}>
-           Iniciá sesión
-          </Text>
-        </AppText>
+          handleSubmit={handleSubmit}
+          schema={schema}
+          error={error}
+          authenticating={authenticating}
+        />
+        <AccountLink />
       </View>
-    </ImageBackground>
+    </Background>
   )
 }
 
