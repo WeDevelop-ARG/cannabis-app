@@ -10,6 +10,10 @@ const styles = StyleSheet.create({
     width: '75%',
     margin: '25%'
   },
+  loginForm: {
+    width: '75%',
+    margin: '25%'
+  },
   label: {
     margin: 13,
     paddingLeft: 15,
@@ -30,6 +34,13 @@ const styles = StyleSheet.create({
     padding: 10,
     alignSelf: 'center'
   },
+  loginButton: {
+    backgroundColor: 'rgba(92, 254, 78, 0.71)',
+    borderRadius: 40,
+    margin: 30,
+    padding: 10,
+    alignSelf: 'center'
+  },
   whiteText: {
     color: 'white'
   },
@@ -41,8 +52,17 @@ const styles = StyleSheet.create({
     height: 163,
     top: 57
   },
-  hasAccount: {
-    marginBottom: '10%'
+  loginImage: {
+    width: 163,
+    height: 163,
+    top: 57,
+    right: 10
+  },
+  haveAccount: {
+    bottom: 25
+  },
+  doesntHaveAccount: {
+    bottom: 25
   },
   errorMessage: {
     paddingLeft: 20

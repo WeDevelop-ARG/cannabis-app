@@ -8,7 +8,7 @@ const checkIfLoggedIn = () => {
     if (user) {
       NavigationService.navigate('Home')
     } else {
-      NavigationService.navigate('SignUp')
+      NavigationService.navigate('Login')
     }
   })
 }
