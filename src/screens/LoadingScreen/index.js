@@ -6,7 +6,7 @@ import * as firebase from 'firebase'
 const checkIfLoggedIn = () => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      NavigationService.navigate('Home')
+      NavigationService.navigate('MainApp')
     } else {
       NavigationService.navigate('Login')
     }

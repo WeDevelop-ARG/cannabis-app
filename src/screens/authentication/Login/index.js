@@ -1,23 +1,17 @@
 import React, { useState } from 'react'
 import NavigationService from '~/navigationService'
-import { ImageBackground, Text, View, Image, TextInput, TouchableHighlight, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import DatabaseService from '~/databaseService'
+import { View } from 'react-native'
 import * as firebase from 'firebase'
-import { Formik } from 'formik'
-import AppText from '~/helpers/AppText'
 import styles from '../styles'
-
-const Error = ({ error }) => (
-  error && <AppText style={[styles.whiteText, { textAlign: 'center' }]}>
-  El email y contraseña ingresados no coinciden con nuestros registros.
-  </AppText>
-)
-
-const Authenticating = ({ authenticating }) => (
-  authenticating && <ActivityIndicator />
-)
+import { isValidEmail } from '../utils'
+import Background from '../Background'
+import LoginHeader from './LoginHeader'
+import LoginForm from './LoginForm'
+import NoAccountLink from './NoAccountLink'
 
 const initialValues = {
-  email: '',
+  account: '',
   password: ''
 }
 
@@ -29,8 +23,15 @@ const Login = () => {
     setAuthenticating(true)
     setError(null)
     try {
-      await firebase.auth().signInWithEmailAndPassword(values.email, values.password)
-      NavigationService.navigate('Home')
+      let email = null
+      if (!isValidEmail(values.account)) {
+        email = await DatabaseService.queryEmailFromUsername(values.account)
+      } else {
+        email = values.account
+      }
+
+      await firebase.auth().signInWithEmailAndPassword(email, values.password)
+      NavigationService.navigate('MainApp')
     } catch (error) {
       setError(error)
       setAuthenticating(false)
@@ -38,59 +39,18 @@ const Login = () => {
   }
 
   return (
-    <ImageBackground
-      style={styles.backgroundImage}
-      source={require('../resources/background.jpg')}
-    >
+    <Background>
       <View style={styles.container}>
-        <Image
-          style={styles.loginImage}
-          source={require('../resources/whiteKey.png')}
-        />
-        <Formik
+        <LoginHeader />
+        <LoginForm
           initialValues={initialValues}
-          onSubmit={handleSubmit}
-        >
-          {formikProps => (
-            <KeyboardAvoidingView style={styles.loginForm}>
-              <AppText style={[styles.whiteText, { fontSize: 18 }]}> Iniciar Sesión</AppText>
-              <TextInput
-                style={styles.label}
-                placeholder='email@ejemplo.com'
-                placeholderTextColor='white'
-                onChangeText={formikProps.handleChange('email')}
-                value={formikProps.values.email}
-              />
-              <TextInput
-                style={styles.label}
-                placeholder='contraseña'
-                placeholderTextColor='white'
-                secureTextEntry
-                onChangeText={formikProps.handleChange('password')}
-                value={formikProps.values.password}
-              />
-              <Error error={error} />
-              <Authenticating authenticating={authenticating} />
-              <TouchableHighlight
-                style={styles.loginButton}
-                onPress={formikProps.handleSubmit}
-              >
-                <AppText style={styles.whiteText}>
-                  Ingresar
-                </AppText>
-              </TouchableHighlight>
-            </KeyboardAvoidingView>
-          )}
-        </Formik>
-        <AppText style={[styles.whiteText, styles.doesntHaveAccount]}>No tenes una cuenta? {' '}
-          <Text
-            onPress={() => NavigationService.navigate('SignUp')}
-            style={styles.underlineText}>
-           Registrate
-          </Text>
-        </AppText>
+          handleSubmit={handleSubmit}
+          error={error}
+          authenticating={authenticating}
+        />
+        <NoAccountLink />
       </View>
-    </ImageBackground>
+    </Background>
   )
 }
 
