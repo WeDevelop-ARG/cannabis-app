@@ -1,5 +1,8 @@
 /ios
 .env
+*.keystore
+gradle.properties
+build/
 
 #All next is react-native .gitignore
 
@@ -49,7 +52,6 @@ buck-out
 .gradle
 local.properties
 *.iml
-/android/
 
 # Node
 node_modules
