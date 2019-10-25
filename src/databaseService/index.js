@@ -81,6 +81,8 @@ const addDiagnoseIDToCurrentUser = async (diagnoseID, collectionPath = 'users') 
 
 export const addDiagnose = async (imageReferences, text, diagnosePath = 'diagnoses') => {
   try {
+    if (!Array.isArray(imageReferences)) imageReferences = [imageReferences]
+
     const user = AuthenticationService.getCurrentUserUID()
     const newDiagnoseData = {
       user,
