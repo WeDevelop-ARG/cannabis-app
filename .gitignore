@@ -1,5 +1,6 @@
 /ios
 .env
+_env
 *.keystore
 gradle.properties
 build/
