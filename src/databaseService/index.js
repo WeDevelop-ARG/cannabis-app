@@ -90,7 +90,7 @@ export const addDiagnose = async (imageReferences, text, diagnosePath = 'diagnos
       imageReferences
     }
     const newDiagnoseReference = await add(diagnosePath, newDiagnoseData)
-    await addDiagnoseIDToCurrentUser(newDiagnoseReference)
+    await addDiagnoseIDToCurrentUser(newDiagnoseReference.id)
   } catch (error) {
     throw new DatabaseError(error.message)
   }
