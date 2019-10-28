@@ -81,6 +81,8 @@ const addDiagnoseIDToCurrentUser = async (diagnoseID, collectionPath = 'users') 
 
 export const addDiagnose = async (imageReferences, text, diagnosePath = 'diagnoses') => {
   try {
+    if (!Array.isArray(imageReferences)) imageReferences = [imageReferences]
+
     const user = AuthenticationService.getCurrentUserUID()
     const newDiagnoseData = {
       user,
@@ -88,7 +90,7 @@ export const addDiagnose = async (imageReferences, text, diagnosePath = 'diagnos
       imageReferences
     }
     const newDiagnoseReference = await add(diagnosePath, newDiagnoseData)
-    await addDiagnoseIDToCurrentUser(newDiagnoseReference)
+    await addDiagnoseIDToCurrentUser(newDiagnoseReference.id)
   } catch (error) {
     throw new DatabaseError(error.message)
   }
