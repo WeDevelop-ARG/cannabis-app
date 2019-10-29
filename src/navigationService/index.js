@@ -1,6 +1,6 @@
-//this is just as it appears in the react navigation official docs https://reactnavigation.org/docs/en/navigating-without-navigation-prop.html
-
-import { NavigationActions } from 'react-navigation'
+// this is just as it appears in the react navigation official docs https://reactnavigation.org/docs/en/navigating-without-navigation-prop.html
+import React from 'react'
+import { NavigationActions, NavigationEvents } from 'react-navigation'
 
 let _navigator
 
@@ -16,6 +16,16 @@ function navigate (routeName, params) {
     })
   )
 }
+
+// this is our functions
+
+export const ForceRerenderOnNavigation = ({ resetStateFunction }) => (
+  <NavigationEvents
+    onWillFocus={() => {
+      resetStateFunction()
+    }}
+  />
+)
 
 export default {
   navigate,

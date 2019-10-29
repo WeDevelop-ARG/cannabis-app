@@ -87,10 +87,28 @@ export const addDiagnose = async (imageReferences, text, diagnosePath = 'diagnos
     const newDiagnoseData = {
       user,
       text,
-      imageReferences
+      imageReferences,
+      answered: false
     }
     const newDiagnoseReference = await add(diagnosePath, newDiagnoseData)
     await addDiagnoseIDToCurrentUser(newDiagnoseReference.id)
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
+export const getAnsweredDiagnosesForCurrentUser = async (howMany = 25, diagnosePath = 'diagnoses') => {
+  try {
+    const currentUserUID = AuthenticationService.getCurrentUserUID()
+    const querySnapshot = await firebase
+      .firestore()
+      .collection(diagnosePath)
+      .where('user', '==', currentUserUID)
+      .where('answered', '==', true)
+      .limit(howMany)
+      .get()
+
+    return querySnapshot.docs.map(doc => ({ ...doc.data() }))
   } catch (error) {
     throw new DatabaseError(error.message)
   }

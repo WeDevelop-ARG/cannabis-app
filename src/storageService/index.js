@@ -26,3 +26,11 @@ export const uploadImageAndReturnReference = async (imageURI) => {
     throw new StorageError('Could not upload image.')
   }
 }
+
+export const getDownloadURL = async (storageUUID) => {
+  try {
+    return await firebase.storage().ref(`images/${storageUUID}`).getDownloadURL()
+  } catch (error) {
+    throw new StorageError('Could not obtain image.')
+  }
+}
