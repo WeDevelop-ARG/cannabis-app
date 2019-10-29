@@ -4,6 +4,8 @@ _env
 *.keystore
 gradle.properties
 build/
+.cache/
+dist/
 
 #All next is react-native .gitignore
 
