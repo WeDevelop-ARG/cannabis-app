@@ -43,7 +43,9 @@ const DiagnoseResponse = () => {
         })
 
         setDiagnoses([...unanswered])
-        setCurrentDiagnose(diagnoseOnScreen)
+        if (diagnoseOnScreen !== currentDiagnose) {
+          setCurrentDiagnose(diagnoseOnScreen)
+        }
       })
   }
 
