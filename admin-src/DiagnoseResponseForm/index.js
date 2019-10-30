@@ -12,7 +12,26 @@ const schema = Yup.object().shape({
   answeredBy: Yup.string().required(' Required ')
 })
 
-const answerAs = ['AlFumeta', 'THCPower', '25gr', 'fernando_cannabis', 'sativa_91', 'RubenStonner', 'CRIPY', 'weedow']
+const answerAs = [
+  'AlFumeta',
+  'THCPower',
+  '25gr',
+  'fernando_cannabis',
+  'sativa_91',
+  'RubenStonner',
+  'CRIPY',
+  'weedow',
+  'ganjahman',
+  'tricoman',
+  'thegreendoctor',
+  'bluesativa',
+  'Sintabaco',
+  'paulaenverde',
+  'joseliyo',
+  'jamaica97',
+  'cannabisIndica',
+  'cogollosano'
+]
 
 export const DiagnoseResponseForm = ({ handleSubmit }) => {
   return (

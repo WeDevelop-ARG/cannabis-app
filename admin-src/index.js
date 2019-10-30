@@ -1,17 +1,53 @@
-import regeneratorRuntime from 'regenerator-runtime'
 import initFirebase from './initFirebase'
 import * as firebase from 'firebase'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { Button, ListGroup } from 'react-bootstrap'
+import { ListGroup } from 'react-bootstrap'
 import { DiagnoseResponseForm } from './DiagnoseResponseForm'
 import { DiagnoseInfo } from './DiagnoseInfo'
-import { getDownloadURLFromImages, getUnansweredDiagnoses } from './utils'
+import { getDownloadURLFromImages } from './utils'
 import './stylesheets/admin.css'
 
 const DiagnoseResponse = () => {
   const [currentDiagnose, setCurrentDiagnose] = useState(null)
   const [diagnoses, setDiagnoses] = useState([])
+
+  const attachQueryListenerForUnansweredDiagnoses = () => {
+    firebase
+      .firestore()
+      .collection('diagnoses')
+      .where('answered', '==', false)
+      .onSnapshot((querySnapshot) => {
+        let unanswered = diagnoses
+        let diagnoseOnScreen = currentDiagnose
+
+        querySnapshot.docChanges().forEach(docChange => {
+          const doc = docChange.doc
+          const changeType = docChange.type
+
+          if (changeType === 'added') {
+            if (!unanswered.find(diagnose => diagnose.id === doc.id)) {
+              unanswered.push({
+                id: doc.id,
+                ...doc.data()
+              })
+            }
+          }
+
+          if (changeType === 'removed') {
+            unanswered = unanswered.filter(diagnose => diagnose.id !== doc.id)
+            if (diagnoseOnScreen && diagnoseOnScreen.id === doc.id) {
+              diagnoseOnScreen = null
+            }
+          }
+        })
+
+        setDiagnoses([...unanswered])
+        setCurrentDiagnose(diagnoseOnScreen)
+      })
+  }
+
+  useEffect(() => attachQueryListenerForUnansweredDiagnoses(), [])
 
   const handleSubmit = async (values) => {
     const dataToUpdate = {
@@ -34,17 +70,8 @@ const DiagnoseResponse = () => {
     })
   }
 
-  const signalFetch = async () => {
-    setDiagnoses([])
-    setCurrentDiagnose(null)
-    setDiagnoses(await getUnansweredDiagnoses())
-  }
-
   return (
     <>
-      <Button onClick={async () => signalFetch()}>
-        Fetch diagnoses
-      </Button>
       <div className='row'>
         <ListGroup className='column'>
           {diagnoses && diagnoses.map((diagnose, index) => (
