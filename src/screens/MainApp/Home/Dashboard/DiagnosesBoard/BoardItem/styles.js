@@ -33,13 +33,13 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   answered: {
-    backgroundColor: 'green',
-    width: 30,
+    maxHeight: 30,
+    maxWidth: 30,
     marginLeft: 5
   },
   notAnswered: {
-    backgroundColor: 'gray',
-    width: 30,
+    maxHeight: 30,
+    maxWidth: 30,
     marginLeft: 5
   },
   titleText: {

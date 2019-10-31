@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, Image } from 'react-native'
 import styles from './styles'
 import cannabisLeaf from './resources/placeholder.png'
+import answeredIcon from './resources/answered.png'
+import notAnsweredIcon from './resources/notAnswered.png'
 
 const RealThumbnailOrPlaceholder = ({ thumbnail }) => (
   <Image
@@ -19,10 +21,9 @@ const parseTime = (date) => {
 }
 
 const AnsweredIcon = ({ answered }) => {
-  if (answered === false) {
-    return (<View style={styles.notAnswered} />)
-  }
-  return (<View style={styles.answered} />)
+  const icon = (answered === false) ? notAnsweredIcon : answeredIcon
+  const style = (answered === false) ? styles.notAnswered : styles.answered
+  return (<Image source={icon} style={style} />)
 }
 
 const BoardItem = (props) => {
