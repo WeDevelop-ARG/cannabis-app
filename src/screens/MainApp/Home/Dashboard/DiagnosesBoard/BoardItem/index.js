@@ -12,12 +12,22 @@ const RealThumbnailOrPlaceholder = ({ thumbnail }) => (
   />
 )
 
+const zeroPad = (number, cant) => {
+  return ('' + number).padStart(cant, '0')
+}
+
 const parseDate = (date) => {
-  return '' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
+  return '' +
+    zeroPad(date.getDate(), 2) + '/' +
+    zeroPad(date.getMonth() + 1, 2) + '/' +
+    date.getFullYear()
 }
 
 const parseTime = (date) => {
-  return '' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+  return '' +
+    zeroPad(date.getHours(), 2) + ':' +
+    zeroPad(date.getMinutes(), 2) + ':' +
+    zeroPad(date.getSeconds(), 2)
 }
 
 const AnsweredIcon = ({ answered }) => {
