@@ -1,0 +1,21 @@
+.diagnose-image {
+  max-width: 90%;
+  height: auto;
+}
+
+.answer-field {
+  height: 200px;
+  word-wrap: break-word;
+}
+
+.row {
+  display: flex;
+}
+
+.diagnose-info-column {
+  flex:40%
+}
+
+.column {
+  flex:20%
+}
