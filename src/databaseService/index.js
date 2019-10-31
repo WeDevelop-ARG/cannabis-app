@@ -114,6 +114,22 @@ export const getAnsweredDiagnosesForCurrentUser = async (howMany = 25, diagnoseP
   }
 }
 
+export const getDiagnosesFromCurrentUser = async (howMany = 25, diagnosePath = 'diagnoses') => {
+  try {
+    const currentUserUID = AuthenticationService.getCurrentUserUID()
+    const querySnapshot = await firebase
+      .firestore()
+      .collection(diagnosePath)
+      .where('user', '==', currentUserUID)
+      .limit(howMany)
+      .get()
+
+    return querySnapshot.docs.map(doc => ({ ...doc.data() }))
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
 export default {
   set,
   get,
