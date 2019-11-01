@@ -16,8 +16,6 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     overflow: 'hidden'
-  },
-  list: {
   }
 })
 

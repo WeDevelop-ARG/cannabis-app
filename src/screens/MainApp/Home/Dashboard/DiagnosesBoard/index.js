@@ -16,14 +16,17 @@ const getURL = async (imageReference) => {
 }
 
 const buildBoardItems = async (downloadedData) => (
-  downloadedData.reduce(async (boardItems, diagnose, index) => {
-    boardItems = await boardItems
-    const boardItem = await getBoardItemFromDiagnose(diagnose, index)
-    boardItems.push(boardItem)
+  downloadedData.reduce(
+    async (boardItems, diagnose, index) => {
+      boardItems = await boardItems
+      const boardItem = await getBoardItemFromDiagnose(diagnose, index)
+      boardItems.push(boardItem)
 
-    return boardItems
-  },
-  Promise.resolve([])))
+      return boardItems
+    },
+    Promise.resolve([])
+  )
+)
 
 const getBoardItemFromDiagnose = async (diagnose, key) => {
   const thumbnail = await getURL(diagnose.imageReferences[0])
