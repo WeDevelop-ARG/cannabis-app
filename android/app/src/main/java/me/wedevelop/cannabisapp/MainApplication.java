@@ -1,4 +1,4 @@
-package com.WeDevelop.CannabisApp;
+package me.wedevelop.cannabisapp;
 
 import android.app.Application;
 import android.content.Context;

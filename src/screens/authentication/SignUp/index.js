@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import NavigationService from '~/navigationService'
 import * as DatabaseService from '~/databaseService'
 import * as AnalyticsService from '~/analyticsService'
