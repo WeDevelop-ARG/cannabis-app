@@ -36,6 +36,10 @@ const getBoardItemFromDiagnose = async (diagnose, key) => {
   )
 }
 
+export const sortByCreatedAt = (diagnoses) => (
+  diagnoses.sort((a, b) => a.createdAt - b.createdAt)
+)
+
 const DiagnosesBoard = () => {
   const [diagnoses, setDiagnoses] = useState(null)
   const [downloadingDiagnoses, setDownloadingDiagnoses] = useState(false)
@@ -51,7 +55,8 @@ const DiagnosesBoard = () => {
     setDownloadingDiagnoses(true)
     try {
       const downloadedData = await getDiagnosesFromCurrentUser()
-      const diagnoses = await buildBoardItems(downloadedData)
+      const sortedData = sortByCreatedAt(downloadedData)
+      const diagnoses = await buildBoardItems(sortedData)
       setDiagnoses(diagnoses)
     } catch (error) {
       setDiagnoses(null)
