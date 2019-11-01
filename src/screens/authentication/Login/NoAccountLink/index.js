@@ -5,7 +5,7 @@ import NavigationService from '~/navigationService'
 import styles from './styles'
 
 const NoAccountLink = () => (
-  <AppText style={styles.noAccountText}>No tenes una cuenta? {' '}
+  <AppText style={styles.noAccountText}>No tenés una cuenta? {' '}
     <Text
       onPress={() => NavigationService.navigate('SignUp')}
       style={styles.underlineText}>

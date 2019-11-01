@@ -1,6 +1,7 @@
 import 'react-native'
 import * as firebase from 'firebase'
 import * as AuthenticationService from '~/authenticationService'
+import * as AnalyticsService from '~/analyticsService'
 import DatabaseError from '~/AppErrors/DatabaseError'
 
 const set = async (docPath, data) => {
@@ -46,13 +47,13 @@ const add = async (collectionPath, data) => {
   }
 }
 
-const usernameAlreadyInUse = async (username, collectionPath = 'users') => {
+export const usernameAlreadyInUse = async (username, collectionPath = 'users') => {
   const email = await queryEmailFromUsername(username, collectionPath)
 
   return email !== undefined
 }
 
-const queryEmailFromUsername = async (username, collectionPath = 'users') => {
+export const queryEmailFromUsername = async (username, collectionPath = 'users') => {
   try {
     const querySnapshot = await firebase.firestore().collection(collectionPath).where('username', '==', username).get()
     if (hasDocuments(querySnapshot)) {
@@ -92,6 +93,12 @@ export const addDiagnose = async (imageReferences, text, diagnosePath = 'diagnos
     }
     const newDiagnoseReference = await add(diagnosePath, newDiagnoseData)
     await addDiagnoseIDToCurrentUser(newDiagnoseReference.id)
+
+    await AnalyticsService.logEvent('new_diagnose_request', {
+      id: newDiagnoseReference.id,
+      user,
+      imageCount: imageReferences.length
+    })
   } catch (error) {
     throw new DatabaseError(error.message)
   }
@@ -114,8 +121,19 @@ export const getAnsweredDiagnosesForCurrentUser = async (howMany = 25, diagnoseP
   }
 }
 
+export const addNewUserData = async (userUID, userData) => {
+  try {
+    await set(`users/${userUID}`, userData)
+    await AnalyticsService.logEvent('sign_up', {
+      userUID,
+      email: userData.email
+    })
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
 export default {
-  set,
   get,
   update,
   usernameAlreadyInUse,

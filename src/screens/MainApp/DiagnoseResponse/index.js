@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native'
 import { ForceRerenderOnNavigation } from '~/navigationService'
+import * as AnalyticsService from '~/analyticsService'
 import { getDiagnosesFromDatabase, getDiagnosesFromAnswers, sortByCreatedAt } from './utils'
 import styles from './styles'
 
@@ -8,6 +9,8 @@ const DiagnoseResponse = () => {
   const [diagnoses, setDiagnoses] = useState(null)
   const [downloadingDiagnoses, setDownloadingDiagnoses] = useState(true)
   const [refetchTrigger, toggleRefetch] = useState(false)
+
+  AnalyticsService.setCurrentScreenName('Diagnose Response')
 
   const refetchDiagnoses = () => {
     // Tab navigator doesn't unmount components, we need this to refetch need data when pressing DiagnoseResponse tab.
