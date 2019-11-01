@@ -5,7 +5,6 @@ import cannabisLeaf from './resources/placeholder.png'
 import answeredIcon from './resources/answered.png'
 import notAnsweredIcon from './resources/notAnswered.png'
 
-
 const RealThumbnailOrPlaceholder = ({ thumbnail }) => (
   <Image
     source={thumbnail ? { uri: thumbnail } : cannabisLeaf}
@@ -14,9 +13,9 @@ const RealThumbnailOrPlaceholder = ({ thumbnail }) => (
 )
 
 const AnsweredIcon = ({ answered }) => {
-  const icon = (answered === false) ? notAnsweredIcon : answeredIcon
-  const style = (answered === false) ? styles.notAnswered : styles.answered
-  return (<Image source={icon} style={style} />)
+  const icon = answered ? answeredIcon : notAnsweredIcon
+  const style = answered ? styles.answered : styles.notAnswered
+  return <Image source={icon} style={style} />
 }
 
 const BoardItem = ({ thumbnail, diagnose }) => {

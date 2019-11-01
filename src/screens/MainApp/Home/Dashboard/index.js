@@ -12,7 +12,7 @@ const Dashboard = () => {
         Dr Cannabis
       </Text>
       <View style={styles.body}>
-        <CreateDiagnoseBoard handleRedirectFunc={() => { NavigationService.navigate('DiagnoseRequest') }} />
+        <CreateDiagnoseBoard handleGoToCreateDiagnoseScreen={() => { NavigationService.navigate('DiagnoseRequest') }} />
         <DiagnosesBoard />
       </View>
     </View>

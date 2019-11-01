@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import styles from './styles'
 
-const CreateDiagnoseBoard = ({ handleRedirectFunc }) => {
+const CreateDiagnoseBoard = ({ handleGoToCreateDiagnoseScreen }) => {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -17,7 +17,7 @@ const CreateDiagnoseBoard = ({ handleRedirectFunc }) => {
         </Text>
       </View>
       <TouchableOpacity
-        onPress={handleRedirectFunc}
+        onPress={handleGoToCreateDiagnoseScreen}
       >
         <Text style={styles.button}>Solicitá un diagnóstico</Text>
       </TouchableOpacity>
