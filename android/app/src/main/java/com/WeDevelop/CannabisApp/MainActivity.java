@@ -1,4 +1,4 @@
-package com.cannabisapp;
+package com.WeDevelop.CannabisApp;
 
 import com.facebook.react.ReactActivity;
 

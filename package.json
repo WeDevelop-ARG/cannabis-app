@@ -12,6 +12,8 @@
     "admin:build": "parcel build admin-src/index.html"
   },
   "dependencies": {
+    "@react-native-firebase/analytics": "^6.0.3",
+    "@react-native-firebase/app": "^6.0.3",
     "bootstrap": "^4.3.1",
     "firebase": "^7.1.0",
     "formik": "^1.5.8",

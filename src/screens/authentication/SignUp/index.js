@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import NavigationService from '~/navigationService'
-import DatabaseService from '~/databaseService'
+import * as DatabaseService from '~/databaseService'
 import { View } from 'react-native'
 import * as firebase from 'firebase'
 import * as Yup from 'yup'
@@ -52,8 +52,7 @@ const SignUp = () => {
         username: values.username
       }
 
-      await DatabaseService.set(`users/${newUserUID}`, newUserData)
-
+      await DatabaseService.addNewUserData(newUserUID, newUserData)
       NavigationService.navigate('MainApp')
     } catch (error) {
       setError(error)
