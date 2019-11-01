@@ -6,6 +6,8 @@ gradle.properties
 build/
 .cache/
 dist/
+google-services.json
+.firebaserc
 
 #All next is react-native .gitignore
 

@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Button } from 'react-native'
 import NavigationService from '~/navigationService'
 import * as firebase from 'firebase'
+import * as AnalyticsService from '~/analyticsService'
 
 const LogOut = async () => {
   try {
@@ -13,6 +14,7 @@ const LogOut = async () => {
 }
 
 const Settings = () => {
+  AnalyticsService.setCurrentScreenName('Settings')
   return (
     <View>
       <Button

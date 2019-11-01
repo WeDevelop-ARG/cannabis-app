@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator } from 'react-native'
-import NavigationService from '../../navigationService'
+import NavigationService from '~/navigationService'
+import * as AnalyticsService from '~/analyticsService'
 import * as firebase from 'firebase'
 
 const checkIfLoggedIn = () => {
@@ -15,7 +16,7 @@ const checkIfLoggedIn = () => {
 
 const LoadingScreen = () => {
   useEffect(() => checkIfLoggedIn())
-
+  AnalyticsService.setCurrentScreenName('Loading Screen')
   return (
     <ActivityIndicator />
   )

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import NavigationService from '~/navigationService'
 import DatabaseService from '~/databaseService'
+import * as AnalyticsService from '~/analyticsService'
 import { View } from 'react-native'
 import * as firebase from 'firebase'
 import styles from '../styles'
@@ -18,6 +19,8 @@ const initialValues = {
 const Login = () => {
   const [authenticating, setAuthenticating] = useState(false)
   const [error, setError] = useState(null)
+
+  AnalyticsService.setCurrentScreenName('Login')
 
   const handleSubmit = async (values) => {
     setAuthenticating(true)

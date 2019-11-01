@@ -3,6 +3,7 @@ import { KeyboardAvoidingView } from 'react-native'
 import * as ImageService from '~/imageService'
 import * as StorageService from '~/storageService'
 import * as DatabaseService from '~/databaseService'
+import * as AnalyticsService from '~/analyticsService'
 import FullScreenActivityIndicator from '~/helpers/FullScreenActivityIndicator'
 import DiagnoseProblemDescription from './DiagnoseProblemDescription'
 import DiagnosePhoto from './DiagnosePhoto'
@@ -17,6 +18,8 @@ const DiagnoseRequest = () => {
   const [imageSource, setImageSource] = useState(cameraIcon)
   const [isSubmitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
+
+  AnalyticsService.setCurrentScreenName('Diagnose Request')
 
   const resetStates = () => {
     setProblemDescription('')
