@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import NavigationService from '~/navigationService'
 import * as DatabaseService from '~/databaseService'
+import * as AnalyticsService from '~/analyticsService'
 import { View } from 'react-native'
 import * as firebase from 'firebase'
 import * as Yup from 'yup'
@@ -30,6 +31,8 @@ const schema = Yup.object().shape({
 const SignUp = () => {
   const [authenticating, setAuthenticating] = useState(false)
   const [error, setError] = useState(null)
+
+  AnalyticsService.setCurrentScreenName('Sign Up')
 
   const handleSubmit = async (values) => {
     setAuthenticating(true)

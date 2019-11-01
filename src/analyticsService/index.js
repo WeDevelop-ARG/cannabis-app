@@ -8,3 +8,5 @@ export const logEvent = async (eventName, data = {}) => {
     throw new AnalyticsError(error.message)
   }
 }
+
+export const setCurrentScreenName = (name) => analytics().setCurrentScreen(name, name)
