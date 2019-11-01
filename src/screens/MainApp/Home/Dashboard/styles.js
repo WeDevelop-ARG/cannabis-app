@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     color: '#3EDD91',
     fontWeight: 'bold',
-    fontFamily: 'roboto',
     fontSize: 24,
     backgroundColor: 'white',
     height: 60

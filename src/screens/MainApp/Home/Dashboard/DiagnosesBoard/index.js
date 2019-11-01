@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, SafeAreaView, ActivityIndicator } from 'react-native'
+import { View, SafeAreaView, ActivityIndicator } from 'react-native'
 import styles from './styles'
 import BoardItem from './BoardItem'
 import { getDiagnosesFromCurrentUser } from '~/databaseService'
 import * as StorageService from '~/storageService'
 import { ForceRerenderOnNavigation } from '~/navigationService'
+import AppText from '~/helpers/AppText'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const getURL = async (imageReference) => {
@@ -39,7 +40,7 @@ const getBoardItemFromDiagnose = async (diagnose, key) => {
   )
 }
 
-export const sortByCreatedAt = (diagnoses) => (
+const sortByCreatedAt = (diagnoses) => (
   diagnoses.sort((a, b) => a.createdAt - b.createdAt)
 )
 
@@ -73,9 +74,9 @@ const DiagnosesBoard = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
+      <AppText style={styles.title}>
         Diagnósticos pendientes
-      </Text>
+      </AppText>
       <View style={styles.listContainer}>
         {downloadingDiagnoses && <ActivityIndicator style={styles.downloadingIndicator} />}
         <ForceRerenderOnNavigation resetStateFunction={refetchDiagnoses} />

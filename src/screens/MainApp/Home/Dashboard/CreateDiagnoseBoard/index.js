@@ -1,25 +1,26 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import styles from './styles'
+import AppText from '~/helpers/AppText'
 
 const CreateDiagnoseBoard = ({ handleGoToCreateDiagnoseScreen }) => {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.text}>
+        <AppText style={styles.text}>
           ¿Tu planta de Cannabis se ve rara?
-        </Text>
-        <Text style={styles.text}>
+        </AppText>
+        <AppText style={styles.text}>
           ¿Parece estar enferma?
-        </Text>
-        <Text style={styles.text}>
+        </AppText>
+        <AppText style={styles.text}>
           No te preocupes más
-        </Text>
+        </AppText>
       </View>
       <TouchableOpacity
         onPress={handleGoToCreateDiagnoseScreen}
       >
-        <Text style={styles.button}>Solicitá un diagnóstico</Text>
+        <AppText style={styles.button}>Solicitá un diagnóstico</AppText>
       </TouchableOpacity>
     </View>
   )

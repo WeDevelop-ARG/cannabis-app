@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native'
 const styles = StyleSheet.create({
   container: {
     marginBottom: 5,
-    fontFamily: 'roboto',
     borderWidth: 4,
     borderColor: '#00000022',
     backgroundColor: '#FFFFFFB2'
@@ -47,12 +46,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlignVertical: 'center',
     fontWeight: 'bold',
-    color: '#000000',
-    fontFamily: 'roboto'
-  },
-  description: {
-    fontFamily: 'roboto',
-    fontSize: 14
+    color: '#000000'
   }
 })
 

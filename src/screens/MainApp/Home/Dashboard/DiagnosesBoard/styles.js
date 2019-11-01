@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#000000',
-    fontFamily: 'roboto',
     fontSize: 18,
     height: 44,
     textAlign: 'left',

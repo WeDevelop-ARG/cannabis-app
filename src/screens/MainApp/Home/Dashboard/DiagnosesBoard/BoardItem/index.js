@@ -1,9 +1,11 @@
 import React from 'react'
-import { View, Text, Image } from 'react-native'
+import { View, Image } from 'react-native'
 import styles from './styles'
 import cannabisLeaf from './resources/placeholder.png'
 import answeredIcon from './resources/answered.png'
 import notAnsweredIcon from './resources/notAnswered.png'
+import AppText from '~/helpers/AppText'
+import moment from 'moment'
 
 const RealThumbnailOrPlaceholder = ({ thumbnail }) => (
   <Image
@@ -19,7 +21,6 @@ const AnsweredIcon = ({ answered }) => {
 }
 
 const BoardItem = ({ thumbnail, diagnose }) => {
-  const moment = require('moment')
   const date = moment(diagnose.createdAt.seconds * 1000)
 
   return (
@@ -29,15 +30,15 @@ const BoardItem = ({ thumbnail, diagnose }) => {
       </View>
       <View style={styles.body}>
         <View style={styles.title}>
-          <Text style={styles.titleText}>DESCRIPCIÓN</Text>
+          <AppText style={styles.titleText}>DESCRIPCIÓN</AppText>
           <View>
-            <Text style={styles.titleDate}>{date.format('DD/MM/YYYY')}</Text>
-            <Text style={styles.titleDate}>{date.format('hh:mm a')}</Text>
+            <AppText style={styles.titleDate}>{date.format('DD/MM/YYYY')}</AppText>
+            <AppText style={styles.titleDate}>{date.format('hh:mm a')}</AppText>
           </View>
           <AnsweredIcon answered={diagnose.answered} />
         </View>
         <View>
-          <Text style={styles.description}>{diagnose.text}</Text>
+          <AppText>{diagnose.text}</AppText>
         </View>
       </View>
     </View>
