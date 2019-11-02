@@ -18,7 +18,7 @@ const Settings = () => {
   return (
     <View>
       <Button
-        title='Log out'
+        title='Cerrar sesión'
         onPress={() => { LogOut() }}
       />
     </View>
