@@ -4,6 +4,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import firebaseConfig from './configs/firebase'
 import NavigationService from './navigationService'
 import SignUp from './screens/authentication/SignUp'
@@ -23,29 +24,46 @@ const MainApp = createBottomTabNavigator({
     screen: Home,
     navigationOptions: {
       headerTitle: 'Home',
-      tabBarLabel: 'Principal'
+      tabBarLabel: 'Principal',
+      tabBarIcon: ({ tintColor }) => (
+        <Icon name='cannabis' size={22} color={tintColor} />
+      )
     }
   },
   DiagnoseRequest: {
     screen: DiagnoseRequest,
     navigationOptions: {
       headerTitle: 'DiagnoseRequest',
-      tabBarLabel: 'Diagnosticar'
+      tabBarLabel: 'Diagnosticar',
+      tabBarIcon: ({ tintColor }) => (
+        <Icon name='comment-medical' size={22} color={tintColor} />
+      )
     }
   },
   DiagnoseResponse: {
     screen: DiagnoseResponse,
     navigationOptions: {
       headerTitle: 'DiagnoseResponse',
-      tabBarLabel: 'Diagnósticos'
+      tabBarLabel: 'Diagnósticos',
+      tabBarIcon: ({ tintColor }) => (
+        <Icon name='microscope' size={22} color={tintColor} />
+      )
     }
   },
   Settings: {
     screen: Settings,
     navigationOptions: {
       headerTitle: 'Settings',
-      tabBarLabel: 'Opciones'
+      tabBarLabel: 'Opciones',
+      tabBarIcon: ({ tintColor }) => (
+        <Icon name='cog' size={22} color={tintColor} />
+      )
     }
+  }
+}, {
+  tabBarOptions: {
+    activeTintColor: 'green',
+    inactiveTintColor: 'gray'
   }
 })
 
