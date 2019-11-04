@@ -10,7 +10,7 @@ const Dashboard = () => {
   return (
     <View style={styles.container}>
       <AppText style={styles.title}>
-        Dr Cannabis
+        Dr. Cannabis
       </AppText>
       <View style={styles.body}>
         <CreateDiagnoseBoard handleGoToCreateDiagnoseScreen={() => { NavigationService.navigate('DiagnoseRequest') }} />
