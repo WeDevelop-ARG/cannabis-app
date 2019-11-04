@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native'
+import { widthPercentageToDP, heightPercentageToDP } from '~/styleMixins'
 
 const styles = StyleSheet.create({
   diagnoseContainer: {
     flex: 1,
-    width: '90%',
     flexDirection: 'row',
     padding: 10,
+    paddingBottom: 0,
     marginTop: 20,
     borderColor: 'gray',
     borderWidth: 2,
@@ -14,7 +15,7 @@ const styles = StyleSheet.create({
   },
   answerContainer: {
     marginLeft: 10,
-    width: '90%'
+    width: widthPercentageToDP('60%')
   },
   thumbnail: {
     width: 64,
@@ -24,12 +25,18 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   answeredBy: {
+    width: widthPercentageToDP('60%'),
+    fontWeight: 'bold'
+  },
+  answerSeparator: {
     borderColor: 'gray',
     borderBottomWidth: 1,
-    width: '90%'
+    bottom: heightPercentageToDP('2%')
   },
   answer: {
-    width: '90%'
+    width: widthPercentageToDP('70%'),
+    paddingRight: widthPercentageToDP('10%'),
+    bottom: heightPercentageToDP('2%')
   }
 })
 

@@ -2,8 +2,25 @@ import React, { useState, useEffect } from 'react'
 import { View, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native'
 import { ForceRerenderOnNavigation } from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
-import { getDiagnosesFromDatabase, getDiagnosesFromAnswers, sortByCreatedAt } from './utils'
+import NoAnswersYet from './NoAnswersYet'
+import { getDiagnosesFromDatabase, getDiagnosesFromAnswers, sortAnswersByMostRecentUpdate } from './utils'
 import styles from './styles'
+
+const DiagnosesOrPlaceholderScreen = ({ diagnoses }) => {
+  if (diagnoses && diagnoses.length > 0) {
+    return (
+      <ScrollView>
+        {diagnoses}
+      </ScrollView>
+    )
+  } else {
+    return (
+      <View style={styles.noAnswersYetContainer}>
+        <NoAnswersYet />
+      </View>
+    )
+  }
+}
 
 const DiagnoseResponse = () => {
   const [diagnoses, setDiagnoses] = useState(null)
@@ -21,7 +38,7 @@ const DiagnoseResponse = () => {
   const buildDiagnoses = async () => {
     setDownloadingDiagnoses(true)
     try {
-      const answers = sortByCreatedAt(await getDiagnosesFromDatabase())
+      const answers = sortAnswersByMostRecentUpdate(await getDiagnosesFromDatabase())
       const diagnoses = await getDiagnosesFromAnswers(answers)
       setDiagnoses(diagnoses)
     } catch (error) {
@@ -34,14 +51,17 @@ const DiagnoseResponse = () => {
     buildDiagnoses()
   }, [refetchTrigger])
 
+  if (downloadingDiagnoses) {
+    return (
+      <ActivityIndicator style={styles.downloadingIndicator} />
+    )
+  }
+
   return (
     <View style={styles.container}>
-      {downloadingDiagnoses && <ActivityIndicator style={styles.downloadingIndicator} />}
       <ForceRerenderOnNavigation resetStateFunction={refetchDiagnoses} />
       <SafeAreaView>
-        <ScrollView>
-          {diagnoses}
-        </ScrollView>
+        <DiagnosesOrPlaceholderScreen diagnoses={diagnoses} />
       </SafeAreaView>
     </View>
   )

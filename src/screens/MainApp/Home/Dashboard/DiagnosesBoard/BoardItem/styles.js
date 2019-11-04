@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { widthPercentageToDP } from '~/styleMixins'
 
 const styles = StyleSheet.create({
   container: {
@@ -21,15 +22,22 @@ const styles = StyleSheet.create({
   body: {
     padding: 6
   },
-  title: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  problemInfo: {
     paddingBottom: 5,
     paddingTop: 3
   },
+  diagnoseStateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  dateContainer: {
+    flexDirection: 'row'
+  },
   titleDate: {
     textAlign: 'right',
-    fontSize: 12
+    alignSelf: 'center',
+    fontSize: 12,
+    margin: widthPercentageToDP('1%')
   },
   answered: {
     maxHeight: 30,
@@ -40,13 +48,6 @@ const styles = StyleSheet.create({
     maxHeight: 30,
     maxWidth: 30,
     marginLeft: 5
-  },
-  titleText: {
-    flex: 1,
-    fontSize: 18,
-    textAlignVertical: 'center',
-    fontWeight: 'bold',
-    color: '#000000'
   }
 })
 

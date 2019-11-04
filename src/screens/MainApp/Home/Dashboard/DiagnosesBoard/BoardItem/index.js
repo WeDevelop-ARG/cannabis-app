@@ -29,15 +29,15 @@ const BoardItem = ({ thumbnail, diagnose }) => {
         <RealThumbnailOrPlaceholder thumbnail={thumbnail} />
       </View>
       <View style={styles.body}>
-        <View style={styles.title}>
-          <AppText style={styles.titleText}>DESCRIPCIÓN</AppText>
-          <View>
+        <View style={styles.diagnoseStateContainer}>
+          <View style={styles.dateContainer}>
             <AppText style={styles.titleDate}>{date.format('DD/MM/YYYY')}</AppText>
+            <AppText style={styles.titleDate}>-</AppText>
             <AppText style={styles.titleDate}>{date.format('hh:mm a')}</AppText>
           </View>
           <AnsweredIcon answered={diagnose.answered} />
         </View>
-        <View>
+        <View style={styles.problemInfo}>
           <AppText>{diagnose.text}</AppText>
         </View>
       </View>

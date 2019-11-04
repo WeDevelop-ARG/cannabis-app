@@ -40,8 +40,8 @@ const getBoardItemFromDiagnose = async (diagnose, key) => {
   )
 }
 
-const sortByCreatedAt = (diagnoses) => (
-  diagnoses.sort((a, b) => a.createdAt - b.createdAt)
+const sortDiagnosesByMostRecentCreation = (Diagnoses) => (
+  Diagnoses.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
 )
 
 const DiagnosesBoard = () => {
@@ -59,7 +59,7 @@ const DiagnosesBoard = () => {
     setDownloadingDiagnoses(true)
     try {
       const downloadedData = await getDiagnosesFromCurrentUser()
-      const sortedData = sortByCreatedAt(downloadedData)
+      const sortedData = sortDiagnosesByMostRecentCreation(downloadedData)
       const diagnoses = await buildBoardItems(sortedData)
       setDiagnoses(diagnoses)
     } catch (error) {
@@ -75,7 +75,7 @@ const DiagnosesBoard = () => {
   return (
     <View style={styles.container}>
       <AppText style={styles.title}>
-        Diagnósticos pendientes
+        Diagnósticos
       </AppText>
       <View style={styles.listContainer}>
         {downloadingDiagnoses && <ActivityIndicator style={styles.downloadingIndicator} />}
