@@ -14,6 +14,9 @@ import LoadingScreen from './screens/LoadingScreen'
 import DiagnoseRequest from './screens/MainApp/DiagnoseRequest'
 import DiagnoseResponse from './screens/MainApp/DiagnoseResponse'
 import Settings from './screens/MainApp/Settings'
+import styles from './styles'
+
+//console.disableYellowBox = true // releases only
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
@@ -24,9 +27,9 @@ const MainApp = createBottomTabNavigator({
     screen: Home,
     navigationOptions: {
       headerTitle: 'Home',
-      tabBarLabel: 'Principal',
+      tabBarLabel: 'Diagnósticos',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name='cannabis' size={22} color={tintColor} />
+        <Icon name='cannabis' size={18} color={tintColor} />
       )
     }
   },
@@ -36,7 +39,7 @@ const MainApp = createBottomTabNavigator({
       headerTitle: 'DiagnoseRequest',
       tabBarLabel: 'Diagnosticar',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name='comment-medical' size={22} color={tintColor} />
+        <Icon name='comment-medical' size={18} color={tintColor} />
       )
     }
   },
@@ -44,9 +47,9 @@ const MainApp = createBottomTabNavigator({
     screen: DiagnoseResponse,
     navigationOptions: {
       headerTitle: 'DiagnoseResponse',
-      tabBarLabel: 'Diagnósticos',
+      tabBarLabel: 'Respuestas',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name='microscope' size={22} color={tintColor} />
+        <Icon name='microscope' size={18} color={tintColor} />
       )
     }
   },
@@ -56,14 +59,15 @@ const MainApp = createBottomTabNavigator({
       headerTitle: 'Settings',
       tabBarLabel: 'Opciones',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name='cog' size={22} color={tintColor} />
+        <Icon name='cog' size={18} color={tintColor} />
       )
     }
   }
 }, {
   tabBarOptions: {
     activeTintColor: 'green',
-    inactiveTintColor: 'gray'
+    inactiveTintColor: 'gray',
+    style: styles.tabBarStyle
   }
 })
 

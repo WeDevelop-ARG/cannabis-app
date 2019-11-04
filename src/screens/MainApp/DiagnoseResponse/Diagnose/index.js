@@ -11,14 +11,14 @@ const RealThumbnailOrPlaceholder = ({ thumbnail }) => (
   />
 )
 
-const Diagnose = ({ thumbnail, answer, answeredBy }) => (
+const Diagnose = ({ thumbnail, answer, answeredBy, date, time }) => (
   <View style={styles.diagnoseContainer}>
     <RealThumbnailOrPlaceholder thumbnail={thumbnail} />
     <View style={styles.answerContainer}>
       <AppText style={styles.answeredBy}>
-        {answeredBy}
+        Respondido por {answeredBy} el {date} a las {time}
       </AppText>
-
+      <AppText style={styles.answerSeparator} />
       <AppText style={styles.answer}>
         {answer}
       </AppText>
