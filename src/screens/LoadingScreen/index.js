@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator } from 'react-native'
+import * as firebase from 'firebase'
 import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
-import * as firebase from 'firebase'
+import * as CacheService from '~/cacheService'
 
 const checkIfLoggedIn = () => {
   firebase.auth().onAuthStateChanged(user => {
@@ -15,8 +16,19 @@ const checkIfLoggedIn = () => {
 }
 
 const LoadingScreen = () => {
-  useEffect(() => checkIfLoggedIn())
   AnalyticsService.setCurrentScreenName('Loading Screen')
+
+  useEffect(() => {
+    const decideIfGoToPrivacyPolicyScreenOrLoginScreen = async () => {
+      if (!await CacheService.getItem('privacyPolicyAccepted')) {
+        NavigationService.navigate('PrivacyPolicy')
+      } else {
+        checkIfLoggedIn()
+      }
+    }
+    decideIfGoToPrivacyPolicyScreenOrLoginScreen()
+  }, [])
+
   return (
     <ActivityIndicator />
   )
