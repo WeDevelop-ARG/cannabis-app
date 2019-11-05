@@ -3,6 +3,7 @@ import { View, Button } from 'react-native'
 import NavigationService from '~/navigationService'
 import * as firebase from 'firebase'
 import * as AnalyticsService from '~/analyticsService'
+import { goToPrivacyPolicyURL } from '~/mixins/privacyPolicyMixins'
 
 const LogOut = async () => {
   try {
@@ -20,6 +21,10 @@ const Settings = () => {
       <Button
         title='Cerrar sesión'
         onPress={() => { LogOut() }}
+      />
+      <Button
+        title='Política de Privacidad'
+        onPress={goToPrivacyPolicyURL}
       />
     </View>
   )

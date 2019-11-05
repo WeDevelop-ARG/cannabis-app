@@ -11,12 +11,13 @@ import SignUp from './screens/authentication/SignUp'
 import Login from './screens/authentication/Login'
 import Home from './screens/MainApp/Home'
 import LoadingScreen from './screens/LoadingScreen'
+import PrivacyPolicy from './screens/PrivacyPolicy'
 import DiagnoseRequest from './screens/MainApp/DiagnoseRequest'
 import DiagnoseResponse from './screens/MainApp/DiagnoseResponse'
 import Settings from './screens/MainApp/Settings'
 import styles from './styles'
 
-//console.disableYellowBox = true // releases only
+// console.disableYellowBox = true // releases only
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
@@ -73,6 +74,7 @@ const MainApp = createBottomTabNavigator({
 
 const MainNavigator = createSwitchNavigator({
   LoadingScreen: { screen: LoadingScreen },
+  PrivacyPolicy: { screen: PrivacyPolicy },
   MainApp: { screen: MainApp },
   SignUp: { screen: SignUp },
   Login: { screen: Login }
