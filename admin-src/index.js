@@ -20,7 +20,6 @@ const DiagnoseResponse = () => {
         .where('answered', '==', false)
         .onSnapshot(async (querySnapshot) => {
           let unanswered = diagnoses
-          let diagnoseOnScreen = currentDiagnose
 
           await Promise.all(
             querySnapshot.docChanges().map(async docChange => {
@@ -42,20 +41,30 @@ const DiagnoseResponse = () => {
 
               if (changeType === 'removed') {
                 unanswered = unanswered.filter(diagnose => diagnose.id !== doc.id)
-                if (diagnoseOnScreen && diagnoseOnScreen.id === doc.id) {
-                  diagnoseOnScreen = null
-                }
               }
             })
           )
 
           setDiagnoses([...unanswered])
-          setCurrentDiagnose(diagnoseOnScreen)
         })
     }
 
     attachQueryListenerForUnansweredDiagnoses()
   }, [])
+
+  useEffect(() => {
+    const clearScreenIfCurrentDiagnoseWasAnsweredByAnotherOne = () => {
+      if (currentDiagnose) {
+        const queryForCurrentDiagnoseInDiagnoses = diagnoses.filter(diagnose => diagnose.id === currentDiagnose.id)
+        const currentDiagnoseDoesNotExist = queryForCurrentDiagnoseInDiagnoses.length === 0
+        if (currentDiagnoseDoesNotExist) {
+          setCurrentDiagnose(null)
+        }
+      }
+    }
+
+    clearScreenIfCurrentDiagnoseWasAnsweredByAnotherOne()
+  }, [diagnoses])
 
   const handleSubmit = async (values) => {
     const dataToUpdate = {
