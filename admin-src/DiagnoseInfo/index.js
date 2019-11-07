@@ -6,7 +6,7 @@ export const DiagnoseInfo = ({ diagnose }) => (
       DIAGNOSE UUID: {diagnose.id}
     </div>
     <div>
-      USER UUID: {diagnose.user}
+      USERNAME: {diagnose.username}
     </div>
     <div>
       TEXT: {diagnose.text}

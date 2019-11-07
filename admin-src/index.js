@@ -12,44 +12,50 @@ const DiagnoseResponse = () => {
   const [currentDiagnose, setCurrentDiagnose] = useState(null)
   const [diagnoses, setDiagnoses] = useState([])
 
-  const attachQueryListenerForUnansweredDiagnoses = () => {
-    firebase
-      .firestore()
-      .collection('diagnoses')
-      .where('answered', '==', false)
-      .onSnapshot((querySnapshot) => {
-        let unanswered = diagnoses
-        let diagnoseOnScreen = currentDiagnose
+  useEffect(() => {
+    const attachQueryListenerForUnansweredDiagnoses = () => {
+      firebase
+        .firestore()
+        .collection('diagnoses')
+        .where('answered', '==', false)
+        .onSnapshot(async (querySnapshot) => {
+          let unanswered = diagnoses
+          let diagnoseOnScreen = currentDiagnose
 
-        querySnapshot.docChanges().forEach(docChange => {
-          const doc = docChange.doc
-          const changeType = docChange.type
+          await Promise.all(
+            querySnapshot.docChanges().map(async docChange => {
+              const doc = docChange.doc
+              const changeType = docChange.type
 
-          if (changeType === 'added') {
-            if (!unanswered.find(diagnose => diagnose.id === doc.id)) {
-              unanswered.push({
-                id: doc.id,
-                ...doc.data()
-              })
-            }
-          }
+              if (changeType === 'added') {
+                if (!unanswered.find(diagnose => diagnose.id === doc.id)) {
+                  const docData = doc.data()
+                  const userSnap = await firebase.firestore().collection('users').doc(docData.user).get()
+                  const username = userSnap.data().username
+                  unanswered.push({
+                    id: doc.id,
+                    username,
+                    ...docData
+                  })
+                }
+              }
 
-          if (changeType === 'removed') {
-            unanswered = unanswered.filter(diagnose => diagnose.id !== doc.id)
-            if (diagnoseOnScreen && diagnoseOnScreen.id === doc.id) {
-              diagnoseOnScreen = null
-            }
-          }
-        })
+              if (changeType === 'removed') {
+                unanswered = unanswered.filter(diagnose => diagnose.id !== doc.id)
+                if (diagnoseOnScreen && diagnoseOnScreen.id === doc.id) {
+                  diagnoseOnScreen = null
+                }
+              }
+            })
+          )
 
-        setDiagnoses([...unanswered])
-        if (diagnoseOnScreen !== currentDiagnose) {
+          setDiagnoses([...unanswered])
           setCurrentDiagnose(diagnoseOnScreen)
-        }
-      })
-  }
+        })
+    }
 
-  useEffect(() => attachQueryListenerForUnansweredDiagnoses(), [])
+    attachQueryListenerForUnansweredDiagnoses()
+  }, [])
 
   const handleSubmit = async (values) => {
     const dataToUpdate = {
@@ -78,7 +84,7 @@ const DiagnoseResponse = () => {
         <ListGroup className='column'>
           {diagnoses && diagnoses.map((diagnose, index) => (
             <ListGroup.Item action key={index} onClick={() => fetchDiagnoseImagesAndSetAsCurrent(diagnoses[index])}>
-              {diagnose.id}
+              {diagnose.id}{' '} - {diagnose.username}
             </ListGroup.Item>
           ))}
         </ListGroup>
