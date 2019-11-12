@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "dr-cannabis",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

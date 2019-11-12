@@ -8,6 +8,8 @@ build/
 dist/
 google-services.json
 .firebaserc
+.firebase
+public/
 
 #All next is react-native .gitignore
 
