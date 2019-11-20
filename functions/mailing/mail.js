@@ -9,27 +9,22 @@ class Mail {
 
   set to (value) {
     this._to = value
-    return this
   }
 
   set from (value) {
     this._to = value
-    return this
   }
 
   set subject (value) {
     this._subject = value
-    return this
   }
 
   set text (value) {
     this._text = value
-    return this
   }
 
   set html (value) {
     this._html = value
-    return this
   }
 
   get to () {
@@ -53,4 +48,4 @@ class Mail {
   }
 }
 
-module.exports = { Mail }
+module.exports = Mail

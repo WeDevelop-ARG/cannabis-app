@@ -1,5 +1,5 @@
 const database = require('../database/index.js')
-const { Mail } = require('../mailing/mail.js')
+const Mail = require('../mailing/mail.js')
 const sender = require('../mailing/sender')
 const functions = require('firebase-functions')
 
@@ -39,11 +39,11 @@ const buildHtmlMessage = (username) => {
 
 const sendNotification = async (user) => {
   const mail = new Mail()
-  mail.to(user.email)
-  mail.from('drcannabis@drcannabis.com')
-  mail.subject('Tu solicitud de diagnóstico ha sido respondida!')
-  mail.text(buildTextMessage(user.username))
-  mail.html(buildHtmlMessage(user.username))
+  mail.to = user.email
+  mail.from = 'drcannabis@drcannabis.com'
+  mail.subject = 'Tu solicitud de diagnóstico ha sido respondida!'
+  mail.text = buildTextMessage(user.username)
+  mail.html = buildHtmlMessage(user.username)
   const ss = new sender.SendgridSender(process.env.SENGRID_API_KEY)
   await ss.send(mail)
 }
