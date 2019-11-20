@@ -1,5 +1,5 @@
 const database = require('../database/index.js')
-const Mail = require('../mailing/mail.js')
+const { Mail } = require('../mailing/mail.js')
 const sender = require('../mailing/sender')
 const functions = require('firebase-functions')
 

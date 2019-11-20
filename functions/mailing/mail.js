@@ -1,4 +1,4 @@
-module.exports = class Mail {
+class Mail {
   constructor () {
     this._to = ''
     this._from = ''
@@ -52,3 +52,5 @@ module.exports = class Mail {
     return this._html
   }
 }
+
+module.exports = { Mail }
