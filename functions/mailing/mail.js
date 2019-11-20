@@ -1,4 +1,4 @@
-class Mail {
+module.exports = class Mail {
   constructor () {
     this._to = ''
     this._from = ''
@@ -7,27 +7,27 @@ class Mail {
     this._html = ''
   }
 
-  setTo (value) {
+  set to (value) {
     this._to = value
     return this
   }
 
-  setFrom (value) {
+  set from (value) {
     this._to = value
     return this
   }
 
-  setSubject (value) {
+  set subject (value) {
     this._subject = value
     return this
   }
 
-  setText (value) {
+  set text (value) {
     this._text = value
     return this
   }
 
-  setHtml (value) {
+  set html (value) {
     this._html = value
     return this
   }
@@ -52,5 +52,3 @@ class Mail {
     return this._html
   }
 }
-
-module.exports = Mail

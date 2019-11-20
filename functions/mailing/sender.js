@@ -13,11 +13,11 @@ class SendgridSender extends Sender {
 
   async send (mail) {
     const msg = {
-      to: mail.to(),
-      from: mail.from(),
-      subjet: mail.subject(),
-      text: mail.text(),
-      html: mail.html()
+      to: mail.to,
+      from: mail.from,
+      subjet: mail.subject,
+      text: mail.text,
+      html: mail.html
     }
     await sgMail.send(msg)
   }

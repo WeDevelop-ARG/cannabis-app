@@ -39,13 +39,13 @@ const buildHtmlMessage = (username) => {
 
 const sendNotification = async (user) => {
   const mail = new Mail()
-  mail.setTo(user.email)
-    .setFrom('drcannabis@drcannabis.com')
-    .setSubjec('Tu solicitud de diagnóstico ha sido respondida!')
-    .setText(buildTextMessage(user.username))
-    .setHtml(buildHtmlMessage(user.username))
+  mail.to(user.email)
+  mail.from('drcannabis@drcannabis.com')
+  mail.subject('Tu solicitud de diagnóstico ha sido respondida!')
+  mail.text(buildTextMessage(user.username))
+  mail.html(buildHtmlMessage(user.username))
   const ss = new sender.SendgridSender(process.env.SENGRID_API_KEY)
-  ss.send(mail)
+  await ss.send(mail)
 }
 
 const sendDiagnoseResponseNotification = functions
