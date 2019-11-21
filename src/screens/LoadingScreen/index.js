@@ -6,7 +6,8 @@ import * as AnalyticsService from '~/analyticsService'
 import * as CacheService from '~/cacheService'
 
 const checkIfLoggedIn = () => {
-  firebase.auth().onAuthStateChanged(user => {
+  const unsuscribe = firebase.auth().onAuthStateChanged(user => {
+    unsuscribe()
     if (user) {
       NavigationService.navigate('MainApp')
     } else {

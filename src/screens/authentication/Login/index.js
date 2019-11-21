@@ -1,64 +1,57 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { View, Image, TouchableOpacity } from 'react-native'
+import AppText from '~/helpers/AppText'
+import Background from '~/helpers/Background'
 import NavigationService from '~/navigationService'
-import DatabaseService from '~/databaseService'
-import * as AnalyticsService from '~/analyticsService'
-import { View } from 'react-native'
-import * as firebase from 'firebase'
-import styles from '../styles'
-import { isValidEmail } from '../utils'
-import Background from '../Background'
-import LoginHeader from './LoginHeader'
-import LoginForm from './LoginForm'
-import NoAccountLink from './NoAccountLink'
+import * as AuthenticationService from '~/authenticationService'
+import * as DatabaseService from '~/databaseService'
+import GoogleButton from '../SocialNetworks/GoogleButton'
+import DrCannabis from '~/assets/images/DrCannabis.png'
+import styles from './styles'
 
-const initialValues = {
-  account: '',
-  password: ''
+const onEmailButtonPress = () => {
+  NavigationService.navigate('LoginEmail')
 }
 
-const Login = () => {
-  const [authenticating, setAuthenticating] = useState(false)
-  const [error, setError] = useState(null)
-
-  AnalyticsService.setCurrentScreenName('Login')
-
-  const handleSubmit = async (values) => {
-    setAuthenticating(true)
-    setError(null)
-    try {
-      let email = null
-      if (!isValidEmail(values.account)) {
-        email = await DatabaseService.queryEmailFromUsername(values.account)
-      } else {
-        email = values.account
-      }
-
-      await firebase.auth().signInWithEmailAndPassword(email, values.password)
+const onGoogleButtonPress = async () => {
+  try {
+    const signInData = await AuthenticationService.getGoogleSignInData()
+    const userEmail = signInData.user.email
+    if (await AuthenticationService.emailAlreadyHasGoogleSignIn(userEmail)) {
+      await AuthenticationService.loginWithGoogleSignInData(signInData)
       NavigationService.navigate('MainApp')
-    } catch (error) {
-      setError(error)
-      setAuthenticating(false)
+    } else {
+      const username = await DatabaseService.queryUsernameFromEmail(userEmail)
+      if (username) {
+        await AuthenticationService.loginWithGoogleSignInData()
+        NavigationService.navigate('MainApp')
+      } else {
+        NavigationService.navigate('UsernameRequest', { socialNetwork: 'google' })
+      }
     }
+  } catch (error) {
+    console.log(error.message)
   }
-
-  return (
-    <Background>
-      <View style={styles.container}>
-        <LoginHeader />
-        <LoginForm
-          initialValues={initialValues}
-          handleSubmit={handleSubmit}
-          error={error}
-          authenticating={authenticating}
-        />
-        <NoAccountLink />
-      </View>
-    </Background>
-  )
 }
 
-Login.navigationOptions = () => ({
-  header: null
-})
+const Login = () => (
+  <Background>
+    <View style={styles.container}>
+      <Image
+        source={DrCannabis}
+        style={styles.drCannabisIcon}
+      />
+      <AppText style={styles.welcomeMessage}>Bienvenido a Dr. Cannabis!</AppText>
+      <GoogleButton style={styles.googleButton} onPress={onGoogleButtonPress} />
+      <AppText style={styles.optionDisclaimer}>ó</AppText>
+      <TouchableOpacity
+        style={styles.emailButton}
+        onPress={onEmailButtonPress}
+      >
+        <AppText style={styles.emailButtonText}>Ingresá con tu email o usuario</AppText>
+      </TouchableOpacity>
+    </View>
+  </Background>
+)
 
 export default Login
