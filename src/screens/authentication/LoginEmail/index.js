@@ -16,11 +16,11 @@ const initialValues = {
   password: ''
 }
 
-const Login = () => {
+const LoginEmail = () => {
   const [authenticating, setAuthenticating] = useState(false)
   const [error, setError] = useState(null)
 
-  AnalyticsService.setCurrentScreenName('Login')
+  AnalyticsService.setCurrentScreenName('LoginEmail')
 
   const handleSubmit = async (values) => {
     setAuthenticating(true)
@@ -57,8 +57,8 @@ const Login = () => {
   )
 }
 
-Login.navigationOptions = () => ({
+LoginEmail.navigationOptions = () => ({
   header: null
 })
 
-export default Login
+export default LoginEmail

@@ -5,6 +5,7 @@ import Background from '~/helpers/Background'
 import NavigationService from '~/navigationService'
 import * as AuthenticationService from '~/authenticationService'
 import * as DatabaseService from '~/databaseService'
+import * as AnalyticsService from '~/analyticsService'
 import GoogleButton from '../SocialNetworks/GoogleButton'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
@@ -34,24 +35,28 @@ const onGoogleButtonPress = async () => {
   }
 }
 
-const Login = () => (
-  <Background>
-    <View style={styles.container}>
-      <Image
-        source={DrCannabis}
-        style={styles.drCannabisIcon}
-      />
-      <AppText style={styles.welcomeMessage}>Bienvenido a Dr. Cannabis!</AppText>
-      <GoogleButton style={styles.googleButton} onPress={onGoogleButtonPress} />
-      <AppText style={styles.optionDisclaimer}>ó</AppText>
-      <TouchableOpacity
-        style={styles.emailButton}
-        onPress={onEmailButtonPress}
-      >
-        <AppText style={styles.emailButtonText}>Ingresá con tu email o usuario</AppText>
-      </TouchableOpacity>
-    </View>
-  </Background>
-)
+const Login = () => {
+  AnalyticsService.setCurrentScreenName('Login')
+
+  return (
+    <Background>
+      <View style={styles.container}>
+        <Image
+          source={DrCannabis}
+          style={styles.drCannabisIcon}
+        />
+        <AppText style={styles.welcomeMessage}>Bienvenido a Dr. Cannabis!</AppText>
+        <GoogleButton style={styles.googleButton} onPress={onGoogleButtonPress} />
+        <AppText style={styles.optionDisclaimer}>ó</AppText>
+        <TouchableOpacity
+          style={styles.emailButton}
+          onPress={onEmailButtonPress}
+        >
+          <AppText style={styles.emailButtonText}>Ingresá con tu email o usuario</AppText>
+        </TouchableOpacity>
+      </View>
+    </Background>
+  )
+}
 
 export default Login
