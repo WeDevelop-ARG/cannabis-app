@@ -9,6 +9,8 @@ import firebaseConfig from './configs/firebase'
 import NavigationService from './navigationService'
 import SignUp from './screens/authentication/SignUp'
 import Login from './screens/authentication/Login'
+import LoginEmail from './screens/authentication/LoginEmail'
+import UsernameRequest from './screens/authentication/UsernameRequest'
 import Home from './screens/MainApp/Home'
 import LoadingScreen from './screens/LoadingScreen'
 import PrivacyPolicy from './screens/PrivacyPolicy'
@@ -77,7 +79,9 @@ const MainNavigator = createSwitchNavigator({
   PrivacyPolicy: { screen: PrivacyPolicy },
   MainApp: { screen: MainApp },
   SignUp: { screen: SignUp },
-  Login: { screen: Login }
+  Login: { screen: Login },
+  LoginEmail: { screen: LoginEmail },
+  UsernameRequest: { screen: UsernameRequest }
 })
 
 const AppContainer = createAppContainer(MainNavigator)

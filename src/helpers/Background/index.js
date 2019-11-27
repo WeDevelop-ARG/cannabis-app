@@ -1,7 +1,7 @@
 import React from 'react'
 import { ImageBackground } from 'react-native'
 import styles from './styles'
-import source from './resources/background.jpg'
+import source from '~/assets/images/background.jpg'
 
 const Background = ({ children }) => (
   <ImageBackground
