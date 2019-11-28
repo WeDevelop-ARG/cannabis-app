@@ -149,9 +149,35 @@ export const addNewUserData = async (userUID, userData) => {
   }
 }
 
+export const storeFCMTokenForCurrentUser = async (fcmToken, collectionPath = 'users') => {
+  try {
+    const currentUserUID = AuthenticationService.getCurrentUserUID()
+    const currentInstanceUID = fcmToken.split(':')[0]
+
+    await set(`${collectionPath}/${currentUserUID}/instances/${currentInstanceUID}`, {
+      fcmToken: fcmToken
+    })
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
+export const removeFCMTokenForCurrentUser = async (fcmToken, collectionPath = 'users') => {
+  try {
+    const currentUserUID = AuthenticationService.getCurrentUserUID()
+    const currentInstanceUID = fcmToken.split(':')[0]
+
+    await firebase.firestore().doc(`${collectionPath}/${currentUserUID}/instances/${currentInstanceUID}`).delete()
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
 export default {
   get,
   update,
   usernameAlreadyInUse,
-  queryEmailFromUsername
+  queryEmailFromUsername,
+  storeFCMTokenForCurrentUser,
+  removeFCMTokenForCurrentUser
 }

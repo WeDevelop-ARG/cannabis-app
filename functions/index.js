@@ -43,5 +43,28 @@ const onAnswerMigrateToUserCollection = functions
     }
   })
 
+const sendDiagnoseResponsePushNotification = functions
+  .firestore
+  .document('users/{userUID}/requests/{diagnoseUID}/responses/{responseUID}')
+  .onCreate(async (snapshot, context) => {    
+    try {
+      const instancesSnapshot = await admin.firestore().collection(`users/${context.params.userUID}/instances`).get()
+      instancesSnapshot.docs.forEach(
+        async doc => {
+          const payload = {
+            notification: {
+              title: '¡Tu solicitud de diagnóstico ha sido respondida!',
+              body: 'Ingresá a la aplicación para leer la respuesta del profesional.'
+            }
+          }
+          admin.messaging().sendToDevice(doc.data().fcmToken, payload)
+        }
+      )
+    } catch (error) {
+      console.log(error.message)
+    }
+  })
+
+exports.sendDiagnoseResponsePushNotification = sendDiagnoseResponsePushNotification
 exports.onDiagnoseCreateMigrateToUserCollection = onDiagnoseCreateMigrateToUserCollection
 exports.onAnswerMigrateToUserCollection = onAnswerMigrateToUserCollection
