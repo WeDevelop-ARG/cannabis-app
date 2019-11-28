@@ -65,6 +65,18 @@ export const queryEmailFromUsername = async (username, collectionPath = 'users')
   }
 }
 
+export const queryUsernameFromEmail = async (email, collectionPath = 'users') => {
+  try {
+    const querySnapshot = await firebase.firestore().collection(collectionPath).where('email', '==', email).get()
+    if (hasDocuments(querySnapshot)) {
+      const json = getFirstDocumentDataFromQuerySnapshot(querySnapshot)
+      return json && json.username
+    }
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
 const getFirstDocumentDataFromQuerySnapshot = (querySnapshot) => querySnapshot.docs[0].data()
 
 const hasDocuments = (querySnapshot) => querySnapshot.size > 0
@@ -142,7 +154,7 @@ export const addNewUserData = async (userUID, userData) => {
     await set(`users/${userUID}`, userData)
     await AnalyticsService.logEvent('sign_up', {
       userUID,
-      email: userData.email
+      ...userData
     })
   } catch (error) {
     throw new DatabaseError(error.message)
