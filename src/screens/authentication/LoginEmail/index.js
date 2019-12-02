@@ -33,7 +33,6 @@ const LoginEmail = () => {
       } else {
         email = values.account
       }
-
       await firebase.auth().signInWithEmailAndPassword(email, values.password)
       await MessagingService.checkForPermissions()
       await MessagingService.saveFCMTokenForCurrentUser()
