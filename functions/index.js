@@ -61,7 +61,6 @@ const sendDiagnoseResponsePushNotification = functions
 
       try {
         const deviceGroupResponse = await admin.messaging().sendToDeviceGroup(notificationKey, payload)
-        console.log(JSON.stringify(deviceGroupResponse))
         if (deviceGroupResponse.failureCount > 0) {
           await runFCMOperation('remove', notificationKeyName, notificationKey, deviceGroupResponse.failedRegistrationTokens)
         }
@@ -96,7 +95,6 @@ const getNotificationKey = async (notificationKeyName) => {
   const url = `https://fcm.googleapis.com/fcm/notification?notification_key_name=${notificationKeyName}`
   try {
     const result = await fetchNotificationRequest(url, 'get', {})
-    console.log(result)
     const json = JSON.parse(result)
     if (json.notification_key !== undefined) {
       return json.notification_key
@@ -114,8 +112,7 @@ const createNotificationGroup = async (notificationKeyName, fcmToken) => {
     notification_key_name: notificationKeyName,
     registration_ids: [fcmToken]
   }
-  const result = await fetchNotificationRequest(url, 'post', data)
-  console.log(result)
+  await fetchNotificationRequest(url, 'post', data)
 }
 
 const runFCMOperation = async (operation, notificationKeyName, notificationKey, fcmTokens) => {
@@ -126,8 +123,7 @@ const runFCMOperation = async (operation, notificationKeyName, notificationKey, 
     notification_key: notificationKey,
     registration_ids: fcmTokens
   }
-  const result = await fetchNotificationRequest(url, 'post', body)
-  console.log(result)
+  await fetchNotificationRequest(url, 'post', body)
 }
 
 const storeFCMTokenInUserGroup = functions
