@@ -8,13 +8,8 @@ import MessagingService from '~/messagingService'
 
 const LogOut = async () => {
   try {
-    await MessagingService.deleteFCMTokenForCurrentUser()
-  } catch (error) {
-    console.log(error.message)
-  }
-
-  try {
     await firebase.auth().signOut()
+    await MessagingService.deleteFCMTokenForCurrentUser()
     NavigationService.navigate('Login')
   } catch (error) {
     console.log(error.message)
