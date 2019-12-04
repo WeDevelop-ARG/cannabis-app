@@ -44,7 +44,7 @@ const sendNotification = async (user) => {
   mail.subject = 'Tu solicitud de diagnóstico ha sido respondida!'
   mail.text = buildTextMessage(user.username)
   mail.html = buildHtmlMessage(user.username)
-  const ss = new sender.SendgridSender(process.env.SENGRID_API_KEY)
+  const ss = new sender.SendgridSender(functions.config().sendgrid.api_key)
   await ss.send(mail)
 }
 
