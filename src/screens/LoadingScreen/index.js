@@ -9,13 +9,15 @@ import AppText from '~/helpers/AppText'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
 
-const checkIfLoggedIn = () => {
+const MILLISECONDS_SHOWING_SPLASH_SCREEN = 2000
+
+const checkIfSignedUp = () => {
   const unsuscribe = firebase.auth().onAuthStateChanged(user => {
     unsuscribe()
     if (user) {
       NavigationService.navigate('MainApp')
     } else {
-      NavigationService.navigate('Login')
+      NavigationService.navigate('SignUp')
     }
   })
 }
@@ -24,15 +26,15 @@ const LoadingScreen = () => {
   AnalyticsService.setCurrentScreenName('Loading Screen')
 
   useEffect(() => {
-    const decideIfGoToPrivacyPolicyScreenOrLoginScreen = async () => {
-      if (!await CacheService.getItem('privacyPolicyAccepted')) {
-        NavigationService.navigate('PrivacyPolicy')
+    const decideIfGoToOnBoardingScreenOrSignUpScreen = async () => {
+      if (!await CacheService.getItem('OnBoardingSeen')) {
+        NavigationService.navigate('OnBoarding')
       } else {
-        checkIfLoggedIn()
+        checkIfSignedUp()
       }
     }
 
-    setTimeout(() => decideIfGoToPrivacyPolicyScreenOrLoginScreen(), 4000)
+    setTimeout(() => decideIfGoToOnBoardingScreenOrSignUpScreen(), MILLISECONDS_SHOWING_SPLASH_SCREEN)
   }, [])
 
   return (
