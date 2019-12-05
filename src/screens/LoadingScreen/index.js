@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react'
-import { ActivityIndicator } from 'react-native'
+import { View, Image } from 'react-native'
 import * as firebase from 'firebase'
 import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
 import * as CacheService from '~/cacheService'
+import Background from '~/helpers/Background'
+import AppText from '~/helpers/AppText'
+import DrCannabis from '~/assets/images/DrCannabis.png'
+import styles from './styles'
 
 const checkIfLoggedIn = () => {
   const unsuscribe = firebase.auth().onAuthStateChanged(user => {
@@ -27,11 +31,20 @@ const LoadingScreen = () => {
         checkIfLoggedIn()
       }
     }
-    decideIfGoToPrivacyPolicyScreenOrLoginScreen()
+
+    setTimeout(() => decideIfGoToPrivacyPolicyScreenOrLoginScreen(), 4000)
   }, [])
 
   return (
-    <ActivityIndicator />
+    <Background>
+      <View style={styles.container}>
+        <Image
+          style={styles.DrCannabisIcon}
+          source={DrCannabis}
+        />
+        <AppText style={styles.DrCannabisText}>Dr. Cannabis</AppText>
+      </View>
+    </Background>
   )
 }
 
