@@ -5,7 +5,7 @@ import * as AnalyticsService from '~/analyticsService'
 import { View } from 'react-native'
 import * as firebase from 'firebase'
 import styles from '../styles'
-import { isValidEmail } from '../utils'
+import { isValidEmail, enableNotificationsForUser } from '../utils'
 import Background from '../Background'
 import LoginHeader from './LoginHeader'
 import LoginForm from './LoginForm'
@@ -34,8 +34,7 @@ const LoginEmail = () => {
         email = values.account
       }
       await firebase.auth().signInWithEmailAndPassword(email, values.password)
-      await MessagingService.checkForPermissions()
-      await MessagingService.saveFCMTokenForCurrentUser()
+      await enableNotificationsForUser()
       NavigationService.navigate('MainApp')
     } catch (error) {
       setError(error)

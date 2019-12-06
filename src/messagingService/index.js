@@ -1,6 +1,8 @@
 import messaging from '@react-native-firebase/messaging'
 import firebase from 'firebase'
 import 'firebase/functions'
+import MessagingError from '~/AppErrors/MessagingError'
+import * as CacheService from '~/cacheService'
 
 export const checkForPermissions = async () => {
   const enabled = await messaging().hasPermission()
@@ -9,7 +11,7 @@ export const checkForPermissions = async () => {
     try {
       await messaging().requestPermission()
     } catch (error) {
-      console.log(error.message)
+      throw new MessagingError(error.message)
     }
   }
 }
@@ -17,31 +19,37 @@ export const checkForPermissions = async () => {
 export const saveFCMTokenForCurrentUser = async () => {
   if (messaging().hasPermission()) {
     const fcmToken = await messaging().getToken()
-
     if (fcmToken) {
       try {
+        await CacheService.setItem('fcmToken', fcmToken)
         const storeFCMTokenInUserGroup = firebase.functions().httpsCallable('storeFCMTokenInUserGroup')
 
         await storeFCMTokenInUserGroup({ fcmToken: fcmToken })
       } catch (error) {
-        console.log(error.message)
+        throw new MessagingError(error.message)
       }
     }
   }
 }
 
 export const deleteFCMTokenForCurrentUser = async () => {
-  if (await messaging().hasPermission()) {
-    const fcmToken = await messaging().getToken()
+  let fcmToken
 
-    if (fcmToken) {
-      try {
-        const removeFCMTokenInUserGroup = firebase.functions().httpsCallable('removeFCMTokenInUserGroup')
+  try {
+    fcmToken = await CacheService.getItem('fcmToken')
 
-        await removeFCMTokenInUserGroup({ fcmToken: fcmToken })
-      } catch (error) {
-        console.log(error.message)
-      }
+    await CacheService.removeItem('fcmToken')
+  } catch (error) {
+    fcmToken = null
+  }
+
+  if (fcmToken) {
+    try {
+      const removeFCMTokenInUserGroup = firebase.functions().httpsCallable('removeFCMTokenInUserGroup')
+      
+      await removeFCMTokenInUserGroup({ fcmToken: fcmToken })
+    } catch (error) {
+      throw new MessagingError(error.message)
     }
   }
 }
