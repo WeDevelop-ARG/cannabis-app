@@ -9,6 +9,8 @@ import * as AnalyticsService from '~/analyticsService'
 import GoogleButton from '../SocialNetworks/GoogleButton'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
+import MessagingService from '~/messagingService'
+import { enableNotificationsForUser } from '../utils'
 
 const onEmailButtonPress = () => {
   NavigationService.navigate('LoginEmail')
@@ -20,11 +22,13 @@ const onGoogleButtonPress = async () => {
     const userEmail = signInData.user.email
     if (await AuthenticationService.emailAlreadyHasGoogleSignIn(userEmail)) {
       await AuthenticationService.loginWithGoogleSignInData(signInData)
+      await enableNotificationsForUser()
       NavigationService.navigate('MainApp')
     } else {
       const username = await DatabaseService.queryUsernameFromEmail(userEmail)
       if (username) {
         await AuthenticationService.loginWithGoogleSignInData()
+        await enableNotificationsForUser()
         NavigationService.navigate('MainApp')
       } else {
         NavigationService.navigate('UsernameRequest', { socialNetwork: 'google' })

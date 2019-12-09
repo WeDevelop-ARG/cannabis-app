@@ -24,3 +24,11 @@ export const getItem = async (itemKey) => {
   }
   return null
 }
+
+export const removeItem = async (itemKey) => {
+  try {
+    const item = await AsyncStorage.removeItem(itemKey)
+  } catch (error) {
+    throw new CacheError(error.message)
+  }
+}

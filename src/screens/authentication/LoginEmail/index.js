@@ -5,11 +5,12 @@ import * as AnalyticsService from '~/analyticsService'
 import { View } from 'react-native'
 import * as firebase from 'firebase'
 import styles from '../styles'
-import { isValidEmail } from '../utils'
+import { isValidEmail, enableNotificationsForUser } from '../utils'
 import Background from '../Background'
 import LoginHeader from './LoginHeader'
 import LoginForm from './LoginForm'
 import NoAccountLink from './NoAccountLink'
+import MessagingService from '~/messagingService'
 
 const initialValues = {
   account: '',
@@ -32,8 +33,8 @@ const LoginEmail = () => {
       } else {
         email = values.account
       }
-
       await firebase.auth().signInWithEmailAndPassword(email, values.password)
+      await enableNotificationsForUser()
       NavigationService.navigate('MainApp')
     } catch (error) {
       setError(error)

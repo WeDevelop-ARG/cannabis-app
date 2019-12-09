@@ -7,6 +7,8 @@ import * as DatabaseService from '~/databaseService'
 import NavigationService from '~/navigationService'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
+import MessagingService from '~/messagingService'
+import { enableNotificationsForUser } from '../utils'
 
 const SubmitIndicator = ({ submitting }) => (
   submitting &&
@@ -51,6 +53,7 @@ const UsernameRequest = (props) => {
     } finally {
       setSubmitting(false)
       if (signedIn) {
+        await enableNotificationsForUser()
         NavigationService.navigate('MainApp')
       }
     }

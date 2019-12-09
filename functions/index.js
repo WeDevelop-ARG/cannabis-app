@@ -1,5 +1,6 @@
 const admin = require('firebase-admin')
 const functions = require('firebase-functions')
+const fetch = require('node-fetch')
 
 admin.initializeApp()
 
@@ -43,5 +44,126 @@ const onAnswerMigrateToUserCollection = functions
     }
   })
 
+const sendDiagnoseResponsePushNotification = functions
+  .firestore
+  .document('users/{userUID}/requests/{diagnoseUID}/responses/{responseUID}')
+  .onCreate(async (snapshot, context) => {
+    const notificationKeyName = `appUser-${context.params.userUID}`
+    const notificationKey = await getNotificationKey(notificationKeyName)
+
+    if (notificationKey !== null) {
+      const payload = {
+        notification: {
+          title: '¡Tu solicitud de diagnóstico ha sido respondida!',
+          body: 'Ingresá a la aplicación para leer la respuesta del profesional.'
+        }
+      }
+
+      try {
+        const deviceGroupResponse = await admin.messaging().sendToDeviceGroup(notificationKey, payload)
+        if (deviceGroupResponse.failureCount > 0) {
+          await runFCMOperation('remove', notificationKeyName, notificationKey, deviceGroupResponse.failedRegistrationTokens)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  })
+
+const fetchNotificationRequest = async (url, method, body) => {
+  try {
+    const options = {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `key = ${functions.config().fcm.api_key}`,
+        project_id: functions.config().fcm.sender_id
+      }
+    }
+
+    if (method === 'post') {
+      options.body = JSON.stringify(body)
+    }
+
+    const response = await fetch(url, options)
+
+    return await response.text()
+  } catch (error) {
+    console.log(error)
+
+    return null
+  }
+}
+
+const getNotificationKey = async (notificationKeyName) => {
+  const url = `https://fcm.googleapis.com/fcm/notification?notification_key_name=${notificationKeyName}`
+
+  try {
+    const result = await fetchNotificationRequest(url, 'get', {})
+    const json = JSON.parse(result)
+
+    if (json.notification_key !== undefined) {
+      return json.notification_key
+    }
+  } catch (error) {
+    console.log(error)
+  }
+  return null
+}
+
+const createNotificationGroup = async (notificationKeyName, fcmToken) => {
+  const url = 'https://fcm.googleapis.com/fcm/notification'
+  const data = {
+    operation: 'create',
+    notification_key_name: notificationKeyName,
+    registration_ids: [fcmToken]
+  }
+
+  await fetchNotificationRequest(url, 'post', data)
+}
+
+const runFCMOperation = async (operation, notificationKeyName, notificationKey, fcmTokens) => {
+  const url = 'https://fcm.googleapis.com/fcm/notification'
+  const body = {
+    operation: operation,
+    notification_key_name: notificationKeyName,
+    notification_key: notificationKey,
+    registration_ids: fcmTokens
+  }
+
+  await fetchNotificationRequest(url, 'post', body)
+}
+
+const storeFCMTokenInUserGroup = functions
+  .https
+  .onCall(async (data, context) => {
+    const fcmToken = data.fcmToken
+    const uid = context.auth.uid
+    const notificationKeyName = 'appUser-' + uid
+    const notificationKey = await getNotificationKey(notificationKeyName)
+
+    if (notificationKey === null) {
+      await createNotificationGroup(notificationKeyName, fcmToken)
+    } else {
+      await runFCMOperation('add', notificationKeyName, notificationKey, [fcmToken])
+    }
+  })
+
+const removeFCMTokenInUserGroup = functions
+  .https
+  .onCall(async (data, context) => {
+    const fcmToken = data.fcmToken
+    const uid = context.auth.uid
+    const notificationKeyName = 'appUser-' + uid
+    const notificationKey = await getNotificationKey(notificationKeyName)
+
+    if (notificationKey !== null) {
+      await runFCMOperation('remove', notificationKeyName, notificationKey, [fcmToken])
+    }
+  })
+
+exports.sendDiagnoseResponsePushNotification = sendDiagnoseResponsePushNotification
 exports.onDiagnoseCreateMigrateToUserCollection = onDiagnoseCreateMigrateToUserCollection
 exports.onAnswerMigrateToUserCollection = onAnswerMigrateToUserCollection
+exports.storeFCMTokenInUserGroup = storeFCMTokenInUserGroup
+exports.removeFCMTokenInUserGroup = removeFCMTokenInUserGroup
