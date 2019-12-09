@@ -55,7 +55,7 @@ Text.propTypes = {
 }
 
 Text.defaultProps = {
-  colorVariant: 'black',
+  colorVariant: 'white',
   fontVariant: 'body'
 }
 
