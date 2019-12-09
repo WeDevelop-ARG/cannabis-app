@@ -26,15 +26,15 @@ const LoadingScreen = () => {
   AnalyticsService.setCurrentScreenName('Loading Screen')
 
   useEffect(() => {
-    const decideIfGoToOnBoardingScreenOrSignUpScreen = async () => {
-      if (!await CacheService.getItem('OnBoardingSeen')) {
-        NavigationService.navigate('OnBoarding')
+    const decideIfGoToOnboardingScreenOrSignUpScreen = async () => {
+      if (!await CacheService.getItem('OnboardingSeen')) {
+        NavigationService.navigate('Onboarding')
       } else {
         checkIfSignedUp()
       }
     }
 
-    setTimeout(() => decideIfGoToOnBoardingScreenOrSignUpScreen(), MILLISECONDS_SHOWING_SPLASH_SCREEN)
+    setTimeout(() => decideIfGoToOnboardingScreenOrSignUpScreen(), MILLISECONDS_SHOWING_SPLASH_SCREEN)
   }, [])
 
   return (

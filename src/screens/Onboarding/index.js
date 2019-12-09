@@ -6,14 +6,14 @@ import * as CacheService from '~/cacheService'
 import NavigationService from '~/navigationService'
 import Background from '~/helpers/Background'
 import AppText from '~/helpers/AppText'
-import OnBoardingItem from './OnBoardingItem'
+import OnboardingItem from './OnboardingItem'
 import Header from './Header'
-import firstImage from '~/assets/images/OnBoarding/first.png'
-import secondImage from '~/assets/images/OnBoarding/second.png'
-import thirdImage from '~/assets/images/OnBoarding/third.png'
+import firstImage from '~/assets/images/Onboarding/first.png'
+import secondImage from '~/assets/images/Onboarding/second.png'
+import thirdImage from '~/assets/images/Onboarding/third.png'
 import styles from './styles'
 
-const OnBoardingItems = [
+const OnboardingItems = [
   {
     imageSource: firstImage,
     text: '¿Querés saber el estado de tu planta?'
@@ -32,23 +32,23 @@ const OnBoardingItems = [
 ]
 
 const renderItem = ({ item, index }) => (
-  <OnBoardingItem imageSource={item.imageSource}>
+  <OnboardingItem imageSource={item.imageSource}>
     {item.text}
-  </OnBoardingItem>
+  </OnboardingItem>
 )
 
 const handleExit = async () => {
-  await CacheService.setItem('OnBoardingSeen', 'true')
+  await CacheService.setItem('OnboardingSeen', 'true')
   NavigationService.navigate('SignUp')
 }
 
-const OnBoarding = () => {
-  AnalyticsService.setCurrentScreenName('OnBoarding')
+const Onboarding = () => {
+  AnalyticsService.setCurrentScreenName('Onboarding')
   const [activeIndex, setActiveIndex] = useState(0)
   const carouselRef = useRef()
 
   const slideIsLastOne = (index) => {
-    return ((index) === OnBoardingItems.length - 1)
+    return ((index) === OnboardingItems.length - 1)
   }
 
   const nextSlideIsLastOne = () => {
@@ -78,14 +78,14 @@ const OnBoarding = () => {
         <View style={styles.carouselContainer}>
           <Carousel
             ref={carouselRef}
-            data={OnBoardingItems}
+            data={OnboardingItems}
             renderItem={renderItem}
             sliderWidth={300}
             itemWidth={300}
             onSnapToItem={(index) => moveCarouselWithSlide(index)}
           />
           <Pagination
-            dotsLength={OnBoardingItems.length}
+            dotsLength={OnboardingItems.length}
             activeDotIndex={activeIndex}
             carouselRef={carouselRef}
             dotStyle={styles.paginationDot}
@@ -103,4 +103,4 @@ const OnBoarding = () => {
   )
 }
 
-export default OnBoarding
+export default Onboarding

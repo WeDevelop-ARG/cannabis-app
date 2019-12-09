@@ -13,7 +13,7 @@ import LoginEmail from './screens/authentication/LoginEmail'
 import UsernameRequest from './screens/authentication/UsernameRequest'
 import Home from './screens/MainApp/Home'
 import LoadingScreen from './screens/LoadingScreen'
-import OnBoarding from './screens/OnBoarding'
+import Onboarding from './screens/Onboarding'
 import PrivacyPolicy from './screens/PrivacyPolicy'
 import DiagnoseRequest from './screens/MainApp/DiagnoseRequest'
 import DiagnoseResponse from './screens/MainApp/DiagnoseResponse'
@@ -83,7 +83,7 @@ const MainNavigator = createSwitchNavigator({
   Login: { screen: Login },
   LoginEmail: { screen: LoginEmail },
   UsernameRequest: { screen: UsernameRequest },
-  OnBoarding: { screen: OnBoarding }
+  Onboarding: { screen: Onboarding }
 })
 
 const AppContainer = createAppContainer(MainNavigator)
