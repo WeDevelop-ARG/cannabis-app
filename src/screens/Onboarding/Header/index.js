@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
-import AppText from '~/helpers/AppText'
+import { View, Image } from 'react-native'
+import { Text, Button } from '~/components'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
 
@@ -10,12 +10,9 @@ const Header = ({ onExitPress }) => (
       style={styles.headerImage}
       source={DrCannabis}
     />
-    <TouchableOpacity
-      style={styles.button}
-      onPress={onExitPress}
-    >
-      <AppText style={styles.buttonText}>Saltar</AppText>
-    </TouchableOpacity>
+    <Button variant='alpha' onPress={onExitPress}>
+      <Text>Saltar</Text>
+    </Button>
   </View>
 )
 

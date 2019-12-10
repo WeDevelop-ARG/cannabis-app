@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react'
-import { View, TouchableOpacity } from 'react-native'
+import { View } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import * as AnalyticsService from '~/analyticsService'
 import * as CacheService from '~/cacheService'
 import NavigationService from '~/navigationService'
 import Background from '~/helpers/Background'
-import AppText from '~/helpers/AppText'
+import { Text, Button } from '~/components'
 import OnboardingItem from './OnboardingItem'
 import Header from './Header'
 import firstImage from '~/assets/images/Onboarding/first.png'
@@ -92,12 +92,12 @@ const Onboarding = () => {
             inactiveDotStyle={styles.inactivePaginationDot}
           />
         </View>
-        <TouchableOpacity
-          style={styles.continueButton}
+        <Button
+          variant='alpha'
           onPress={moveCarouselForwardWithButton}
         >
-          <AppText style={styles.continueButtonText}>Siguiente</AppText>
-        </TouchableOpacity>
+          <Text>Siguiente</Text>
+        </Button>
       </View>
     </Background>
   )

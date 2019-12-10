@@ -11,13 +11,6 @@ const styles = StyleSheet.create({
   headerImage: {
     width: moderateScale(75),
     height: moderateScale(75)
-  },
-  button: {
-    margin: verticalScale(15)
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: scale(14)
   }
 })
 
