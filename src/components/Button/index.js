@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
     height: theme.sizes.base,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: theme.sizes.padding
+    margin: theme.sizes.margin,
+    padding: theme.sizes.padding
   },
 
   primary: { backgroundColor: theme.colors.primary },
@@ -42,12 +43,13 @@ const styles = StyleSheet.create({
   white: { backgroundColor: theme.colors.white },
   gray: { backgroundColor: theme.colors.gray },
   gray2: { backgroundColor: theme.colors.gray2 },
-  gray3: { backgroundColor: theme.colors.gray3 }
+  gray3: { backgroundColor: theme.colors.gray3 },
+  alpha: { backgroundColor: theme.colors.alpha }
 })
 
 Button.propTypes = {
   style: PropTypes.object,
-  variant: PropTypes.oneOf(['primary', 'secondary', 'black', 'white', 'gray', 'gray2', 'gray3'])
+  variant: PropTypes.oneOf(['primary', 'secondary', 'black', 'white', 'gray', 'gray2', 'gray3', 'alpha'])
 }
 
 Button.defaultProps = {

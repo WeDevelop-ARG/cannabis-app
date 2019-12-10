@@ -7,7 +7,8 @@ const colors = {
   white: '#FFFFFF',
   gray: '#BDBFC7',
   gray2: '#D8D8D8',
-  gray3: '#F0F0F0'
+  gray3: '#F0F0F0',
+  alpha: 'rgba(255, 255, 255, 0.01)'
 }
 
 const sizes = {
