@@ -7,7 +7,7 @@ import * as firebase from 'firebase'
 import * as Yup from 'yup'
 import styles from '../styles'
 import AccountLink from './AccountLink'
-import Background from '../Background'
+import Background from '~/helpers/Background'
 import SignUpHeader from './SignUpHeader'
 import SignUpForm from './SignUpForm'
 

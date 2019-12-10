@@ -1,25 +1,23 @@
 import React from 'react'
-import { KeyboardAvoidingView, TextInput, TouchableHighlight } from 'react-native'
+import { KeyboardAvoidingView, TextInput } from 'react-native'
 import { Formik } from 'formik'
-import AppText from '~/helpers/AppText'
+import { Text, Button } from '~/components'
 import AuthenticatingIndicator from '~/screens/authentication/AuthenticatingIndicator'
 import styles from './styles'
 
 const Error = ({ error }) => (
-  error && <AppText style={styles.signUpError}>
+  error && <Text style={styles.signUpError}>
   Combinación de usuario, email y contraseña no aceptada.
-  </AppText>
+  </Text>
 )
 
 const SignUpButton = ({ onPress }) => (
-  <TouchableHighlight
+  <Button
     style={styles.signUpButton}
     onPress={onPress}
   >
-    <AppText style={styles.signUpText}>
-        Registrarme
-    </AppText>
-  </TouchableHighlight>
+    <Text>Registrarme</Text>
+  </Button>
 )
 
 const SignUpForm = ({ initialValues, handleSubmit, schema, error, authenticating }) => (
@@ -38,7 +36,7 @@ const SignUpForm = ({ initialValues, handleSubmit, schema, error, authenticating
           value={formikProps.values.username}
         />
         {formikProps.touched.username && formikProps.errors.username &&
-        <AppText style={styles.errorMessage}>{formikProps.errors.username}</AppText>
+        <Text style={styles.errorMessage}>{formikProps.errors.username}</Text>
         }
         <TextInput
           style={styles.label}
@@ -48,7 +46,7 @@ const SignUpForm = ({ initialValues, handleSubmit, schema, error, authenticating
           value={formikProps.values.email}
         />
         {formikProps.touched.email && formikProps.errors.email &&
-        <AppText style={styles.errorMessage}>{formikProps.errors.email}</AppText>
+        <Text style={styles.errorMessage}>{formikProps.errors.email}</Text>
         }
         <TextInput
           style={styles.label}
@@ -59,7 +57,7 @@ const SignUpForm = ({ initialValues, handleSubmit, schema, error, authenticating
           value={formikProps.values.password}
         />
         {formikProps.touched.password && formikProps.errors.password &&
-        <AppText style={styles.errorMessage}>{formikProps.errors.password}</AppText>
+        <Text style={styles.errorMessage}>{formikProps.errors.password}</Text>
         }
         <Error error={error} />
         <AuthenticatingIndicator authenticating={authenticating} />

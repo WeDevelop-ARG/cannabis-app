@@ -6,11 +6,10 @@ import { View } from 'react-native'
 import * as firebase from 'firebase'
 import styles from '../styles'
 import { isValidEmail, enableNotificationsForUser } from '../utils'
-import Background from '../Background'
+import Background from '~/helpers/Background'
 import LoginHeader from './LoginHeader'
 import LoginForm from './LoginForm'
 import NoAccountLink from './NoAccountLink'
-import MessagingService from '~/messagingService'
 
 const initialValues = {
   account: '',

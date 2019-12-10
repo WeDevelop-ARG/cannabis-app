@@ -1,37 +1,26 @@
 import { StyleSheet } from 'react-native'
-import { heightPercentageToDP, widthPercentageToDP } from '~/styleMixins'
+import { widthPercentageToDP } from 'react-native-responsive-screen'
+import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   loginError: {
-    textAlign: 'center',
-    color: 'white'
+    textAlign: 'center'
   },
   loginForm: {
     width: widthPercentageToDP('75%'),
-    margin: heightPercentageToDP('15%')
+    margin: theme.sizes.margin
   },
   loginButton: {
-    backgroundColor: 'rgba(92, 254, 78, 0.71)',
-    borderRadius: 40,
-    margin: heightPercentageToDP('5%'),
-    padding: 10,
     alignSelf: 'center'
   },
-  loginText: {
-    color: 'white'
-  },
-  errorMessage: {
-    paddingLeft: 20,
-    color: 'white'
-  },
   label: {
-    margin: heightPercentageToDP('1'),
-    padding: heightPercentageToDP('1'),
-    paddingLeft: 15,
-    backgroundColor: 'rgba(254,93,78, 0.8)',
-    color: 'white',
+    margin: theme.sizes.margin / 2,
+    padding: theme.sizes.padding / 2,
+    paddingLeft: theme.sizes.padding,
+    backgroundColor: theme.colors.secondary,
+    color: theme.colors.white,
     textDecorationLine: 'none',
-    borderRadius: 40
+    borderRadius: theme.sizes.border
   }
 })
 

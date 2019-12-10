@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import { KeyboardAvoidingView, Image, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native'
-import AppText from '~/helpers/AppText'
+import { KeyboardAvoidingView, Image, TextInput, ActivityIndicator } from 'react-native'
+import { Text, Button } from '~/components'
 import Background from '~/helpers/Background'
 import * as AuthenticationService from '~/authenticationService'
 import * as DatabaseService from '~/databaseService'
 import NavigationService from '~/navigationService'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
-import MessagingService from '~/messagingService'
 import { enableNotificationsForUser } from '../utils'
 
 const SubmitIndicator = ({ submitting }) => (
@@ -18,7 +17,7 @@ const SubmitIndicator = ({ submitting }) => (
 )
 
 const Error = ({ error }) => (
-  error && <AppText style={styles.error}>{error}</AppText>
+  error && <Text fontVariant='h3' style={styles.error}>{error}</Text>
 )
 
 const UsernameRequest = (props) => {
@@ -71,8 +70,8 @@ const UsernameRequest = (props) => {
           style={styles.drCannabisIcon}
           source={DrCannabis}
         />
-        <AppText style={styles.information}>Antes de iniciar sesión vamos a necesitar un nombre para tu usuario.</AppText>
-        <AppText style={styles.usernameTag}>Usuario</AppText>
+        <Text fontVariant='description' style={styles.information}>Antes de iniciar sesión vamos a necesitar un nombre para tu usuario.</Text>
+        <Text fontVariant='h1' style={styles.usernameTag}>Usuario</Text>
         <TextInput
           style={styles.textInput}
           placeholder='Escribinos un nombre de usuario'
@@ -82,12 +81,12 @@ const UsernameRequest = (props) => {
         />
         <Error error={error} />
         <SubmitIndicator submitting={submitting} />
-        <TouchableOpacity
+        <Button
           style={styles.submitButton}
           onPress={submitHandler}
         >
-          <AppText style={styles.submitButtonText}>Aceptar</AppText>
-        </TouchableOpacity>
+          <Text>Aceptar</Text>
+        </Button>
       </KeyboardAvoidingView>
     </Background>
   )

@@ -1,22 +1,22 @@
-import React from 'react'
 import { StyleSheet } from 'react-native'
-import { scale, verticalScale } from 'react-native-size-matters'
+import { scale } from 'react-native-size-matters'
+import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   button: {
-    height: verticalScale(30),
-    backgroundColor: 'rgba(254,93,78, 0.8)'
+    height: theme.sizes.base,
+    paddingVertical: theme.sizes.padding,
+    margin: theme.sizes.margin,
+    backgroundColor: '#dd4b39' // specific google color
   },
   icon: {
     alignSelf: 'center',
-    paddingHorizontal: scale(10),
-    borderRightColor: 'white',
+    paddingHorizontal: theme.sizes.padding,
+    borderRightColor: theme.colors.white,
     borderRightWidth: scale(1)
   },
   text: {
-    fontSize: scale(14),
-    padding: scale(10),
-    color: 'white'
+    padding: theme.sizes.padding
   }
 })
 
