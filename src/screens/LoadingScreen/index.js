@@ -4,6 +4,7 @@ import * as firebase from 'firebase'
 import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
 import * as CacheService from '~/cacheService'
+import * as DatabaseService from '~/databaseService'
 import Background from '~/helpers/Background'
 import AppText from '~/helpers/AppText'
 import DrCannabis from '~/assets/images/DrCannabis.png'
@@ -12,10 +13,15 @@ import styles from './styles'
 const MILLISECONDS_SHOWING_SPLASH_SCREEN = 2000
 
 const checkIfSignedUp = () => {
-  const unsuscribe = firebase.auth().onAuthStateChanged(user => {
+  const unsuscribe = firebase.auth().onAuthStateChanged(async user => {
     unsuscribe()
     if (user) {
-      NavigationService.navigate('MainApp')
+      const username = await DatabaseService.queryUsernameFromEmail(user.email)
+      if (!username) {
+        NavigationService.navigate('UsernameRequest')
+      } else {
+        NavigationService.navigate('MainApp')
+      }
     } else {
       NavigationService.navigate('SignUp')
     }
