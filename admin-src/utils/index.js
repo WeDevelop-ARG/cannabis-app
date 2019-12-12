@@ -20,3 +20,18 @@ export const getDownloadURLFromImages = async (imageReferences) => (
     Promise.resolve([])
   )
 )
+
+export const userHasAccess = async () => {
+  try {
+    const user = await firebase.auth().currentUser
+
+    if (!user) return false
+
+    const result = await user.getIdTokenResult()
+
+    return Boolean(result.claims.isAdmin)
+  } catch (error) {
+    console.error(error.message)
+    return false
+  }
+}
