@@ -14,7 +14,6 @@ import UsernameRequest from './screens/authentication/UsernameRequest'
 import Home from './screens/MainApp/Home'
 import LoadingScreen from './screens/LoadingScreen'
 import Onboarding from './screens/Onboarding'
-import PrivacyPolicy from './screens/PrivacyPolicy'
 import DiagnoseRequest from './screens/MainApp/DiagnoseRequest'
 import DiagnoseResponse from './screens/MainApp/DiagnoseResponse'
 import Settings from './screens/MainApp/Settings'
@@ -77,7 +76,6 @@ const MainApp = createBottomTabNavigator({
 
 const MainNavigator = createSwitchNavigator({
   LoadingScreen: { screen: LoadingScreen },
-  PrivacyPolicy: { screen: PrivacyPolicy },
   MainApp: { screen: MainApp },
   SignUp: { screen: SignUp },
   Login: { screen: Login },
