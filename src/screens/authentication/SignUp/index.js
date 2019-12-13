@@ -1,25 +1,23 @@
 import React, { useState } from 'react'
 import NavigationService from '~/navigationService'
-import * as DatabaseService from '~/databaseService'
 import * as AnalyticsService from '~/analyticsService'
+import * as AuthenticationService from '~/authenticationService'
 import { View } from 'react-native'
-import * as firebase from 'firebase'
 import * as Yup from 'yup'
 import styles from '../styles'
 import AccountLink from './AccountLink'
 import Background from '~/helpers/Background'
 import SignUpHeader from './SignUpHeader'
 import SignUpForm from './SignUpForm'
+import GoogleButton from '../SocialNetworks/GoogleButton'
+import PrivacyPolicyText from './PrivacyPolicyText'
 
 const initialValues = {
-  username: '',
   email: '',
   password: ''
 }
 
 const schema = Yup.object().shape({
-  username: Yup.string()
-    .required('Requerido'),
   email: Yup.string()
     .email('Email inválido')
     .required('Requerido'),
@@ -38,25 +36,8 @@ const SignUp = () => {
     setAuthenticating(true)
     setError(null)
     try {
-      if (await DatabaseService.usernameAlreadyInUse(values.username)) {
-        throw new Error('Nombre de usuario no válido')
-      }
-
-      const userCredentials = await firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
-      const user = userCredentials.user
-
-      await user.updateProfile({
-        displayName: values.username
-      })
-
-      const newUserUID = user.uid
-      const newUserData = {
-        email: values.email,
-        username: values.username
-      }
-
-      await DatabaseService.addNewUserData(newUserUID, newUserData)
-      NavigationService.navigate('MainApp')
+      await AuthenticationService.emailSignUp(values.email, values.password)
+      NavigationService.navigate('UsernameRequest')
     } catch (error) {
       setError(error)
       setAuthenticating(false)
@@ -66,6 +47,7 @@ const SignUp = () => {
   return (
     <Background>
       <View style={styles.container}>
+        <AccountLink />
         <SignUpHeader />
         <SignUpForm
           initialValues={initialValues}
@@ -74,7 +56,8 @@ const SignUp = () => {
           error={error}
           authenticating={authenticating}
         />
-        <AccountLink />
+        <GoogleButton />
+        <PrivacyPolicyText />
       </View>
     </Background>
   )

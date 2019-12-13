@@ -7,7 +7,7 @@ import styles from './styles'
 
 const Error = ({ error }) => (
   error && <Text style={styles.signUpError}>
-  Combinación de usuario, email y contraseña no aceptada.
+  Combinación de email y contraseña no aceptada.
   </Text>
 )
 
@@ -28,16 +28,6 @@ const SignUpForm = ({ initialValues, handleSubmit, schema, error, authenticating
   >
     {formikProps => (
       <KeyboardAvoidingView style={styles.signUpForm}>
-        <TextInput
-          style={styles.label}
-          placeholder='Nombre de usuario'
-          placeholderTextColor='white'
-          onChangeText={formikProps.handleChange('username')}
-          value={formikProps.values.username}
-        />
-        {formikProps.touched.username && formikProps.errors.username &&
-        <Text style={styles.errorMessage}>{formikProps.errors.username}</Text>
-        }
         <TextInput
           style={styles.label}
           placeholder='email@ejemplo.com'

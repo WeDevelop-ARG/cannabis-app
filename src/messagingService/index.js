@@ -46,11 +46,20 @@ export const deleteFCMTokenForCurrentUser = async () => {
   if (fcmToken) {
     try {
       const removeFCMTokenInUserGroup = firebase.functions().httpsCallable('removeFCMTokenInUserGroup')
-      
+
       await removeFCMTokenInUserGroup({ fcmToken: fcmToken })
     } catch (error) {
       throw new MessagingError(error.message)
     }
+  }
+}
+
+export const enableNotificationsForUser = async () => {
+  try {
+    await checkForPermissions()
+    await saveFCMTokenForCurrentUser()
+  } catch (error) {
+    throw new MessagingError(error.message)
   }
 }
 

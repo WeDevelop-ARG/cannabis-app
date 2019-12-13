@@ -1,7 +1,7 @@
 import * as firebase from 'firebase'
-import { GoogleSignin } from 'react-native-google-signin'
+import * as MessagingService from '~/messagingService'
 import AuthenticationError from '~/AppErrors/AuthenticationError'
-import googleConfig from '~/configs/google'
+import { GoogleLogin, EmailLogin, EmailSignUp } from './authenticationMethods'
 
 export const getCurrentUserUID = () => {
   try {
@@ -11,35 +11,36 @@ export const getCurrentUserUID = () => {
   }
 }
 
-export const getGoogleSignInData = async () => {
+export const getCurrentUser = () => {
   try {
-    await GoogleSignin.configure({
-      webClientId: googleConfig.webClientId
-    })
-    const googleSignInData = await GoogleSignin.signIn()
+    return firebase.auth().currentUser
+  } catch (error) {
+    throw new AuthenticationError('Not logged in.')
+  }
+}
 
-    return googleSignInData
+const authenticate = async (AuthenticationMethod) => {
+  // SigninMethod should be either EmailLogin, GoogleLogin, or any other that we may need.
+  try {
+    const firebaseCredential = await AuthenticationMethod.authenticate()
+    await MessagingService.enableNotificationsForUser()
+    return firebaseCredential
   } catch (error) {
     throw new AuthenticationError(error.message)
   }
 }
 
-export const loginWithGoogleSignInData = async (googleSignInData) => {
+export const emailSignUp = async (email, password) => {
   try {
-    const credential = firebase.auth.GoogleAuthProvider.credential(googleSignInData.idToken, googleSignInData.accessToken)
-    const firebaseUserCredential = await firebase.auth().signInWithCredential(credential)
-
-    return firebaseUserCredential
+    return await authenticate(new EmailSignUp(email, password))
   } catch (error) {
     throw new AuthenticationError(error.message)
   }
 }
 
-export const emailAlreadyHasGoogleSignIn = async (email) => {
+export const emailLogin = async (email, password) => {
   try {
-    const signInMethods = await firebase.auth().fetchSignInMethodsForEmail(email)
-
-    return signInMethods.indexOf('google.com') !== -1
+    return await authenticate(new EmailLogin(email, password))
   } catch (error) {
     throw new AuthenticationError(error.message)
   }
@@ -47,11 +48,7 @@ export const emailAlreadyHasGoogleSignIn = async (email) => {
 
 export const googleLogin = async () => {
   try {
-    const googleSignInData = await getGoogleSignInData()
-    const credential = firebase.auth.GoogleAuthProvider.credential(googleSignInData.idToken, googleSignInData.accessToken)
-    const firebaseUserCredential = await firebase.auth().signInWithCredential(credential)
-
-    return firebaseUserCredential
+    return await authenticate(new GoogleLogin())
   } catch (error) {
     throw new AuthenticationError(error.message)
   }

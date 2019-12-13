@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
   signUpImage: {
     width: moderateScale(150),
     height: moderateScale(150),
-    right: theme.sizes.padding,
     margin: theme.sizes.margin
   },
   signUpText: {
