@@ -6,7 +6,7 @@ import * as AnalyticsService from '~/analyticsService'
 import * as CacheService from '~/cacheService'
 import * as DatabaseService from '~/databaseService'
 import Background from '~/helpers/Background'
-import AppText from '~/helpers/AppText'
+import { Text } from '~/components'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
 
@@ -50,7 +50,7 @@ const LoadingScreen = () => {
           style={styles.DrCannabisIcon}
           source={DrCannabis}
         />
-        <AppText style={styles.DrCannabisText}>Dr. Cannabis</AppText>
+        <Text fontVariant='h1' colorVariant='primary' style={styles.DrCannabisText}>Dr. Cannabis</Text>
       </View>
     </Background>
   )

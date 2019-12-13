@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native'
 import { scale, verticalScale } from 'react-native-size-matters'
+import { theme } from '~/constants'
 
 const baseMarginVertical = {
-  marginVertical: verticalScale(5)
+  marginVertical: theme.sizes.margin / 3
 }
 
 const styles = StyleSheet.create({
@@ -17,9 +18,7 @@ const styles = StyleSheet.create({
     ...baseMarginVertical
   },
   DrCannabisText: {
-    color: 'rgba(92, 254, 78, 0.71)',
     fontSize: scale(30),
-    fontWeight: 'bold',
     ...baseMarginVertical
   }
 
