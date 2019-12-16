@@ -1,18 +1,17 @@
 import { StyleSheet } from 'react-native'
-import { heightPercentageToDP, widthPercentageToDP } from '~/styleMixins'
+import { moderateScale } from 'react-native-size-matters'
+import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   loginImage: {
-    width: 163,
-    height: 163,
-    top: heightPercentageToDP('10%'),
-    right: 10
+    width: moderateScale(150),
+    height: moderateScale(150),
+    right: theme.sizes.padding,
+    margin: theme.sizes.margin
   },
   loginText: {
-    color: 'white',
-    fontSize: 18,
-    top: heightPercentageToDP('15%'),
-    right: widthPercentageToDP('25%')
+    left: theme.sizes.base,
+    alignSelf: 'flex-start'
   }
 })
 

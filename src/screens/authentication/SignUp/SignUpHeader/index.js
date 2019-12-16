@@ -1,15 +1,16 @@
 import React from 'react'
 import { Image } from 'react-native'
-import AppText from '~/helpers/AppText'
+import { Text } from '~/components'
+import signUpIcon from '~/assets/images/Authentication/signUpIcon.png'
 import styles from './styles'
 
 const SignUpHeader = () => (
   <>
     <Image
       style={styles.signUpImage}
-      source={require('~/screens/authentication/resources/signUpIconWhite.png')}
+      source={signUpIcon}
     />
-    <AppText style={styles.signUpText}> Crear cuenta</AppText>
+    <Text fontVariant='description' style={styles.signUpText}> Crear cuenta</Text>
   </>
 )
 

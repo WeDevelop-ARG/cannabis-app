@@ -1,37 +1,30 @@
 import { StyleSheet } from 'react-native'
-import { heightPercentageToDP, widthPercentageToDP } from '~/styleMixins'
+import { widthPercentageToDP } from 'react-native-responsive-screen'
+import { scale } from 'react-native-size-matters'
+import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   signUpError: {
-    textAlign: 'center',
-    color: 'white'
+    textAlign: 'center'
   },
   signUpForm: {
     width: widthPercentageToDP('75%'),
-    margin: heightPercentageToDP('15%')
+    margin: theme.sizes.margin
   },
   signUpButton: {
-    backgroundColor: 'rgba(92, 254, 78, 0.71)',
-    borderRadius: 40,
-    margin: heightPercentageToDP('5%'),
-    padding: 10,
     alignSelf: 'center'
   },
-  signUpText: {
-    color: 'white'
-  },
   errorMessage: {
-    paddingLeft: 20,
-    color: 'white'
+    paddingLeft: theme.sizes.margin
   },
   label: {
-    margin: heightPercentageToDP('1'),
-    padding: heightPercentageToDP('1'),
-    paddingLeft: 15,
-    backgroundColor: 'rgba(254,93,78, 0.8)',
-    color: 'white',
+    margin: theme.sizes.margin / 2,
+    padding: theme.sizes.padding / 2,
+    paddingLeft: theme.sizes.padding,
+    backgroundColor: theme.colors.secondary,
+    color: theme.colors.white,
     textDecorationLine: 'none',
-    borderRadius: 40
+    borderRadius: theme.sizes.border
   }
 })
 

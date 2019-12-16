@@ -1,25 +1,23 @@
 import React from 'react'
-import { KeyboardAvoidingView, TextInput, TouchableHighlight } from 'react-native'
+import { KeyboardAvoidingView, TextInput } from 'react-native'
 import { Formik } from 'formik'
-import AppText from '~/helpers/AppText'
+import { Text, Button } from '~/components'
 import AuthenticatingIndicator from '~/screens/authentication/AuthenticatingIndicator'
 import styles from './styles'
 
 const Error = ({ error }) => (
-  error && <AppText style={styles.loginError}>
+  error && <Text style={styles.loginError}>
   Las credenciales ingresadas no coinciden con nuestros registros.
-  </AppText>
+  </Text>
 )
 
 const LoginButton = ({ onPress }) => (
-  <TouchableHighlight
+  <Button
     style={styles.loginButton}
     onPress={onPress}
   >
-    <AppText style={styles.loginText}>
-       Ingresar
-    </AppText>
-  </TouchableHighlight>
+    <Text>Ingresar</Text>
+  </Button>
 )
 
 const LoginForm = ({ initialValues, handleSubmit, error, authenticating }) => (

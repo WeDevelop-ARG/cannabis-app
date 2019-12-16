@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
-import AppText from '~/helpers/AppText'
+import { View, Image } from 'react-native'
+import { Text, Button } from '~/components'
 import Background from '~/helpers/Background'
 import NavigationService from '~/navigationService'
 import * as AuthenticationService from '~/authenticationService'
@@ -9,7 +9,6 @@ import * as AnalyticsService from '~/analyticsService'
 import GoogleButton from '../SocialNetworks/GoogleButton'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
-import MessagingService from '~/messagingService'
 import { enableNotificationsForUser } from '../utils'
 
 const onEmailButtonPress = () => {
@@ -49,15 +48,16 @@ const Login = () => {
           source={DrCannabis}
           style={styles.drCannabisIcon}
         />
-        <AppText style={styles.welcomeMessage}>Bienvenido a Dr. Cannabis!</AppText>
+        <Text fontVariant='h1' style={styles.welcomeMessage}>Bienvenido a Dr. Cannabis!</Text>
         <GoogleButton style={styles.googleButton} onPress={onGoogleButtonPress} />
-        <AppText style={styles.optionDisclaimer}>ó</AppText>
-        <TouchableOpacity
+        <Text fontVariant='description' style={styles.optionDisclaimer}>ó</Text>
+        <Button
+          variant='alpha'
           style={styles.emailButton}
           onPress={onEmailButtonPress}
         >
-          <AppText style={styles.emailButtonText}>Ingresá con tu email o usuario</AppText>
-        </TouchableOpacity>
+          <Text>Ingresá con tu email o usuario</Text>
+        </Button>
       </View>
     </Background>
   )

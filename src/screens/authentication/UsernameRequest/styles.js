@@ -1,14 +1,16 @@
 import { StyleSheet } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import { scale, verticalScale } from 'react-native-size-matters'
+import { theme } from '~/constants'
 
 const marginVerticalBase = {
-  marginVertical: verticalScale(30)
+  marginVertical: theme.sizes.margin
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    top: heightPercentageToDP('10%')
   },
   drCannabisIcon: {
     width: scale(150),
@@ -18,49 +20,30 @@ const styles = StyleSheet.create({
   },
   information: {
     width: widthPercentageToDP('80%'),
-    fontSize: scale(16),
-    alignSelf: 'center',
-    color: 'white'
+    alignSelf: 'center'
   },
   usernameTag: {
-    fontSize: scale(20),
-    fontWeight: 'bold',
-    color: 'white',
-    paddingLeft: scale(40),
+    paddingLeft: theme.sizes.padding,
     ...marginVerticalBase
   },
   textInput: {
-    color: 'white',
+    color: theme.colors.white,
     width: widthPercentageToDP('80%'),
     alignSelf: 'center',
-    borderColor: 'white',
+    borderColor: theme.colors.white,
     borderWidth: scale(1),
-    borderRadius: scale(10),
+    borderRadius: theme.sizes.border,
     textAlign: 'center'
   },
   error: {
-    position: 'absolute',
-    top: heightPercentageToDP('60%'),
-    color: 'rgba(254,93,78, 0.98)',
-    alignSelf: 'center',
-    fontSize: scale(14)
+    color: theme.colors.secondary,
+    alignSelf: 'center'
   },
   submitIndicator: {
-    position: 'absolute',
-    alignSelf: 'center',
-    top: heightPercentageToDP('60%')
+    alignSelf: 'center'
   },
   submitButton: {
-    marginVertical: scale(40),
-    paddingVertical: scale(10),
-    paddingHorizontal: scale(20),
-    alignSelf: 'center',
-    borderRadius: scale(15),
-    backgroundColor: 'rgba(92, 254, 78, 0.71)'
-  },
-  submitButtonText: {
-    textAlign: 'center',
-    color: 'white'
+    alignSelf: 'center'
   }
 })
 

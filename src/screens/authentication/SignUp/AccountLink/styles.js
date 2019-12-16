@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native'
-import { heightPercentageToDP } from '~/styleMixins'
+import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   accountText: {
-    color: 'white',
-    bottom: heightPercentageToDP('15')
+    position: 'absolute',
+    bottom: theme.sizes.margin
   },
   underlineText: {
     textDecorationLine: 'underline'
