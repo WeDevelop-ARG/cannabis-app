@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
+import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   container: {
@@ -10,28 +11,21 @@ const styles = StyleSheet.create({
   carouselContainer: {
     height: verticalScale(500),
     borderRadius: moderateScale(30),
-    padding: moderateScale(10)
+    padding: theme.sizes.padding
   },
   paginationDot: {
     width: moderateScale(20),
     height: moderateScale(20),
     borderRadius: moderateScale(10),
     marginHorizontal: scale(3),
-    borderColor: 'rgba(59, 210, 59, 0.92)',
+    borderColor: theme.colors.primary,
     borderWidth: scale(3),
-    backgroundColor: 'rgba(68, 135, 68, 0.01)'
+    backgroundColor: theme.colors.alpha
   },
   inactivePaginationDot: {
-    borderColor: 'rgba(255, 255, 255, 0.92)',
+    borderColor: theme.colors.white,
     borderWidth: scale(3),
-    backgroundColor: 'rgba(60, 60, 60, 0.01)'
-  },
-  continueButton: {
-    margin: verticalScale(15)
-  },
-  continueButtonText: {
-    color: 'white',
-    fontSize: scale(14)
+    backgroundColor: theme.colors.alpha
   }
 })
 

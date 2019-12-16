@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native'
 import { scale, verticalScale } from 'react-native-size-matters'
+import { theme } from '~/constants'
 
 const marginVerticalBase = {
-  marginVertical: verticalScale(15)
+  marginVertical: theme.sizes.margin
 }
 
 const styles = StyleSheet.create({
@@ -17,9 +18,6 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    fontSize: scale(18),
-    fontWeight: '500',
-    color: 'white',
     ...marginVerticalBase
   }
 })
