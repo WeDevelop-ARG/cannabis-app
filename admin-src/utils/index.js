@@ -29,9 +29,8 @@ export const userHasAccess = async () => {
 
     const result = await user.getIdTokenResult()
 
-    return Boolean(result.claims.isAdmin)
+    return result.claims.isAdmin
   } catch (error) {
-    console.error(error.message)
     return false
   }
 }

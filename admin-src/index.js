@@ -30,7 +30,7 @@ const App = () => {
       </>
     )
   } else {
-    return (<LoginScreen onUserLogin={onUserLogin} />)
+    return <LoginScreen onUserLogin={onUserLogin} />
   }
 }
 

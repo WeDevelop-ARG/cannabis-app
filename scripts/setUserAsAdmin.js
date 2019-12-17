@@ -22,8 +22,6 @@ const setUserAsAdmin = async (user) => {
   process.exit(0)
 }
 
-admin.auth().getUserByEmail(mail).then(
-  user => setUserAsAdmin(user)
-).catch(
-  error => console.error(error.message)
-)
+admin.auth().getUserByEmail(mail)
+  .then(setUserAsAdmin)
+  .catch(console.error.bind(console))
