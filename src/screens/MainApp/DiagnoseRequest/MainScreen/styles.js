@@ -4,7 +4,7 @@ import { moderateScale } from 'react-native-size-matters'
 
 const styles = StyleSheet.create({
   container: {
-    margin: theme.sizes.margin,
+    padding: theme.sizes.padding,
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center'
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...theme.fonts.h1,
-    marginBottom: theme.sizes.margin
+    marginBottom: theme.sizes.margin * 2
   },
   subtitle: {
     ...theme.fonts.h2,
@@ -30,6 +30,8 @@ const styles = StyleSheet.create({
     marginBottom: theme.sizes.margin
   },
   button: {
+    padding: 20,
+    borderRadius: 2
   }
 })
 
