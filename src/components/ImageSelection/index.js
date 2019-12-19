@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const ImageSelection = (props) => {
+const ImageSelection = ({ onImagesSelected, onCancel }) => {
   const [isVisible, setIsVisible] = useState(true)
 
   const clean = async () => {
@@ -52,16 +52,16 @@ const ImageSelection = (props) => {
 
   const imagesSelected = (images) => {
     setIsVisible(false)
-    if (props.onImagesSelected) {
-      props.onImagesSelected(images)
+    if (onImagesSelected) {
+      onImagesSelected(images)
     }
   }
 
   const cancel = async () => {
     setIsVisible(false)
     clean()
-    if (props.onCancel) {
-      props.onCancel()
+    if (onCancel) {
+      onCancel()
     }
   }
 

@@ -19,12 +19,20 @@ export const MainScreen = ({ navigation }) => {
     <>
       {showImageSelection && <ImageSelection onCancel={() => setShowImageSelection(false)} onImagesSelected={onImagesSelected} />}
       <View style={styles.container}>
-        <Text fontVariant='h1' colorVariant='black' styles={styles.title}>Estado de mi planta</Text>
+        <Text fontVariant='h1' colorVariant='black' styles={styles.title}>
+          Estado de mi planta
+        </Text>
         <Image style={styles.image} />
-        <Text fontVariant='h2' colorVariant='black' styles={styles.subtitle}>Conocé el estado de tu planta</Text>
-        <Text fontVariant='description' colorVariant='black' style={styles.description}>Agregá un mínimo de 3 fotos en detalle y bien iluminadas para que nuestros expertos puedan darte su opinión</Text>
+        <Text fontVariant='h2' colorVariant='black' styles={styles.subtitle}>
+          Conocé el estado de tu planta
+        </Text>
+        <Text fontVariant='description' colorVariant='black' style={styles.description}>
+          Agregá un mínimo de 3 fotos en detalle y bien iluminadas para que nuestros expertos puedan darte su opinión
+        </Text>
         <Button variant='black' style={styles.button} onPress={() => setShowImageSelection(true)}>
-          <Text fontVariant='h3'>Agregar fotos</Text>
+          <Text fontVariant='h3'>
+            Agregar fotos
+          </Text>
         </Button>
       </View>
     </>
