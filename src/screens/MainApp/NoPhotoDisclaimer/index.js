@@ -11,7 +11,9 @@ const goToCallToAction = () => {
 const NoPhotoDisclaimer = () => (
   <View style={styles.container}>
     <Image source={DrCannabis} style={styles.image} />
-    <Text colorVariant='gray'>Ya no tenés fotos para enviar</Text>
+    <Text colorVariant='gray'>
+      Ya no tenés fotos para enviar
+    </Text>
     <Button
       onPress={goToCallToAction}
       variant='gray'

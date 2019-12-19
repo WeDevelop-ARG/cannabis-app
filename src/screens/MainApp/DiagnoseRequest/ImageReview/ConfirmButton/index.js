@@ -2,12 +2,14 @@ import React from 'react'
 import { Text, Button } from '~/components'
 
 const Error = ({ errorState }) => (
-  errorState &&
+  errorState && (
     <Text
       colorVariant='secondary'
       style={{ alignSelf: 'center' }}
-    >Selecciona al menos 3 imagenes para continuar!
+    >
+      Selecciona al menos 3 imagenes para continuar!
     </Text>
+  )
 )
 
 const ConfirmButton = ({ errorState, onConfirm }) => (

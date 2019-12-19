@@ -28,6 +28,11 @@ const ImageVisualization = (props) => {
     carouselRef.current.snapToItem(index)
   }
 
+  const setCurrentItem = (index) => {
+    setFlatListItem(index)
+    setCarouselItem(index)
+  }
+
   const confirmRequest = () => {}
 
   const getMorePhotos = () => {
@@ -39,6 +44,7 @@ const ImageVisualization = (props) => {
     const itemIndex = images.indexOf(item)
     const lastIndex = images.length - 1
     const selected = images[activeIndex] === item
+
     if (itemIndex === lastIndex && images.length < MAX_IMAGES) {
       return (
         <>
@@ -52,31 +58,33 @@ const ImageVisualization = (props) => {
     )
   }
 
-  useEffect(() => {
+  const deleteActiveIndexImage = () => {
+    const wantedImages = images.slice()
+    wantedImages.splice(activeIndex, 1)
+    setImages(wantedImages)
+
+    return wantedImages
+  }
+
+  const setSubmitErrorIfImageCountBelowMinimum = () => {
     if (images.length < MIN_IMAGES) {
       setSubmitError(true)
     } else {
       setSubmitError(false)
     }
+  }
+
+  useEffect(() => {
+    setSubmitErrorIfImageCountBelowMinimum()
 
     const deleteImage = () => {
-      if (images.length === 1) {
-        setImages([])
+      const currentImages = deleteActiveIndexImage()
+
+      if (currentImages.length === 0) {
         NavigationService.navigate('NoPhotoDisclaimer')
       } else {
-        const wantedImages = images.filter((val, index) => index !== activeIndex)
-
-        setImages(wantedImages)
-
-        if (activeIndex === 0) {
-          setFlatListItem(0)
-          setCarouselItem(0)
-        }
-
         if (activeIndex > 0) {
-          const nextIndex = activeIndex - 1
-          setFlatListItem(nextIndex)
-          setCarouselItem(nextIndex)
+          setCurrentItem(activeIndex - 1)
         }
       }
     }
@@ -127,8 +135,12 @@ const ImageVisualization = (props) => {
 ImageVisualization.navigationOptions = ({ navigation }) => ({
   headerRight: () => (
     <>
-      <Button variant='alpha' onPress={navigation.getParam('changeImage')}><Icon name='redo' size={18} color='black' /></Button>
-      <Button variant='alpha' onPress={navigation.getParam('deleteImage')}><Icon name='trash' size={18} color='black' /></Button>
+      <Button variant='alpha' onPress={navigation.getParam('changeImage')}>
+        <Icon name='redo' size={18} color='black' />
+      </Button>
+      <Button variant='alpha' onPress={navigation.getParam('deleteImage')}>
+        <Icon name='trash' size={18} color='black' />
+      </Button>
     </>
   )
 })
