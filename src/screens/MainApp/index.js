@@ -41,7 +41,8 @@ const MainApp = createBottomTabNavigator(
       activeTintColor: 'green',
       inactiveTintColor: 'gray',
       style: styles.tabBarStyle
-    }
+    },
+    initialRouteName: 'DiagnoseRequest'
   }
 )
 
