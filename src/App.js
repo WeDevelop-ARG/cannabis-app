@@ -18,9 +18,6 @@ import DiagnoseRequest from './screens/MainApp/DiagnoseRequest'
 import DiagnoseResponse from './screens/MainApp/DiagnoseResponse'
 import Settings from './screens/MainApp/Settings'
 import styles from './styles'
-import ImageReview from './screens/MainApp/DiagnoseRequest/ImageReview'
-import NoPhotoDisclaimer from './screens/MainApp/NoPhotoDisclaimer'
-import { createStackNavigator } from 'react-navigation-stack'
 
 // console.disableYellowBox = true // releases only
 
@@ -87,8 +84,7 @@ const MainNavigator = createSwitchNavigator({
   Onboarding: { screen: Onboarding }
 })
 
-// const AppContainer = createAppContainer(MainNavigator)
-const AppContainer = createAppContainer(createStackNavigator({ ImageReview: ImageReview, NoPhotoDisclaimer: NoPhotoDisclaimer }))
+const AppContainer = createAppContainer(MainNavigator)
 
 const App = () => (
   <AppContainer
