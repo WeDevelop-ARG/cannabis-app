@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import { FlatList } from 'react-native'
 import FlatListItem from './FlatListItem'
 
-const ImageList = ({ images, activeIndex, setActiveIndex, getMorePhotos }) => {
+const ImageList = ({ images, activeIndex, onActiveIndexChange, onGetMoreImages }) => {
   const flatListRef = useRef()
 
   useEffect(() => {
@@ -20,8 +20,8 @@ const ImageList = ({ images, activeIndex, setActiveIndex, getMorePhotos }) => {
           image={item}
           images={images}
           activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
-          getMorePhotos={getMorePhotos}
+          onActiveIndexChange={onActiveIndexChange}
+          onAskForMoreItems={onGetMoreImages}
         />
       )}
       keyExtractor={item => item}

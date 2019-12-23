@@ -4,12 +4,12 @@ import Carousel, { Pagination } from 'react-native-snap-carousel'
 import CarouselImage from './CarouselImage'
 import styles, { ITEM_HEIGHT, ITEM_WIDTH, CAROUSEL_SLIDER_WIDTH } from './styles'
 
-const CarouselWrapper = ({ images, activeIndex, setActiveIndex }) => {
+const CarouselWrapper = ({ images, activeIndex, onActiveIndexChange }) => {
   const carouselRef = useRef()
 
   useEffect(() => {
     carouselRef.current.snapToItem(activeIndex)
-  }, [activeIndex])
+  }, [activeIndex, images.length])
 
   return (
     <View>
@@ -20,7 +20,7 @@ const CarouselWrapper = ({ images, activeIndex, setActiveIndex }) => {
         sliderWidth={CAROUSEL_SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}
         itemHeight={ITEM_HEIGHT}
-        onSnapToItem={(index) => setActiveIndex(index)}
+        onSnapToItem={(index) => onActiveIndexChange(index)}
       />
       <Pagination
         dotsLength={images.length}

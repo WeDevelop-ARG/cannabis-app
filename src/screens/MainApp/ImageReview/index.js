@@ -68,14 +68,14 @@ const ImageVisualization = (props) => {
         <Carousel
           images={images}
           activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
+          onActiveIndexChange={setActiveIndex}
         />
       </View>
       <ImageList
         images={images}
         activeIndex={activeIndex}
-        setActiveIndex={setActiveIndex}
-        getMorePhotos={getMorePhotos}
+        onActiveIndexChange={setActiveIndex}
+        onGetMoreImages={getMorePhotos}
       />
       <ConfirmButton errorState={submitError} onConfirm={confirmRequest} />
     </View>
