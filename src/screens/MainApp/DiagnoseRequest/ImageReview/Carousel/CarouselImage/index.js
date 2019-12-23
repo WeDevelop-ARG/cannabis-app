@@ -1,6 +1,6 @@
 import React from 'react'
 import { View } from 'react-native'
-import RenderedImage from '../RenderedImage'
+import RenderedImage from '../../RenderedImage'
 import styles from './styles'
 
 const CarouselImage = ({ item }) => (
