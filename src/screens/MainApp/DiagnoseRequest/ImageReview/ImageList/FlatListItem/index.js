@@ -15,6 +15,7 @@ const FlatListItem = ({ image, images, activeIndex, setActiveIndex, getMorePhoto
       </>
     )
   }
+
   return (
     <FlatListImage selected={selected} item={image} onPress={() => setActiveIndex(images.indexOf(image))} />
   )
