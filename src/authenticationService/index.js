@@ -20,7 +20,6 @@ export const getCurrentUser = () => {
 }
 
 const authenticate = async (AuthenticationMethod) => {
-  // SigninMethod should be either EmailLogin, GoogleLogin, or any other that we may need.
   try {
     const firebaseCredential = await AuthenticationMethod.authenticate()
     await MessagingService.enableNotificationsForUser()
