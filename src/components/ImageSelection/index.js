@@ -7,7 +7,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 const styles = StyleSheet.create({
   button: {
-    padding: moderate(20),
+    padding: moderateScale(20),
     margin: moderateScale(5),
     borderRadius: 2
   },
@@ -27,20 +27,21 @@ const ImageSelection = ({ onImagesSelected, onCancel }) => {
     }
   }
 
-  const callPickerAction = (action) => {
-    ImagePicker[action]({
-      mediaType: 'photo',
-      multiple: true
-    }).then(images => {
+  const callPickerAction = async (action) => {
+    try {
+      const images = await ImagePicker[action]({
+        mediaType: 'photo',
+        multiple: true
+      })
+
       if (Array.isArray(images)) {
         imagesSelected(images)
       } else {
         imagesSelected([images])
       }
-    }).catch(error => {
-      console.log(error)
+    } catch (error) {
       clean()
-    })
+    }
   }
 
   const callCamera = () => {
