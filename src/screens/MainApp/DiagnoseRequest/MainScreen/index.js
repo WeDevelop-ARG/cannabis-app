@@ -12,12 +12,16 @@ export const MainScreen = ({ navigation }) => {
       return a
     }, [])
     setShowImageSelection(false)
-    console.log(reduced)
   }
 
   return (
     <>
-      {showImageSelection && <ImageSelection onCancel={() => setShowImageSelection(false)} onImagesSelected={onImagesSelected} />}
+      {showImageSelection && (
+        <ImageSelection
+          onCancel={() => setShowImageSelection(false)}
+          onImagesSelected={onImagesSelected} 
+        />
+      )}
       <View style={styles.container}>
         <Text fontVariant='h1' colorVariant='black' styles={styles.title}>
           Estado de mi planta
