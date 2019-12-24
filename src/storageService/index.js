@@ -6,7 +6,7 @@ import StorageError from '~/AppErrors/StorageError'
 
 const mime = 'image/jpg'
 
-export const uploadImageAndReturnReference = async (imageURI) => {
+export const uploadImageAndReturnReference = async (imageURI, onProgress) => {
   try {
     const currentUserUID = AuthenticationService.getCurrentUserUID()
     const metadata = {
@@ -18,9 +18,9 @@ export const uploadImageAndReturnReference = async (imageURI) => {
 
     const blob = await BlobService.buildBlobFromURI(imageURI)
     const uuid = uuidv4()
-    const imageRef = firebase.storage().ref('images').child(uuid)
-    await imageRef.put(blob, metadata)
-
+    const imageRef = firebase.storage().ref('images').child(uuid).put(blob, metadata)
+    imageRef.on('state_changed', onProgress)
+    await imageRef
     return uuid
   } catch (error) {
     throw new StorageError('Could not upload image.')
