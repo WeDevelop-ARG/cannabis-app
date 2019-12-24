@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { theme } from '~/constants'
-import { moderateScale } from 'react-native-size-matters'
+import { moderateScale, verticalScale} from 'react-native-size-matters'
 
 const styles = StyleSheet.create({
   container: {
@@ -17,20 +17,17 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(10)
   },
   title: {
-    ...theme.fonts.h1,
-    marginBottom: theme.sizes.margin * 2
+    marginBottom: verticalScale(20)
   },
   subtitle: {
-    ...theme.fonts.h2,
     marginTop: theme.sizes.margin
   },
   description: {
-    ...theme.fonts.description,
     textAlign: 'center',
     marginBottom: theme.sizes.margin
   },
   button: {
-    padding: 20,
+    padding: moderateScale(20),
     borderRadius: 2
   }
 })

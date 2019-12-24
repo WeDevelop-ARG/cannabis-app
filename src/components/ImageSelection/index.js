@@ -3,15 +3,16 @@ import { View, StyleSheet } from 'react-native'
 import { Overlay } from 'react-native-elements'
 import { Button, Text } from '~/components'
 import ImagePicker from 'react-native-image-crop-picker'
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 const styles = StyleSheet.create({
   button: {
-    padding: 20,
-    margin: 5,
+    padding: moderate(20),
+    margin: moderateScale(5),
     borderRadius: 2
   },
   title: {
-    marginBottom: 10
+    marginBottom: verticalScale(10)
   }
 })
 
