@@ -1,5 +1,11 @@
 import React from 'react'
+import { TouchableOpacity } from 'react-native'
+import NavigationService from '~/navigationService'
 import Diagnose from '../Diagnose'
+
+const goToDetailedDiagnoseScreen = (diagnose) => {
+  NavigationService.navigate('DetailedDiagnose', { diagnose })
+}
 
 const renderDiagnose = (diagnose, key) => {
   let answerQuantity = 0
@@ -9,13 +15,17 @@ const renderDiagnose = (diagnose, key) => {
   }
 
   return (
-    <Diagnose
-      key={key}
-      thumbnail={diagnose.thumbnail}
-      firebaseTimestamp={diagnose.createdAt}
-      description={diagnose.text}
-      answerQuantity={answerQuantity}
-    />
+    <TouchableOpacity
+      onPress={() => goToDetailedDiagnoseScreen(diagnose)}
+    >
+      <Diagnose
+        key={key}
+        thumbnail={diagnose.thumbnail}
+        firebaseTimestamp={diagnose.createdAt}
+        description={diagnose.text}
+        answerQuantity={answerQuantity}
+      />
+    </TouchableOpacity>
   )
 }
 

@@ -1,11 +1,12 @@
 import React from 'react'
 import { View } from 'react-native'
-import moment from 'moment'
+import pluralize from 'pluralize'
+import { firebaseTimestampToMoment } from '~/mixins/date'
 import { Text, RealThumbnailOrPlaceholder } from '~/components'
 import styles from './styles'
 
 const Diagnose = ({ thumbnail, firebaseTimestamp, description, answerQuantity }) => {
-  const date = moment(firebaseTimestamp.seconds * 1000)
+  const date = firebaseTimestampToMoment(firebaseTimestamp)
 
   return (
     <View style={styles.container}>
@@ -25,7 +26,7 @@ const Diagnose = ({ thumbnail, firebaseTimestamp, description, answerQuantity })
         </View>
         <View style={styles.answers}>
           <Text colorVariant='black'>
-            {answerQuantity} respuesta{(answerQuantity !== 1) ? 's' : ''}
+            {answerQuantity} {pluralize('respuesta', answerQuantity)}
           </Text>
         </View>
       </View>
