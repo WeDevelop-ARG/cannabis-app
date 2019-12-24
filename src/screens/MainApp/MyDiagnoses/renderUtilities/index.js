@@ -1,17 +1,7 @@
 import React from 'react'
-import * as StorageService from '~/storageService'
 import Diagnose from '../Diagnose'
 
-const getURL = async (imageReference) => {
-  try {
-    return await StorageService.getDownloadURL(imageReference)
-  } catch (error) {
-    return null
-  }
-}
-
-const renderDiagnose = async (diagnose, key) => {
-  const thumbnail = await getURL(diagnose.imageReferences[0])
+const renderDiagnose = (diagnose, key) => {
   let answerQuantity = 0
 
   if (diagnose.answer) {
@@ -21,7 +11,7 @@ const renderDiagnose = async (diagnose, key) => {
   return (
     <Diagnose
       key={key}
-      thumbnail={thumbnail}
+      thumbnail={diagnose.thumbnail}
       firebaseTimestamp={diagnose.createdAt}
       description={diagnose.text}
       answerQuantity={answerQuantity}
@@ -29,15 +19,6 @@ const renderDiagnose = async (diagnose, key) => {
   )
 }
 
-export const renderDiagnoses = async (myDiagnoses) => (
-  myDiagnoses.reduce(
-    async (diagnoses, diagnose, index) => {
-      diagnoses = await diagnoses
-      const renderedDiagnose = await renderDiagnose(diagnose, index)
-      diagnoses.push(renderedDiagnose)
-
-      return diagnoses
-    },
-    Promise.resolve([])
-  )
+export const renderDiagnoses = (myDiagnoses) => (
+  myDiagnoses.map((diagnose, index) => renderDiagnose(diagnose, index))
 )

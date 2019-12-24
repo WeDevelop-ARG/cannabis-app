@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
+import { isEmpty } from 'lodash'
 import { ForceRerenderOnNavigation } from '~/navigationService'
 import * as DatabaseService from '~/databaseService'
+import * as StorageService from '~/storageService'
 import { sortDiagnosesByMostRecentCreation } from '~/mixins/diagnose'
 import { renderDiagnoses } from './renderUtilities'
 import NoDiagnoses from './NoDiagnoses'
 import styles from './styles'
 
+const getURL = async (imageReference) => {
+  try {
+    return await StorageService.getDownloadURL(imageReference)
+  } catch (error) {
+    return null
+  }
+}
+
 const MyDiagnoses = () => {
   const [diagnoses, setDiagnoses] = useState(null)
-  const [downloadingDiagnoses, setDownloadingDiagnoses] = useState(null)
+  const [downloadingDiagnoses, setDownloadingDiagnoses] = useState(true)
   const [refetchTrigger, toggleRefetch] = useState(false)
-  const [showNoDiagnosesScreen, setShowNoDiagnosesScreen] = useState(false)
 
   const refetchDiagnoses = () => {
-    // Tab navigator doesn't unmount components, we need this to refetch need data when pressing this tab.
-    // alternative is to add a query snapshot listener and a MobX store
     toggleRefetch(!refetchTrigger)
   }
 
@@ -24,33 +31,30 @@ const MyDiagnoses = () => {
     setDownloadingDiagnoses(true)
     try {
       const downloadedData = await DatabaseService.getDiagnosesFromCurrentUser()
-      const sortedData = sortDiagnosesByMostRecentCreation(downloadedData)
-      const renderedDiagnoses = await renderDiagnoses(sortedData)
+
+      const downloadedDataWithThumbnail = await Promise.all(
+        downloadedData.map(async (diagnose, index) => {
+          diagnose.thumbnail = await getURL(diagnose.imageReferences[0])
+          return diagnose
+        })
+      )
+
+      const sortedData = sortDiagnosesByMostRecentCreation(downloadedDataWithThumbnail)
+      const renderedDiagnoses = renderDiagnoses(sortedData)
 
       setDiagnoses(renderedDiagnoses)
     } catch (error) {
       setDiagnoses(null)
+    } finally {
+      setDownloadingDiagnoses(false)
     }
-    setDownloadingDiagnoses(false)
   }
 
   useEffect(() => {
     getRenderedDiagnoses()
   }, [refetchTrigger])
 
-  useEffect(() => {
-    const noDiagnoses = () => (
-      !diagnoses || (diagnoses && (diagnoses.length === 0))
-    )
-
-    if (downloadingDiagnoses === false) {
-      if (noDiagnoses()) {
-        setShowNoDiagnosesScreen(true)
-      }
-    }
-  }, [downloadingDiagnoses])
-
-  if (showNoDiagnosesScreen) {
+  if (isEmpty(diagnoses)) {
     return <NoDiagnoses />
   }
 

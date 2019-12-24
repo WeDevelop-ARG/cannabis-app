@@ -1,7 +1,11 @@
+const sortDescending = (array, getSortValue = a => a) => (
+  array.sort((a, b) => getSortValue(b) - getSortValue(a))
+)
+
 export const sortDiagnosesByMostRecentCreation = (diagnoses) => (
-  diagnoses.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
+  sortDescending(diagnoses, a => a.createdAt.toMillis())
 )
 
 export const sortDiagnosesByMostRecentUpdate = (diagnoses) => (
-  diagnoses.sort((a, b) => b.updatedAt.toMillis() - a.updatedAt.toMillis())
+  sortDescending(diagnoses, a => a.updatedAt.toMillis())
 )
