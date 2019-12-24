@@ -7,7 +7,6 @@ import * as DatabaseService from '~/databaseService'
 import NavigationService from '~/navigationService'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
-import { enableNotificationsForUser } from '../utils'
 
 const SubmitIndicator = ({ submitting }) => (
   submitting &&
@@ -28,7 +27,7 @@ const UsernameRequest = (props) => {
   const submitHandler = async () => {
     setSubmitting(true)
     setError(null)
-    let signedIn = false
+    let newUsernameCreated = false
 
     try {
       if (textInputValue === '') {
@@ -37,22 +36,21 @@ const UsernameRequest = (props) => {
         if (await DatabaseService.usernameAlreadyInUse(textInputValue)) {
           setError('Este nickname ya existe')
         } else {
-          if (props.navigation.state.params.socialNetwork === 'google') {
-            const userCredential = await AuthenticationService.googleLogin()
-            await DatabaseService.addNewUserData(userCredential.user.uid, {
-              username: textInputValue,
-              email: userCredential.user.email
-            })
-            signedIn = true
-          }
+          const user = await AuthenticationService.getCurrentUser()
+
+          await DatabaseService.addNewUserData(user.uid, {
+            username: textInputValue,
+            email: user.email
+          })
+
+          newUsernameCreated = true
         }
       }
     } catch (error) {
       setError('Error inesperado, pruebe más tarde.')
     } finally {
       setSubmitting(false)
-      if (signedIn) {
-        await enableNotificationsForUser()
+      if (newUsernameCreated) {
         NavigationService.navigate('MainApp')
       }
     }

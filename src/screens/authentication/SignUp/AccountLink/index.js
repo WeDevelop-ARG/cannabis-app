@@ -4,11 +4,11 @@ import NavigationService from '~/navigationService'
 import styles from './styles'
 
 const AccountLink = () => (
-  <Text style={styles.accountText}>Ya tenés una cuenta? {' '}
+  <Text style={styles.accountText}>
     <Text
       onPress={() => NavigationService.navigate('Login')}
       style={styles.underlineText}>
-           Iniciá sesión
+           Iniciar sesión
     </Text>
   </Text>
 )
