@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
-import { isEmpty } from 'lodash'
+import { isNull, isEmpty } from 'lodash'
 import { ForceRerenderOnNavigation } from '~/navigationService'
 import * as DatabaseService from '~/databaseService'
 import * as StorageService from '~/storageService'
@@ -54,7 +54,7 @@ const MyDiagnoses = () => {
     getRenderedDiagnoses()
   }, [refetchTrigger])
 
-  if (isEmpty(diagnoses)) {
+  if (!isNull(diagnoses) && isEmpty(diagnoses)) {
     return <NoDiagnoses />
   }
 
