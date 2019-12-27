@@ -42,7 +42,7 @@ const Profile = () => {
   useEffect(
     () => {
       DatabaseService.queryUsernameFromEmail(email)
-        .then(_username => setUsername(_username))
+        .then(username => setUsername(username))
         .catch(() => setUsername('Usuario'))
     },
     [username]
