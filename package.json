@@ -20,6 +20,7 @@
     "firebase-admin": "^8.8.0",
     "firebaseui": "^4.3.0",
     "formik": "^1.5.8",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "16.9.0",
