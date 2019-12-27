@@ -4,19 +4,12 @@ import { createStackNavigator } from 'react-navigation-stack'
 import { isNull, isEmpty } from 'lodash'
 import { ForceRerenderOnNavigation } from '~/navigationService'
 import * as DatabaseService from '~/databaseService'
-import * as StorageService from '~/storageService'
 import { sortDiagnosesByMostRecentCreation } from '~/mixins/diagnose'
+import { getURL } from '~/mixins/storage'
 import { renderDiagnoses } from './renderUtilities'
 import NoDiagnoses from './NoDiagnoses'
+import DetailedDiagnose from '../DetailedDiagnose'
 import styles from './styles'
-
-const getURL = async (imageReference) => {
-  try {
-    return await StorageService.getDownloadURL(imageReference)
-  } catch (error) {
-    return null
-  }
-}
 
 const MyDiagnoses = () => {
   const [diagnoses, setDiagnoses] = useState(null)
@@ -79,7 +72,8 @@ MyDiagnoses.navigationOptions = () => ({
 })
 
 const MyDiagnosesStack = createStackNavigator({
-  MyDiagnoses: MyDiagnoses
+  MyDiagnoses: MyDiagnoses,
+  DetailedDiagnose: DetailedDiagnose
 })
 
 export default MyDiagnosesStack

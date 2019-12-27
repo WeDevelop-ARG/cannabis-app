@@ -22,8 +22,8 @@ const sizes = {
   // font sizes
   h1: moderateScale(22),
   h2: moderateScale(18),
-  h3: moderateScale(16),
-  description: moderateScale(18),
+  h3: moderateScale(14),
+  description: moderateScale(16),
   body: moderateScale(14),
   date: moderateScale(12)
 }
