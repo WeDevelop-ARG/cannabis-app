@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { theme } from '~/constants'
-import { moderateScale, verticalScale} from 'react-native-size-matters'
+import { moderateScale, verticalScale } from 'react-native-size-matters'
 
 const styles = StyleSheet.create({
   container: {

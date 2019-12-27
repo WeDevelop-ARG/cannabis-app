@@ -1,39 +1,42 @@
-import ImagePicker from 'react-native-image-picker'
 import CameraError from '~/AppErrors/CameraError'
+import ImagePicker from 'react-native-image-crop-picker'
 
-const options = {
-  mediaType: 'photo',
-  title: 'Seleccionar una foto',
-  takePhotoButtonTitle: 'Tomar una foto',
-  chooseFromLibraryButtonTitle: 'Seleccionar desde galería',
-  cancelButtonTitle: 'cancelar',
-  noData: true,
-  storageOptions: {
-    skipBackup: true,
-    path: 'CannabisDiagnose',
-    cameraRoll: false
+const callPickerAction = async (action, options) => {
+  try {
+    const images = await ImagePicker[action]({
+      mediaType: 'photo',
+      multiple: true,
+      ...options
+    })
+
+    const reducer = (a, c) => {
+      a.push(c.path)
+      return a
+    }
+
+    if (Array.isArray(images)) {
+      return images.reduce(reducer, [])
+    } else {
+      return [images].reduce(reducer, [])
+    }
+  } catch (error) {
+    clean()
+    throw new CameraError(error.message)
   }
 }
 
-const showImagePickerPromiseWrapper = (options) => (
-  new Promise((resolve, reject) => {
-    ImagePicker.showImagePicker(options, (imageResponse) => {
-      if (!imageResponse.uri) {
-        reject(new CameraError('Image not taken nor selected.'))
-      } else {
-        resolve(buildImageRepresentation(imageResponse))
-      }
-    })
-  })
-)
-
-const buildImageRepresentation = (thirdPartyImageObject) => (
-  {
-    uri: thirdPartyImageObject.uri,
-    filename: thirdPartyImageObject.fileName
+export const clean = async () => {
+  try {
+    await ImagePicker.clean()
+  } catch (error) {
+    throw new CameraError(error.message)
   }
-)
+}
 
-export const selectImageFromGalleryOrCamera = () => showImagePickerPromiseWrapper(options)
-export const getFilenameFromImage = (image) => image.filename
-export const getURIFromImage = (image) => image.uri
+export const openCamera = async (options) => {
+  return callPickerAction('openCamera', { multiple: false, ...options })
+}
+
+export const openGallery = async (options) => {
+  return callPickerAction('openPicker', options)
+}

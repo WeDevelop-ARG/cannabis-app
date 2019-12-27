@@ -25,4 +25,5 @@ const styles = StyleSheet.create({
     position: 'absolute'
   }
 })
+
 export default styles

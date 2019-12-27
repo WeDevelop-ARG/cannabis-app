@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Overlay } from 'react-native-elements'
 import { Button, Text } from '~/components'
-import ImagePicker from 'react-native-image-crop-picker'
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
+import { verticalScale, moderateScale } from 'react-native-size-matters'
+import * as ImageService from '~/imageService'
 
 const styles = StyleSheet.create({
   button: {
@@ -19,37 +19,22 @@ const styles = StyleSheet.create({
 const ImageSelection = ({ onImagesSelected, onCancel }) => {
   const [isVisible, setIsVisible] = useState(true)
 
-  const clean = async () => {
+  const callCamera = async () => {
     try {
-      await ImagePicker.clean()
+      const images = await ImageService.openCamera()
+      imagesSelected(images)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const callPickerAction = async (action) => {
+  const callGallery = async () => {
     try {
-      const images = await ImagePicker[action]({
-        mediaType: 'photo',
-        multiple: true
-      })
-
-      if (Array.isArray(images)) {
-        imagesSelected(images)
-      } else {
-        imagesSelected([images])
-      }
+      const images = await ImageService.openGallery()
+      imagesSelected(images)
     } catch (error) {
-      clean()
+      console.log(error)
     }
-  }
-
-  const callCamera = () => {
-    callPickerAction('openCamera')
-  }
-
-  const callGallery = () => {
-    callPickerAction('openPicker')
   }
 
   const imagesSelected = (images) => {
@@ -61,7 +46,7 @@ const ImageSelection = ({ onImagesSelected, onCancel }) => {
 
   const cancel = async () => {
     setIsVisible(false)
-    clean()
+    ImageService.clean()
     if (onCancel) {
       onCancel()
     }

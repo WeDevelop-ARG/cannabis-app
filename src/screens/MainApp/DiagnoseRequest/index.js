@@ -1,14 +1,19 @@
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import MainScreen from './MainScreen'
+import DescriptionRequest from './DescriptionRequest'
+import FinishRequest from './FinishRequest'
+import ImageReview from './ImageReview'
 
 const Navigator = createStackNavigator(
   {
-    MainScreen
+    MainScreen,
+    DescriptionRequest,
+    FinishRequest,
+    ImageReview
   },
   {
-    initialRouteName: 'MainScreen',
-    headerMode: 'none'
+    initialRouteName: 'MainScreen'
   }
 )
 
