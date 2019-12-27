@@ -1,83 +1,27 @@
-import React, { useState } from 'react'
-import { KeyboardAvoidingView } from 'react-native'
-import * as ImageService from '~/imageService'
-import * as StorageService from '~/storageService'
-import * as DatabaseService from '~/databaseService'
-import * as AnalyticsService from '~/analyticsService'
-import FullScreenActivityIndicator from '~/helpers/FullScreenActivityIndicator'
-import DiagnoseProblemDescription from './DiagnoseProblemDescription'
-import DiagnosePhoto from './DiagnosePhoto'
-import DiagnoseSubmit from './DiagnoseSubmit'
-import styles from './styles'
-import DiagnoseError from './DiagnoseError'
-import cameraIcon from './resources/cameraIcon.png'
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import MainScreen from './MainScreen'
 
-const DiagnoseRequest = () => {
-  const [problemDescription, setProblemDescription] = useState('')
-  const [image, setImage] = useState(null)
-  const [imageSource, setImageSource] = useState(cameraIcon)
-  const [isSubmitting, setSubmitting] = useState(false)
-  const [error, setError] = useState(null)
+const Navigator = createStackNavigator(
+  {
+    MainScreen
+  },
+  {
+    initialRouteName: 'MainScreen',
+    headerMode: 'none'
+  }
+)
 
-  AnalyticsService.setCurrentScreenName('Diagnose Request')
+const DiagnoseRequest = createAppContainer(Navigator)
 
-  const resetStates = () => {
-    setProblemDescription('')
-    setImage(null)
-    setImageSource(cameraIcon)
-    setSubmitting(false)
+DiagnoseRequest.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true
+
+  if (navigation.state.index > 0) {
+    tabBarVisible = false
   }
 
-  const selectImage = async () => {
-    setError(null)
-    try {
-      const selectedImage = await ImageService.selectImageFromGalleryOrCamera()
-      const uri = ImageService.getURIFromImage(selectedImage)
-      setImage(selectedImage)
-      setImageSource({ uri })
-    } catch (error) {
-      setError('No se seleccionó ninguna imagen')
-      setImage(null)
-      setImageSource(cameraIcon)
-    }
-  }
-
-  const onSubmit = async (image, problemDescription) => {
-    setSubmitting(true)
-    try {
-      const imageURI = ImageService.getURIFromImage(image)
-      const imageReference = await StorageService.uploadImageAndReturnReference(imageURI)
-      await DatabaseService.addDiagnose(imageReference, problemDescription)
-    } catch (error) {
-      setError('Ocurrió un problema al subir el diagnóstico')
-    } finally {
-      resetStates()
-    }
-  }
-
-  if (isSubmitting) {
-    return <FullScreenActivityIndicator />
-  }
-
-  return (
-    <KeyboardAvoidingView style={styles.container}>
-      <DiagnosePhoto
-        onPress={() => selectImage()}
-        imageToShow={imageSource}
-        isNewUpload={!!image}
-      />
-      <DiagnoseError error={error} />
-      <KeyboardAvoidingView style={styles.descriptionAndSubmitContainer}>
-        <DiagnoseProblemDescription
-          problemDescription={problemDescription}
-          setProblemDescription={setProblemDescription}
-        />
-        <DiagnoseSubmit
-          onPress={() => onSubmit(image, problemDescription)}
-        />
-      </KeyboardAvoidingView>
-    </KeyboardAvoidingView>
-  )
+  return { tabBarVisible }
 }
 
 export default DiagnoseRequest
