@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import Settings from './Settings'
+import Profile from './Profile'
 import DiagnoseRequest from './DiagnoseRequest'
 import styles from './styles'
 
@@ -17,7 +17,7 @@ const MainApp = createBottomTabNavigator(
       }
     },
     Profile: {
-      screen: Settings,
+      screen: Profile,
       navigationOptions: {
         tabBarLabel: 'Perfil',
         tabBarIcon: ({ tintColor }) => (
