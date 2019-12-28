@@ -20,7 +20,7 @@ const ImageVisualization = (props) => {
   }, [props.navigation.state.params.images])
 
   const confirmRequest = () => {
-    props.navigation.navigate('DescriptionRequest', { images: images })
+    NavigationService.navigate('DescriptionRequest', { images: images })
   }
 
   const getMorePhotos = () => {
