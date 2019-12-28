@@ -3,14 +3,16 @@ import { createStackNavigator } from 'react-navigation-stack'
 import MainScreen from './MainScreen'
 import DescriptionRequest from './DescriptionRequest'
 import FinishRequest from './FinishRequest'
-import ImageReview from './ImageReview'
+import ImageReview from '../ImageReview'
+import NoPhotoDisclaimer from '../NoPhotoDisclaimer'
 
 const Navigator = createStackNavigator(
   {
     MainScreen,
     DescriptionRequest,
     FinishRequest,
-    ImageReview
+    ImageReview,
+    NoPhotoDisclaimer
   },
   {
     initialRouteName: 'MainScreen'

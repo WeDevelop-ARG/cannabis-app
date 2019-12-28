@@ -1,28 +1,45 @@
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { Button } from '~/components'
+import { Button, ImageSelection } from '~/components'
 import NavigationService from '~/navigationService'
+import * as ImageService from '~/imageService'
 import ConfirmButton from './ConfirmButton'
 import Carousel from './Carousel'
 import ImageList from './ImageList'
-import { requestImages, newImages } from '~/constants/mocks'
-import { MIN_IMAGES } from './constants'
+import { MIN_IMAGES, MAX_IMAGES } from './constants'
 
 const ImageVisualization = (props) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [submitError, setSubmitError] = useState(false)
-  const [images, setImages] = useState(requestImages.slice())
+  const [images, setImages] = useState(props.navigation.state.params.images)
+  const [showImageSelection, setShowImageSelection] = useState(false)
 
-  const confirmRequest = () => {}
+  useEffect(() => {
+    setImages(props.navigation.state.params.images)
+  }, [props.navigation.state.params.images])
+
+  const confirmRequest = () => {
+    props.navigation.navigate('DescriptionRequest', { images: images })
+  }
 
   const getMorePhotos = () => {
+    setShowImageSelection(true)
+  }
+
+  const onImagesSelected = (newImages) => {
     const filterDuplicates = newImages.filter(element => !images.includes(element))
-    setImages([...images, filterDuplicates[0]])
+    if (filterDuplicates.length > 0) {
+      const allImages = [...images, ...filterDuplicates]
+
+      setImages(allImages.slice(0, MAX_IMAGES))
+    }
+    setShowImageSelection(false)
   }
 
   const deleteActiveIndexImage = () => {
     const wantedImages = images.slice()
+
     wantedImages.splice(activeIndex, 1)
     setImages(wantedImages)
 
@@ -45,17 +62,21 @@ const ImageVisualization = (props) => {
 
       if (currentImages.length === 0) {
         NavigationService.navigate('NoPhotoDisclaimer')
-      } else {
-        if (activeIndex > 0) {
-          setActiveIndex(activeIndex - 1)
-        }
+      } else if (activeIndex > 0) {
+        setActiveIndex(activeIndex - 1)
       }
     }
 
-    const changeImage = () => {
-      const changedImageArray = images.slice()
-      changedImageArray[activeIndex] = newImages[activeIndex]
-      setImages(changedImageArray)
+    const changeImage = async () => {
+      try {
+        const newImage = (await ImageService.openCamera())[0]
+        const newImages = images.slice()
+
+        newImages[activeIndex] = newImage
+        setImages(newImages)
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     props.navigation.setParams({ deleteImage })
@@ -64,6 +85,11 @@ const ImageVisualization = (props) => {
 
   return (
     <View>
+      {showImageSelection &&
+        <ImageSelection
+          onCancel={() => setShowImageSelection(false)}
+          onImagesSelected={onImagesSelected}
+        />}
       <View>
         <Carousel
           images={images}
