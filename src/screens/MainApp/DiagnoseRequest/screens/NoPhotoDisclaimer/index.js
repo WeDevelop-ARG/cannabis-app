@@ -2,16 +2,15 @@ import React, { useState } from 'react'
 import { View, Image } from 'react-native'
 import { HeaderBackButton } from 'react-navigation-stack'
 import { Text, Button, ImageSelection } from '~/components'
-import NavigationService from '~/navigationService'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
 
-const NoPhotoDisclaimer = () => {
+const NoPhotoDisclaimer = ({ navigation }) => {
   const [showImageSelection, setShowImageSelection] = useState(false)
 
   const onImagesSelected = (images) => {
     setShowImageSelection(false)
-    NavigationService.navigate('ImageReview', { images: images })
+    navigation.navigate('ImageReview', { images: images })
   }
 
   return (
@@ -36,9 +35,9 @@ const NoPhotoDisclaimer = () => {
   )
 }
 
-NoPhotoDisclaimer.navigationOptions = () => ({
+NoPhotoDisclaimer.navigationOptions = ({ navigation }) => ({
   headerLeft: (
-    <HeaderBackButton onPress={NavigationService.back()} />
+    <HeaderBackButton onPress={() => navigation.pop()} />
   )
 })
 
