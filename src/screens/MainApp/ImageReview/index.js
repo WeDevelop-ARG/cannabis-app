@@ -61,6 +61,7 @@ const ImageVisualization = (props) => {
       const currentImages = deleteActiveIndexImage()
 
       if (currentImages.length === 0) {
+        props.navigation.popToTop()
         NavigationService.navigate('NoPhotoDisclaimer')
       } else if (activeIndex > 0) {
         setActiveIndex(activeIndex - 1)

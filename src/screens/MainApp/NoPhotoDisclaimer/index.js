@@ -38,7 +38,7 @@ const NoPhotoDisclaimer = () => {
 
 NoPhotoDisclaimer.navigationOptions = () => ({
   headerLeft: (
-    <HeaderBackButton onPress={() => NavigationService.navigate('MainScreen')} />
+    <HeaderBackButton onPress={NavigationService.back()} />
   )
 })
 
