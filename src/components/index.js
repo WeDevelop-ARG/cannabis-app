@@ -3,7 +3,10 @@ export {
   Title,
   Subtitle,
   Header,
-  Subheader
+  Subheader,
+  Description,
+  Body,
+  Date
 } from './texts'
 
 export {
