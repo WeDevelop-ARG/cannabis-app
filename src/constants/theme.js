@@ -17,8 +17,8 @@ const sizes = {
   base: moderateScale(40, 0.25),
   font: moderateScale(14, 0.25),
   border: moderateScale(7, 0.25),
-  padding: moderateScale(12, 0.25),
-  margin: moderateScale(24, 0.25),
+  padding: moderateScale(6, 0.25),
+  margin: moderateScale(12, 0.25),
   containerWidth: widthPercentageToDP('88%'),
 
   // font sizes
