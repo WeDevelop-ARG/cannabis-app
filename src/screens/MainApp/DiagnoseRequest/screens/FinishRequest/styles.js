@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
+import { scale, moderateScale } from 'react-native-size-matters'
 
 const styles = StyleSheet.create({
   container: {
@@ -27,4 +27,5 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 })
+
 export default styles

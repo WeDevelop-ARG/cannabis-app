@@ -22,12 +22,14 @@ const ProgressBar = ({ progress }) => {
   )
 }
 
-const DescriptionRequest = ({ navigation, imagesUris }) => {
+const DescriptionRequest = ({ navigation }) => {
   const [description, setDescription] = useState('')
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadEnabled, setUploadEnabled] = useState(false)
   const [inputEnabled, setInputEnabled] = useState(true)
+
+  const imagesUris = navigation.getParam('images', [])
 
   const handleInput = (text) => {
     setUploadEnabled(text !== '')

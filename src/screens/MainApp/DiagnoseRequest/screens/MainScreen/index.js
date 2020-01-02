@@ -7,11 +7,8 @@ export const MainScreen = ({ navigation }) => {
   const [showImageSelection, setShowImageSelection] = useState(false)
 
   const onImagesSelected = (images) => {
-    const reduced = images.reduce((a, c) => {
-      a.push(c.path)
-      return a
-    }, [])
     setShowImageSelection(false)
+    navigation.navigate('ImageReview', { images: images })
   }
 
   return (
@@ -19,7 +16,7 @@ export const MainScreen = ({ navigation }) => {
       {showImageSelection && (
         <ImageSelection
           onCancel={() => setShowImageSelection(false)}
-          onImagesSelected={onImagesSelected} 
+          onImagesSelected={onImagesSelected}
         />
       )}
       <View style={styles.container}>
@@ -42,5 +39,9 @@ export const MainScreen = ({ navigation }) => {
     </>
   )
 }
+
+MainScreen.navigationOptions = ({ navigation }) => ({
+  header: null
+})
 
 export default MainScreen

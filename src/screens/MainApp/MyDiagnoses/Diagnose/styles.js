@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
-import { scale, moderateScale } from 'react-native-size-matters'
-import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen'
+import { scale } from 'react-native-size-matters'
+import { widthPercentageToDP } from 'react-native-responsive-screen'
 import { theme } from '~/constants'
 
 const THUMBNAIL_SIZE = 100
