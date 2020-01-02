@@ -1,21 +1,30 @@
 import React from 'react'
 import { Text as ReactText, StyleSheet } from 'react-native'
-import PropTypes from 'prop-types'
 import { theme } from '~/constants'
 
 const Text = (props) => {
   const {
     style,
-    colorVariant,
-    fontVariant,
+    primary,
+    secondary,
+    black,
+    gray,
+    gray2,
+    gray3,
+    white,
     children,
     ...restProps
   } = props
 
   const textStyles = [
     styles.text,
-    colorVariant && styles[colorVariant],
-    fontVariant && styles[fontVariant],
+    primary && styles.primary,
+    secondary && styles.secondary,
+    black && styles.black,
+    gray && styles.gray,
+    gray2 && styles.gray2,
+    gray3 && styles.gray3,
+    white && styles.white,
     style // this is the last applied style, which can overwrite the others
   ]
 
@@ -32,31 +41,13 @@ const styles = StyleSheet.create({
     color: theme.colors.black
   },
 
-  h1: { ...theme.fonts.h1 },
-  h2: { ...theme.fonts.h2 },
-  h3: { ...theme.fonts.h3 },
-  description: { ...theme.fonts.description },
-  body: { ...theme.fonts.body },
-  date: { ...theme.fonts.date },
-
   primary: { color: theme.colors.primary },
   secondary: { color: theme.colors.secondary },
   black: { color: theme.colors.black },
-  white: { color: theme.colors.white },
   gray: { color: theme.colors.gray },
   gray2: { color: theme.colors.gray2 },
-  gray3: { color: theme.colors.gray3 }
+  gray3: { color: theme.colors.gray3 },
+  white: { color: theme.colors.white }
 })
-
-Text.propTypes = {
-  style: PropTypes.object,
-  colorVariant: PropTypes.oneOf(['primary', 'secondary', 'black', 'white', 'gray', 'gray2', 'gray3']),
-  fontVariant: PropTypes.oneOf(['h1', 'h2', 'h3', 'description', 'body', 'date'])
-}
-
-Text.defaultProps = {
-  colorVariant: 'white',
-  fontVariant: 'body'
-}
 
 export default Text

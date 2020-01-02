@@ -1,4 +1,5 @@
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
+import { widthPercentageToDP } from 'react-native-responsive-screen';
 
 const colors = {
   primary: 'rgba(92, 254, 78, 0.71)',
@@ -18,6 +19,7 @@ const sizes = {
   border: moderateScale(30),
   padding: moderateScale(10),
   margin: moderateScale(15),
+  containerWidth: widthPercentageToDP('88%'),
 
   // font sizes
   h1: moderateScale(22),

@@ -1,0 +1,8 @@
+export { default as Text } from './Text'
+export { default as Title } from './Title'
+export { default as Subtitle } from './Subtitle'
+export { default as Header } from './Header'
+export { default as Subheader } from './Subheader'
+export { default as Description } from './Description'
+export { default as Body } from './Body'
+export { default as Date } from './Date'
