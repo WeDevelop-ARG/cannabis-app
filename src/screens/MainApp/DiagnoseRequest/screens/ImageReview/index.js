@@ -10,17 +10,19 @@ import ImageList from './ImageList'
 import { MIN_IMAGES, MAX_IMAGES } from './constants'
 
 const ImageVisualization = (props) => {
+  const imagesFromPreviousStep = props.navigation.state.params.images
+
   const [activeIndex, setActiveIndex] = useState(0)
   const [submitError, setSubmitError] = useState(false)
-  const [images, setImages] = useState(props.navigation.state.params.images)
+  const [images, setImages] = useState(imagesFromPreviousStep)
   const [showImageSelection, setShowImageSelection] = useState(false)
 
   useEffect(() => {
-    setImages(props.navigation.state.params.images)
-  }, [props.navigation.state.params.images])
+    setImages(imagesFromPreviousStep)
+  }, [imagesFromPreviousStep])
 
   const confirmRequest = () => {
-    NavigationService.navigate('DescriptionRequest', { images: images })
+    NavigationService.navigate('DescriptionRequest', { images })
   }
 
   const getMorePhotos = () => {
@@ -70,7 +72,7 @@ const ImageVisualization = (props) => {
 
     const changeImage = async () => {
       try {
-        const newImage = (await ImageService.openCamera())[0]
+        const [newImage] = await ImageService.openCamera()
         const newImages = images.slice()
 
         newImages[activeIndex] = newImage

@@ -3,22 +3,15 @@ import ImagePicker from 'react-native-image-crop-picker'
 
 const callPickerAction = async (action, options) => {
   try {
-    const images = await ImagePicker[action]({
+    let images = await ImagePicker[action]({
       mediaType: 'photo',
       multiple: true,
       ...options
     })
 
-    const reducer = (a, c) => {
-      a.push(c.path)
-      return a
-    }
+    if (!Array.isArray(images)) images = [images]
 
-    if (Array.isArray(images)) {
-      return images.reduce(reducer, [])
-    } else {
-      return [images].reduce(reducer, [])
-    }
+    return images.map(img => img.path)
   } catch (error) {
     clean()
     throw new CameraError(error.message)

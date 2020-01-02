@@ -1,4 +1,3 @@
-import React from 'react'
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import MainScreen from '../screens/MainScreen'
@@ -24,10 +23,9 @@ const MainNavigator = createAppContainer(Navigator)
 
 MainNavigator.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true
+  const isFirstScreen = navigation.state.index === 0
 
-  if (navigation.state.index > 0) {
-    tabBarVisible = false
-  }
+  if (!isFirstScreen) tabBarVisible = false
 
   return { tabBarVisible }
 }

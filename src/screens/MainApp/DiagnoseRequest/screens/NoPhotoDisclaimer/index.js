@@ -10,7 +10,7 @@ const NoPhotoDisclaimer = ({ navigation }) => {
 
   const onImagesSelected = (images) => {
     setShowImageSelection(false)
-    navigation.navigate('ImageReview', { images: images })
+    navigation.navigate('ImageReview', { images })
   }
 
   return (
