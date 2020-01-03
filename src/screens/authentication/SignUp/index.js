@@ -1,24 +1,17 @@
 import React, { useState } from 'react'
+import * as Yup from 'yup'
 import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
 import * as AuthenticationService from '~/authenticationService'
-import { View } from 'react-native'
-import * as Yup from 'yup'
-import styles from '../styles'
-import AccountLink from './AccountLink'
-import Background from '~/helpers/Background'
-import SignUpHeader from './SignUpHeader'
-import SignUpForm from './SignUpForm'
-import GoogleButton from '../SocialNetworks/GoogleButton'
-import PrivacyPolicyText from './PrivacyPolicyText'
+import Auth from '../components/Auth'
 
 const initialValues = {
-  email: '',
+  credential: '',
   password: ''
 }
 
 const schema = Yup.object().shape({
-  email: Yup.string()
+  credential: Yup.string()
     .email('Email inválido')
     .required('Requerido'),
   password: Yup.string()
@@ -36,7 +29,7 @@ const SignUp = () => {
     setAuthenticating(true)
     setError(null)
     try {
-      await AuthenticationService.emailSignUp(values.email, values.password)
+      await AuthenticationService.emailSignUp(values.credential, values.password)
       NavigationService.navigate('UsernameRequest')
     } catch (error) {
       setError(error)
@@ -45,21 +38,22 @@ const SignUp = () => {
   }
 
   return (
-    <Background>
-      <View style={styles.container}>
-        <AccountLink />
-        <SignUpHeader />
-        <SignUpForm
-          initialValues={initialValues}
-          handleSubmit={handleSubmit}
-          schema={schema}
-          error={error}
-          authenticating={authenticating}
-        />
-        <GoogleButton />
-        <PrivacyPolicyText />
-      </View>
-    </Background>
+    <Auth>
+      <Auth.Navigation goTo='Login'>Iniciar sesión</Auth.Navigation>
+      <Auth.Title>Creá tu cuenta</Auth.Title>
+      <Auth.Form
+        initialValues={initialValues}
+        handleSubmit={handleSubmit}
+        schema={schema}
+        error={error}
+        authenticating={authenticating}
+        credentialText='Ingresá tu email'
+        submitText='Registrarme'
+      />
+      <Auth.Separator>Creá tu cuenta usando</Auth.Separator>
+      <Auth.SocialNetworks />
+      <Auth.PrivacyPolicy />
+    </Auth>
   )
 }
 

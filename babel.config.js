@@ -10,6 +10,12 @@ module.exports = {
         rootPathSuffix: 'src/',
         rootPathPrefix: '~/'
       }
+    ],
+    [
+      'babel-plugin-inline-import',
+      {
+        extensions: ['.svg']
+      }
     ]
   ]
 }
