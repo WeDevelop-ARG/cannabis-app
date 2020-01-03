@@ -8,7 +8,7 @@ export const PASSWORD_TOGGLE_ICON_SIZE = moderateScale(16, 1)
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: verticalScale(194)
+    top: verticalScale(188)
   },
   error: {
     textAlign: 'center',
