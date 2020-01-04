@@ -6,11 +6,6 @@ import * as AuthenticationService from '~/authenticationService'
 import Auth from '../components/Auth'
 import { isValidEmail } from '../utils'
 
-const initialValues = {
-  credential: '',
-  password: ''
-}
-
 const Login = () => {
   const [authenticating, setAuthenticating] = useState(false)
   const [error, setError] = useState(null)
@@ -40,7 +35,6 @@ const Login = () => {
       <Auth.Navigation goTo='SignUp'>Registrarme</Auth.Navigation>
       <Auth.Title>Iniciá sesión</Auth.Title>
       <Auth.Form
-        initialValues={initialValues}
         handleSubmit={handleSubmit}
         error={error}
         authenticating={authenticating}

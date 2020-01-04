@@ -4,12 +4,27 @@ import {
   TextInput,
   View
 } from 'react-native'
+import * as Yup from 'yup'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Formik } from 'formik'
 import { isEmpty, values } from 'lodash'
 import { Body, Description, GrayButton, PrimaryButton, Button } from '~/components'
 import AuthenticatingIndicator from '../../AuthenticatingIndicator'
 import styles, { PLACEHOLDER_COLOR, PASSWORD_TOGGLE_ICON_SIZE } from './styles'
+
+const initialValues = {
+  credential: '',
+  password: ''
+}
+
+const schema = Yup.object().shape({
+  credential: Yup.string()
+    .email('Email inválido')
+    .required('Requerido'),
+  password: Yup.string()
+    .min(6, 'Contraseña muy corta')
+    .required('Requerido')
+})
 
 const Error = ({ error }) => (
   error && (
@@ -65,13 +80,12 @@ const formHasBlankValues = (formValues) => {
 }
 
 const Form = ({
-  initialValues,
   handleSubmit,
-  schema,
   error,
   authenticating,
   credentialText,
-  submitText
+  submitText,
+  applyValidation
 }) => {
   const [passwordVisible, togglePasswordVisible] = useState(false)
 
@@ -79,7 +93,7 @@ const Form = ({
     <Formik
       initialValues={initialValues}
       onSubmit={handleSubmit}
-      validationSchema={schema}
+      validationSchema={applyValidation && schema}
     >
       {formikProps => (
         <KeyboardAvoidingView style={styles.container}>
