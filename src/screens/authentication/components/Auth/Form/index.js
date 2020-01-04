@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Formik } from 'formik'
-import { values } from 'lodash'
+import { isEmpty, values } from 'lodash'
 import { Body, Description, GrayButton, PrimaryButton, Button } from '~/components'
 import AuthenticatingIndicator from '../../AuthenticatingIndicator'
 import styles, { PLACEHOLDER_COLOR, PASSWORD_TOGGLE_ICON_SIZE } from './styles'
@@ -19,8 +19,8 @@ const Error = ({ error }) => (
   )
 )
 
-const SubmitButton = ({ onPress, thereAreEmptyValues, error, disabled, children }) => {
-  if (thereAreEmptyValues || error) {
+const SubmitButton = ({ onPress, blankValuesExist, error, disabled, children }) => {
+  if (blankValuesExist || error) {
     return (
       <GrayButton style={styles.submitButton}>
         <Description white>
@@ -59,9 +59,9 @@ const PasswordVisibleToggle = ({ onPress, isVisible }) => {
   )
 }
 
-const areFormValuesEmpty = (formValues) => {
-  const emptyValues = values(formValues).filter(element => element === '')
-  return emptyValues.length !== 0
+const formHasBlankValues = (formValues) => {
+  const blankValues = values(formValues).filter(element => element === '')
+  return !isEmpty(blankValues)
 }
 
 const Form = ({
@@ -114,7 +114,7 @@ const Form = ({
           <AuthenticatingIndicator authenticating={authenticating} />
           <SubmitButton
             onPress={formikProps.handleSubmit}
-            thereAreEmptyValues={areFormValuesEmpty(formikProps.values)}
+            blankValuesExist={formHasBlankValues(formikProps.values)}
             error={!formikProps.isValid}
             disabled={authenticating}
           >

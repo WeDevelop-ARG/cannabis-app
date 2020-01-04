@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
   line: {
     top: verticalScale(14),
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: StyleSheet.hairlineWidth * 2,
     borderColor: theme.colors.gray
   }
 })
