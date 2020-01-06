@@ -10,7 +10,7 @@ const PrivacyPolicy = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <WebView style={styles.webview} source={{ uri: privacyPolicy.url }} />
-      <PrimaryButton style={styles.button} onPress={navigation.state.params.handleRedirect}>
+      <PrimaryButton style={styles.button} onPress={() => navigation.pop()}>
         <Description white>Aceptar</Description>
       </PrimaryButton>
     </View>

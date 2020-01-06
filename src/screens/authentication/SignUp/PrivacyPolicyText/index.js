@@ -2,15 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { Text } from '~/components'
 import styles from './style'
-import NavigationService from '~/navigationService'
-
-const handleRedirect = () => {
-  NavigationService.navigate('SignUp')
-}
-
-const goToPrivacyPolicyURL = () => {
-  NavigationService.navigate('PrivacyPolicy', { handleRedirect })
-}
+import { goToPrivacyPolicyURL } from '~/mixins/privacyPolicyMixins'
 
 const PrivacyPolicyText = () => (
   <View style={styles.container}>
@@ -21,7 +13,6 @@ const PrivacyPolicyText = () => (
       >
             politica de privacidad
       </Text>
-      .
     </Text>
   </View>
 )
