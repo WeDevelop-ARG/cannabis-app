@@ -1,5 +1,5 @@
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
-import { widthPercentageToDP } from 'react-native-responsive-screen';
+import { widthPercentageToDP } from 'react-native-responsive-screen'
 
 const colors = {
   primary: '#5ECE84',
@@ -14,21 +14,21 @@ const colors = {
 
 const sizes = {
   // global sizes
-  base: moderateScale(40, 0.25),
-  font: moderateScale(14, 0.25),
-  border: moderateScale(7, 0.25),
-  padding: moderateScale(6, 0.25),
-  margin: moderateScale(12, 0.25),
+  base: moderateScale(40, 1),
+  font: moderateScale(14, 1),
+  border: moderateScale(7, 1),
+  padding: moderateScale(6, 1),
+  margin: moderateScale(12, 1),
   containerWidth: widthPercentageToDP('88%'),
 
   // font sizes
-  h1: moderateScale(20, 0.25),
-  h2: moderateScale(18, 0.25),
-  h3: moderateScale(16, 0.25),
-  h4: moderateScale(14, 0.25),
-  description: moderateScale(16, 0.25),
-  body: moderateScale(14, 0.25),
-  date: verticalScale(12)
+  h1: moderateScale(20, 1),
+  h2: moderateScale(18, 1),
+  h3: moderateScale(16, 1),
+  h4: moderateScale(14, 1),
+  description: moderateScale(16, 1),
+  body: moderateScale(14, 1),
+  date: moderateScale(12, 1)
 }
 
 const fonts = {
@@ -62,4 +62,18 @@ const fonts = {
   }
 }
 
-export { colors, sizes, fonts }
+const shadows = {
+  ...Platform.select({
+    ios: {
+      shadowColor: '#F0F0F0',
+      shadowRadius: 2,
+      shadowOffset: { width: 2, height: 5 },
+      shadowOpacity: 0.16
+    },
+    android: {
+      elevation: 1
+    }
+  })
+}
+
+export { colors, sizes, fonts, shadows }

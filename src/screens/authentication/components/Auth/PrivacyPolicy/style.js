@@ -1,18 +1,15 @@
 import { StyleSheet } from 'react-native'
-import { widthPercentageToDP } from 'react-native-responsive-screen'
 import { theme } from '~/constants'
+import { verticalScale } from 'react-native-size-matters'
 
 const styles = StyleSheet.create({
   container: {
-    width: widthPercentageToDP('60%'),
+    width: theme.sizes.containerWidth,
     position: 'absolute',
-    bottom: theme.sizes.margin * 2
+    top: verticalScale(570)
   },
   policyText: {
     textAlign: 'center'
-  },
-  link: {
-    textDecorationLine: 'underline'
   }
 })
 
