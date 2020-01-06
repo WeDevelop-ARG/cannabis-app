@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native'
+import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
-  backgroundImage: {
+  background: {
     flex: 1,
-    width: null,
-    height: null
+    backgroundColor: theme.colors.gray3
   }
 })
 

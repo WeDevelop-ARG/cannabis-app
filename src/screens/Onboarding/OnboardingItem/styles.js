@@ -1,24 +1,36 @@
 import { StyleSheet } from 'react-native'
-import { scale, verticalScale } from 'react-native-size-matters'
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters/extend'
 import { theme } from '~/constants'
-
-const marginVerticalBase = {
-  marginVertical: theme.sizes.margin
-}
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    ...StyleSheet.absoluteFill
+  },
+  imageContainer: {
+    width: scale(160),
+    height: scale(160),
+    position: 'absolute',
+    top: verticalScale(116),
+    backgroundColor: 'rgba(94, 206, 132, 0.12)',
+    borderRadius: scale(80),
+    alignItems: 'center',
+    overflow: 'visible'
   },
   image: {
-    width: scale(250),
-    height: verticalScale(250),
-    ...marginVerticalBase
+    position: 'absolute',
+    top: verticalScale(41)
   },
   text: {
-    textAlign: 'center',
-    ...marginVerticalBase
+    position: 'absolute',
+    top: verticalScale(372),
+    left: scale(47),
+    right: scale(47),
+    textAlign: 'center'
+  },
+  title: {
+    position: 'absolute',
+    top: verticalScale(324)
   }
 })
 
