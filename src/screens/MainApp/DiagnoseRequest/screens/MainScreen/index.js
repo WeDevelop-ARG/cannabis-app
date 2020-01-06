@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { ImageSelection, PrimaryButton, Title, Description } from '~/components'
 import styles from './styles'
 import { SvgXml } from 'react-native-svg'
-import Image from '../../resources/Group.svg'
+import Image from '../../resources/main-screen-logo.svg'
 
 export const MainScreen = ({ navigation }) => {
   const [showImageSelection, setShowImageSelection] = useState(false)
