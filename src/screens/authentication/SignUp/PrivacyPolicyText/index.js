@@ -1,15 +1,24 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Text } from '~/components'
-import { goToPrivacyPolicyURL } from '~/mixins/privacyPolicyMixins'
 import styles from './style'
+import NavigationService from '~/navigationService'
+
+const handleRedirect = () => {
+  NavigationService.navigate('SignUp')
+}
+
+const goToPrivacyPolicyURL = () => {
+  NavigationService.navigate('PrivacyPolicy', { handleRedirect })
+}
 
 const PrivacyPolicyText = () => (
   <View style={styles.container}>
     <Text style={styles.policyText}> Al registrarte estás aceptando nuestra{' '}
       <Text
         onPress={goToPrivacyPolicyURL}
-        style={styles.link}>
+        style={styles.link}
+      >
             politica de privacidad
       </Text>
       .

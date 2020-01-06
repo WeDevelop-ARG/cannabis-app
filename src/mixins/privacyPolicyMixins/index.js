@@ -1,10 +1,5 @@
-import { Linking } from 'react-native'
-import privacyPolicy from '~/configs/privacyPolicy'
+import NavigationService from '~/navigationService'
 
 export const goToPrivacyPolicyURL = async () => {
-  try {
-    await Linking.openURL(privacyPolicy.url)
-  } catch (error) {
-    console.log(error.message)
-  }
+  NavigationService.navigate('PrivacyPolicy')
 }

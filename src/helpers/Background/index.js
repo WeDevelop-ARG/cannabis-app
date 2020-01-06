@@ -1,15 +1,13 @@
 import React from 'react'
-import { ImageBackground } from 'react-native'
+import { View } from 'react-native'
 import styles from './styles'
-import source from '~/assets/images/background.jpg'
 
 const Background = ({ children }) => (
-  <ImageBackground
-    style={styles.backgroundImage}
-    source={source}
+  <View
+    style={styles.background}
   >
     {children}
-  </ImageBackground>
+  </View>
 )
 
 export default Background
