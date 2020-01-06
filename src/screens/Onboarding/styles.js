@@ -1,31 +1,34 @@
 import { StyleSheet } from 'react-native'
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
+import { scale, verticalScale } from 'react-native-size-matters/extend'
 import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    ...StyleSheet.absoluteFill,
+    flexDirection: 'column',
+    backgroundColor: theme.colors.gray3
   },
   carouselContainer: {
-    height: verticalScale(500),
-    borderRadius: moderateScale(30),
-    padding: theme.sizes.padding
+    ...StyleSheet.absoluteFill,
+    alignItems: 'center'
   },
   paginationDot: {
-    width: moderateScale(20),
-    height: moderateScale(20),
-    borderRadius: moderateScale(10),
-    marginHorizontal: scale(3),
-    borderColor: theme.colors.primary,
-    borderWidth: scale(3),
-    backgroundColor: theme.colors.alpha
+    width: scale(6),
+    height: scale(6),
+    borderRadius: scale(3),
+    backgroundColor: theme.colors.primary
   },
   inactivePaginationDot: {
-    borderColor: theme.colors.white,
-    borderWidth: scale(3),
-    backgroundColor: theme.colors.alpha
+    width: scale(8),
+    height: scale(8),
+    borderRadius: scale(4),
+    backgroundColor: '#D3D5D8'
+  },
+  button: {
+    width: scale(202),
+    height: verticalScale(45),
+    position: 'absolute',
+    top: verticalScale(511)
   }
 })
 

@@ -1,40 +1,25 @@
 import React, { useState, useRef } from 'react'
-import { View } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import * as AnalyticsService from '~/analyticsService'
 import * as CacheService from '~/cacheService'
 import NavigationService from '~/navigationService'
 import Background from '~/helpers/Background'
-import { Text, Button } from '~/components'
 import OnboardingItem from './OnboardingItem'
 import Header from './Header'
-import firstImage from '~/assets/images/Onboarding/first.png'
-import secondImage from '~/assets/images/Onboarding/second.png'
-import thirdImage from '~/assets/images/Onboarding/third.png'
+import firstImage from '~/assets/images/Onboarding/first.svg'
+import secondImage from '~/assets/images/Onboarding/second.svg'
+import thirdImage from '~/assets/images/Onboarding/third.svg'
 import styles from './styles'
-
-const OnboardingItems = [
-  {
-    imageSource: firstImage,
-    text: '¿Querés saber el estado de tu planta?'
-  },
-  {
-    imageSource: secondImage,
-    text: 'Mandanos fotos para que la podamos diagnosticar.'
-  },
-  {
-    imageSource: thirdImage,
-    text: '¡Esperá el feedback de nuestros expertos cannabineros!'
-  },
-  {
-    text: ''
-  }
-]
+import { scale } from 'react-native-size-matters/extend'
+import { PrimaryButton, Description } from '~/components'
 
 const renderItem = ({ item, index }) => (
-  <OnboardingItem imageSource={item.imageSource}>
-    {item.text}
-  </OnboardingItem>
+  <OnboardingItem
+    image={item.image}
+    title={item.title}
+    description={item.description}
+  />
 )
 
 const handleExit = async () => {
@@ -56,7 +41,7 @@ const Onboarding = () => {
   }
 
   const moveCarouselForwardWithButton = async () => {
-    if (nextSlideIsLastOne()) {
+    if (slideIsLastOne(activeIndex)) {
       await handleExit()
     } else {
       setActiveIndex(activeIndex + 1)
@@ -66,40 +51,66 @@ const Onboarding = () => {
 
   const moveCarouselWithSlide = async (index) => {
     setActiveIndex(index)
-    if (slideIsLastOne(index)) {
-      await handleExit()
-    }
   }
 
+  const OnboardingItems = [
+    {
+      image: {
+        source: firstImage,
+        width: 162,
+        height: 106
+      },
+      title: 'Conocé',
+      description: 'Conocé el estado de tus plantas y los cuidados que necesitan'
+    },
+    {
+      image: {
+        source: secondImage,
+        width: 86,
+        height: 106
+      },
+      title: 'Diagnosticá',
+      description: 'Subí fotos, solicitá revisiones y diagnosticá posibles problemas'
+    },
+    {
+      image: {
+        source: thirdImage,
+        width: 115,
+        height: 106
+      },
+      title: 'Recibí ayuda',
+      description: 'Recibí ayuda de nuestra comunidad de expertos'
+    }
+  ]
+
   return (
-    <Background>
-      <View style={styles.container}>
-        <Header onExitPress={handleExit} />
-        <View style={styles.carouselContainer}>
-          <Carousel
-            ref={carouselRef}
-            data={OnboardingItems}
-            renderItem={renderItem}
-            sliderWidth={300}
-            itemWidth={300}
-            onSnapToItem={(index) => moveCarouselWithSlide(index)}
-          />
-          <Pagination
-            dotsLength={OnboardingItems.length}
-            activeDotIndex={activeIndex}
-            carouselRef={carouselRef}
-            dotStyle={styles.paginationDot}
-            inactiveDotStyle={styles.inactivePaginationDot}
-          />
-        </View>
-        <Button
-          variant='alpha'
+    <View style={styles.container}>
+      <Header onExitPress={handleExit} />
+      <View style={styles.carouselContainer}>
+        <Carousel
+          ref={carouselRef}
+          data={OnboardingItems}
+          renderItem={renderItem}
+          sliderWidth={scale(375)}
+          itemWidth={scale(375)}
+          onSnapToItem={(index) => moveCarouselWithSlide(index)}
+        />
+        <PrimaryButton
           onPress={moveCarouselForwardWithButton}
+          style={styles.button}
         >
-          <Text>Siguiente</Text>
-        </Button>
+          <Description white>{(slideIsLastOne(activeIndex) && 'Comenzar') || 'Siguiente'}</Description>
+        </PrimaryButton>
+        <Pagination
+          dotsLength={OnboardingItems.length}
+          activeDotIndex={activeIndex}
+          carouselRef={carouselRef}
+          dotStyle={styles.paginationDot}
+          inactiveDotStyle={styles.inactivePaginationDot}
+          style={styles.pagination}
+        />
       </View>
-    </Background>
+    </View>
   )
 }
 
