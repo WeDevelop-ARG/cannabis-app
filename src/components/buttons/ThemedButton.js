@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     width: theme.sizes.containerWidth,
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
     margin: theme.sizes.margin,
     padding: theme.sizes.padding
   }
