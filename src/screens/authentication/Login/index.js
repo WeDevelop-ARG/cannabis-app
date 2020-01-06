@@ -3,19 +3,8 @@ import NavigationService from '~/navigationService'
 import DatabaseService from '~/databaseService'
 import * as AnalyticsService from '~/analyticsService'
 import * as AuthenticationService from '~/authenticationService'
-import { View } from 'react-native'
-import styles from '../styles'
+import Auth from '../components/Auth'
 import { isValidEmail } from '../utils'
-import Background from '~/helpers/Background'
-import LoginHeader from './LoginHeader'
-import LoginForm from './LoginForm'
-import GoogleButton from '../SocialNetworks/GoogleButton'
-import NoAccountLink from './NoAccountLink'
-
-const initialValues = {
-  account: '',
-  password: ''
-}
 
 const Login = () => {
   const [authenticating, setAuthenticating] = useState(false)
@@ -28,10 +17,10 @@ const Login = () => {
     setError(null)
     try {
       let email = null
-      if (!isValidEmail(values.account)) {
-        email = await DatabaseService.queryEmailFromUsername(values.account)
+      if (!isValidEmail(values.credential)) {
+        email = await DatabaseService.queryEmailFromUsername(values.credential)
       } else {
-        email = values.account
+        email = values.credential
       }
       await AuthenticationService.emailLogin(email, values.password)
       NavigationService.navigate('MainApp')
@@ -42,19 +31,19 @@ const Login = () => {
   }
 
   return (
-    <Background>
-      <View style={styles.container}>
-        <NoAccountLink />
-        <LoginHeader />
-        <LoginForm
-          initialValues={initialValues}
-          handleSubmit={handleSubmit}
-          error={error}
-          authenticating={authenticating}
-        />
-        <GoogleButton />
-      </View>
-    </Background>
+    <Auth>
+      <Auth.Navigation goTo='SignUp'>Registrarme</Auth.Navigation>
+      <Auth.Title>Iniciá sesión</Auth.Title>
+      <Auth.Form
+        handleSubmit={handleSubmit}
+        error={error}
+        authenticating={authenticating}
+        credentialText='Ingresá tu email o usuario'
+        submitText='Ingresar'
+      />
+      <Auth.Separator>Ingresá usando</Auth.Separator>
+      <Auth.SocialNetworks />
+    </Auth>
   )
 }
 
