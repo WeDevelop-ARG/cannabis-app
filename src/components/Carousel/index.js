@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Image, View } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import PropTypes from 'prop-types'
@@ -19,26 +19,34 @@ const CarouselImage = ({ uri }) => {
 
 const MyCarousel = ({ images, activeIndex, onActiveIndexChange, style }) => {
   const carouselRef = useRef()
+  const [privateImages, setPrivateImages] = useState(images)
+  const [privateIndex, setPrivateIndex] = useState(activeIndex)
 
   useEffect(() => {
     carouselRef.current.snapToItem(activeIndex)
-  }, [activeIndex, images.length])
+    setPrivateIndex(activeIndex)
+  }, [activeIndex])
+
+  useEffect(() => {
+    setPrivateImages(images)
+  }, [images])
 
   return (
     <View style={style}>
       <Carousel
         ref={carouselRef}
-        data={images}
+        data={privateImages}
         renderItem={({ item }) => <CarouselImage uri={item} />}
         sliderWidth={CAROUSEL_SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}
         itemHeight={ITEM_HEIGHT}
         onSnapToItem={(index) => onActiveIndexChange(index)}
+        useScrollView
       />
       <View style={styles.paginationContainer}>
         <Pagination
-          dotsLength={images.length}
-          activeDotIndex={activeIndex}
+          dotsLength={privateImages.length}
+          activeDotIndex={privateIndex}
           carouselRef={carouselRef}
           dotStyle={styles.paginationDot}
           inactiveDotStyle={styles.inactivePaginationDot}

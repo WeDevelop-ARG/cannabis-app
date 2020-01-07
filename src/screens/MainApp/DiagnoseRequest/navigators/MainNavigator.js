@@ -1,5 +1,6 @@
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
+import { includes } from 'lodash'
 import MainScreen from '../screens/MainScreen'
 import DescriptionRequest from '../screens/DescriptionRequest'
 import FinishRequest from '../screens/FinishRequest'
@@ -22,10 +23,18 @@ const Navigator = createStackNavigator(
 const MainNavigator = createAppContainer(Navigator)
 
 MainNavigator.navigationOptions = ({ navigation }) => {
-  let tabBarVisible = true
-  const isFirstScreen = navigation.state.index === 0
+  let tabBarVisible
+  const allowedRoutesToShowTabBar = ['MainScreen', 'NoPhotoDisclaimer', 'FinishRequest']
 
-  if (!isFirstScreen) tabBarVisible = false
+  if (navigation.state.routes.length > 1) {
+    navigation.state.routes.map(route => {
+      if (includes(allowedRoutesToShowTabBar, route.routeName)) {
+        tabBarVisible = true
+      } else {
+        tabBarVisible = false
+      }
+    })
+  }
 
   return { tabBarVisible }
 }

@@ -1,24 +1,27 @@
 import { StyleSheet } from 'react-native'
-import { scale } from 'react-native-size-matters'
-import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen'
+import { scale, moderateScale } from 'react-native-size-matters/extend'
 import { theme } from '~/constants'
+
+export const ITEM_LENGTH = moderateScale(90)
 
 const styles = StyleSheet.create({
   imageContainer: {
-    width: widthPercentageToDP(30),
-    height: heightPercentageToDP(15),
-    margin: theme.sizes.margin
+    width: ITEM_LENGTH,
+    height: ITEM_LENGTH,
+    marginRight: scale(10)
   },
   flatListImage: {
     flex: 1,
     resizeMode: 'cover',
-    margin: 0
+    margin: 0,
+    borderRadius: theme.sizes.border
   },
   selectedFlatListImage: {
     flex: 1,
     resizeMode: 'cover',
     margin: 0,
-    borderColor: theme.colors.secondary,
+    borderColor: theme.colors.primary,
+    borderRadius: theme.sizes.border,
     borderWidth: scale(3)
   }
 })
