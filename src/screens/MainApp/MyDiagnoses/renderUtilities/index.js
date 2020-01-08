@@ -1,7 +1,7 @@
 import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import NavigationService from '~/navigationService'
-import Diagnose from '../Diagnose'
+import Diagnose from '../components/Diagnose'
 
 const goToDetailedDiagnoseScreen = (diagnose) => {
   NavigationService.navigate('DetailedDiagnose', { diagnose })

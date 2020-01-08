@@ -6,11 +6,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     top: theme.sizes.margin
-  },
-  headerTitleStyle: {
-    flex: 1,
-    alignSelf: 'center',
-    textAlign: 'center'
   }
 })
 
