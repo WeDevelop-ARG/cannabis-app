@@ -28,8 +28,8 @@ const Error = ({ error }) => (
   )
 )
 
-const SubmitButton = ({ value, onPress }) => {
-  if (value === '') {
+const SubmitButton = ({ disabled, onPress }) => {
+  if (disabled) {
     return (
       <GrayButton>
         <Description white>Continuar</Description>
@@ -105,7 +105,7 @@ const UsernameRequest = (props) => {
           gray
           style={styles.description}
         >
-        Escribí un nombre de usuario para identificarte dentro de la plataforma
+          Escribí un nombre de usuario para identificarte dentro de la plataforma
         </Description>
         <TextInput
           style={styles.textInput}
@@ -117,7 +117,7 @@ const UsernameRequest = (props) => {
         <Error error={error} />
         <SubmitIndicator submitting={submitting} />
         <SubmitButton
-          value={textInputValue}
+          disabled={textInputValue === ''}
           onPress={submitHandler}
         />
       </KeyboardAvoidingView>
