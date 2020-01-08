@@ -12,8 +12,7 @@ const ConfirmButton = ({ errorState, onConfirm }) => (
         >
           <Description white>Confirmar</Description>
         </GrayButton>
-      )
-      : (
+      ) : (
         <PrimaryButton
           style={styles.button}
           onPress={onConfirm}
