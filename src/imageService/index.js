@@ -13,7 +13,6 @@ const callPickerAction = async (action, options) => {
 
     return images.map(img => img.path)
   } catch (error) {
-    clean()
     throw new CameraError(error.message)
   }
 }
