@@ -1,26 +1,12 @@
 import React, { useState } from 'react'
-import { TextInput, View, StyleSheet, Alert } from 'react-native'
-import { Text, Button } from '~/components'
+import { TextInput, View, Alert, ScrollView } from 'react-native'
+import { ProgressButton, Description, Title } from '~/components'
 import styles from './styles'
 import * as StorageService from '~/storageService'
 import * as DatabaseService from '~/databaseService'
-
-const ProgressBar = ({ progress }) => {
-  const styles = StyleSheet.create({
-    container: StyleSheet.absoluteFillObject,
-    overlay: {
-      backgroundColor: 'black',
-      width: `${progress}%`,
-      height: '100%'
-    }
-  })
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.overlay} />
-    </View>
-  )
-}
+import { theme } from '~/constants'
+import { BoxShadow } from 'react-native-shadow'
+import { scale, verticalScale } from 'react-native-size-matters/extend'
 
 const DescriptionRequest = ({ navigation }) => {
   const [description, setDescription] = useState('')
@@ -75,31 +61,51 @@ const DescriptionRequest = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text fontVariant='h2' colorVariant='black' style={styles.title}>
-        Describí las particularidades que notás en tu planta
-      </Text>
-      <TextInput
-        onChangeText={handleInput}
-        value={description}
-        style={styles.input}
-        editable={inputEnabled}
-      />
-      <Text fontVariant='description' colorVariant='black' style={styles.description}>
-        Cuanta mas información escribas, mejor. Por favor, no incluyas datos de contacto.
-      </Text>
-      <Button
-        variant={uploadEnabled ? 'black' : 'gray'}
-        style={styles.button}
-        onPress={handleUpload}
-        disabled={!uploadEnabled}
-      >
-        <ProgressBar progress={uploadProgress} />
-        <Text style={styles.buttonText}>
-          {((uploading) && 'Enviando...') || 'Enviar'}
-        </Text>
-      </Button>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <Title black style={styles.title}>
+          Describí las particularidades de tu planta
+        </Title>
+        <Description gray style={styles.description}>
+          Cuanta mas información escribas, mejor. Por favor, no incluyas datos de contacto.
+        </Description>
+        <BoxShadow
+          setting={{
+            width: scale(322),
+            height: verticalScale(90),
+            border: 5,
+            opacity: 0.02,
+            radius: 5,
+            style: styles.shadow
+          }}
+        >
+          <TextInput
+            onChangeText={handleInput}
+            value={description}
+            style={styles.input}
+            editable={inputEnabled}
+            placeholder='Mi planta tiene...'
+            placeholderTextColor={theme.colors.gray}
+            numberOfLines={2}
+            multiline
+          />
+        </BoxShadow>
+        <ProgressButton
+          style={styles.button}
+          onPress={handleUpload}
+          disabled={!uploadEnabled}
+          progress={uploadProgress}
+        >
+          <Description white>
+            {((uploading) && 'Enviando...') || 'Enviar'}
+          </Description>
+        </ProgressButton>
+      </ScrollView>
     </View>
   )
+}
+
+DescriptionRequest.navigationOptions = {
+  title: 'Nueva consulta'
 }
 
 export default DescriptionRequest
