@@ -1,28 +1,31 @@
 import React from 'react'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-import Icon from 'react-native-vector-icons/FontAwesome5'
 import Profile from './Profile'
 import DiagnoseRequest from './DiagnoseRequest'
 import MyDiagnoses from './MyDiagnoses'
 import styles from './styles'
+import MyDiagnosesIcon from './resources/tabIcons/DiagnoseRequestTabSVG'
+import DiagnoseRequestIcon from './resources/tabIcons/MyDiagnosesTabSVG'
+import ProfileIcon from './resources/tabIcons/ProfileTabSVG'
+import { theme } from '~/constants'
 
 const MainApp = createBottomTabNavigator(
   {
-    MyDiagnoses: {
-      screen: MyDiagnoses,
-      navigationOptions: {
-        tabBarLabel: 'Mis Solicitudes',
-        tabBarIcon: ({ tintColor }) => (
-          <Icon type='font-awesome' name='clipboard-list' size={18} color={tintColor} />
-        )
-      }
-    },
     DiagnoseRequest: {
       screen: DiagnoseRequest,
       navigationOptions: {
         tabBarLabel: 'Solicitar',
         tabBarIcon: ({ tintColor }) => (
-          <Icon type='font-awesome' name='upload' size={18} color={tintColor} />
+          <MyDiagnosesIcon tintColor={tintColor} />
+        )
+      }
+    },
+    MyDiagnoses: {
+      screen: MyDiagnoses,
+      navigationOptions: {
+        tabBarLabel: 'Mis Solicitudes',
+        tabBarIcon: ({ tintColor }) => (
+          <DiagnoseRequestIcon tintColor={tintColor} />
         )
       }
     },
@@ -31,15 +34,15 @@ const MainApp = createBottomTabNavigator(
       navigationOptions: {
         tabBarLabel: 'Perfil',
         tabBarIcon: ({ tintColor }) => (
-          <Icon type='font-awesome' name='user-circle' size={18} color={tintColor} />
+          <ProfileIcon tintColor={tintColor} />
         )
       }
     }
   }, {
     tabBarOptions: {
       showLabel: false,
-      activeTintColor: 'green',
-      inactiveTintColor: 'gray',
+      activeTintColor: theme.colors.primary,
+      inactiveTintColor: theme.colors.gray,
       style: styles.tabBarStyle
     },
     initialRouteName: 'DiagnoseRequest'
