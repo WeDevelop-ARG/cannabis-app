@@ -1,46 +1,44 @@
 import { StyleSheet } from 'react-native'
-import { moderateScale } from 'react-native-size-matters'
+import { scale, verticalScale } from 'react-native-size-matters/extend'
 import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    padding: theme.sizes.margin * 2
   },
   title: {
-    textAlign: 'center',
-    padding: moderateScale(10)
+    fontSize: 24,
+    marginTop: verticalScale(16)
   },
   userContainer: {
-    padding: moderateScale(20),
-    borderBottomWidth: moderateScale(2),
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: moderateScale(30)
+    marginTop: verticalScale(35),
+    marginBottom: verticalScale(25),
+    marginLeft: scale(5)
   },
-  leftContainer: {
-    flex: 1
-  },
-  list: {
-    padding: moderateScale(10),
-    paddingTop: 0
+  username: {
+    marginBottom: verticalScale(5)
   },
   listItem: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    marginBottom: moderateScale(20)
+    paddingTop: verticalScale(14),
+    paddingBottom: verticalScale(14),
+    borderTopWidth: verticalScale(1),
+    borderBottomWidth: verticalScale(1),
+    borderColor: '#F0F0F0',
+    marginTop: verticalScale(-1),
+    padding: scale(1)
   },
   itemButton: {
     flexDirection: 'row',
     backgroundColor: 'transparent',
-    padding: 0,
-    margin: moderateScale(10)
+    padding: 0
+
   },
-  itemImage: {
-    backgroundColor: theme.colors.gray,
-    width: moderateScale(40),
-    height: moderateScale(40),
-    marginRight: moderateScale(20)
+  itemImageContainer: {
+    width: scale(26),
+    alignItems: 'center',
+    marginRight: scale(16)
   },
   itemText: {
     textAlign: 'left'

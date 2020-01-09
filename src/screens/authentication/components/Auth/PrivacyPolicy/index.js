@@ -5,7 +5,7 @@ import { Body } from '~/components'
 import styles from './style'
 
 const goToPrivacyPolicyScreen = () => {
-  NavigationService.navigate('PrivacyPolicy')
+  NavigationService.navigate('PrivacyPolicy', { prevScreen: 'SignUp' })
 }
 
 const PrivacyPolicy = () => (
