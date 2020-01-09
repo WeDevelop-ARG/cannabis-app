@@ -4,10 +4,12 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Button, ImageSelection } from '~/components'
 import NavigationService from '~/navigationService'
 import * as ImageService from '~/imageService'
-import ConfirmButton from './ConfirmButton'
-import Carousel from './Carousel'
-import ImageList from './ImageList'
-import { MIN_IMAGES, MAX_IMAGES } from './constants'
+import ConfirmButton from './components/ConfirmButton'
+import AddMoreImagesButton from './components/AddMoreImagesButton'
+import Carousel from '~/components/Carousel'
+import ImageList from './components/ImageList'
+import { MIN_IMAGES, MAX_IMAGES, TIMEOUT_TO_WAIT_FOR_RENDERING } from './constants'
+import styles from './styles'
 
 const ImageVisualization = (props) => {
   const imagesFromPreviousStep = props.navigation.state.params.images
@@ -25,6 +27,14 @@ const ImageVisualization = (props) => {
     NavigationService.navigate('DescriptionRequest', { images })
   }
 
+  const canAddMoreImages = () => (
+    images.length < MAX_IMAGES
+  )
+
+  const waitForImagesRenderingAndSetIndex = (index) => {
+    setTimeout(() => setActiveIndex(index), TIMEOUT_TO_WAIT_FOR_RENDERING)
+  }
+
   const getMorePhotos = () => {
     setShowImageSelection(true)
   }
@@ -35,6 +45,7 @@ const ImageVisualization = (props) => {
       const allImages = [...images, ...filterDuplicates]
 
       setImages(allImages.slice(0, MAX_IMAGES))
+      waitForImagesRenderingAndSetIndex(images.length)
     }
     setShowImageSelection(false)
   }
@@ -49,11 +60,7 @@ const ImageVisualization = (props) => {
   }
 
   const setSubmitErrorIfImageCountBelowMinimum = () => {
-    if (images.length < MIN_IMAGES) {
-      setSubmitError(true)
-    } else {
-      setSubmitError(false)
-    }
+    return setSubmitError(images.length < MIN_IMAGES)
   }
 
   useEffect(() => {
@@ -93,20 +100,21 @@ const ImageVisualization = (props) => {
           onCancel={() => setShowImageSelection(false)}
           onImagesSelected={onImagesSelected}
         />}
-      <View>
-        <Carousel
-          images={images}
-          activeIndex={activeIndex}
-          onActiveIndexChange={setActiveIndex}
-        />
-      </View>
+      <Carousel
+        images={images}
+        activeIndex={activeIndex}
+        onActiveIndexChange={setActiveIndex}
+      />
       <ImageList
         images={images}
         activeIndex={activeIndex}
         onActiveIndexChange={setActiveIndex}
         onGetMoreImages={getMorePhotos}
       />
-      <ConfirmButton errorState={submitError} onConfirm={confirmRequest} />
+      <View>
+        <ConfirmButton errorState={submitError} onConfirm={confirmRequest} />
+        {canAddMoreImages() && <AddMoreImagesButton onPress={getMorePhotos} />}
+      </View>
     </View>
   )
 }
@@ -114,11 +122,11 @@ const ImageVisualization = (props) => {
 ImageVisualization.navigationOptions = ({ navigation }) => ({
   headerRight: () => (
     <>
-      <Button variant='alpha' onPress={navigation.getParam('changeImage')}>
+      <Button style={styles.changeButton} onPress={navigation.getParam('changeImage')}>
         <Icon name='redo' size={18} color='black' />
       </Button>
-      <Button variant='alpha' onPress={navigation.getParam('deleteImage')}>
-        <Icon name='trash' size={18} color='black' />
+      <Button style={styles.deleteButton} onPress={navigation.getParam('deleteImage')}>
+        <Icon name='trash-alt' size={18} color='black' />
       </Button>
     </>
   )
