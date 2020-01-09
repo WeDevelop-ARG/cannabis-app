@@ -1,49 +1,62 @@
 import { StyleSheet } from 'react-native'
-import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
-import { scale, verticalScale } from 'react-native-size-matters'
+import { verticalScale, moderateScale, scale } from 'react-native-size-matters'
 import { theme } from '~/constants'
 
-const marginVerticalBase = {
-  marginVertical: theme.sizes.margin
-}
+export const PLACEHOLDER_TEXT_COLOR = theme.colors.gray
+export const ICON_WIDTH = moderateScale(66.53)
+export const ICON_HEIGHT = moderateScale(51.41)
+
+const ICON_TOP_DISPLACEMENT_IN_DP = 89
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    top: heightPercentageToDP('10%')
+    top: verticalScale(175)
   },
-  drCannabisIcon: {
-    width: scale(150),
-    height: verticalScale(150),
+  iconBackground: {
     alignSelf: 'center',
-    ...marginVerticalBase
+    position: 'absolute',
+    top: verticalScale(ICON_TOP_DISPLACEMENT_IN_DP + 10),
+    width: moderateScale(62),
+    height: moderateScale(42),
+    backgroundColor: 'rgba(94, 206, 132, 0.2)'
   },
-  information: {
-    width: widthPercentageToDP('80%'),
-    alignSelf: 'center'
+  icon: {
+    alignSelf: 'center',
+    position: 'absolute',
+    top: verticalScale(ICON_TOP_DISPLACEMENT_IN_DP)
   },
-  usernameTag: {
-    paddingLeft: theme.sizes.padding,
-    ...marginVerticalBase
+  title: {
+    alignSelf: 'center',
+    marginBottom: verticalScale(12)
+  },
+  description: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    width: theme.sizes.containerWidth
   },
   textInput: {
-    color: theme.colors.white,
-    width: widthPercentageToDP('80%'),
+    width: theme.sizes.containerWidth,
+    height: theme.sizes.base,
+    marginTop: verticalScale(35),
+    marginBottom: verticalScale(30),
+    padding: theme.sizes.padding,
+    paddingLeft: scale(14),
     alignSelf: 'center',
-    borderColor: theme.colors.white,
-    borderWidth: scale(1),
     borderRadius: theme.sizes.border,
-    textAlign: 'center'
+    color: theme.colors.black,
+    textDecorationLine: 'none',
+    backgroundColor: theme.colors.white,
+    ...theme.fonts.body,
+    ...theme.shadows
   },
   error: {
-    color: theme.colors.secondary,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginBottom: theme.sizes.margin
   },
   submitIndicator: {
-    alignSelf: 'center'
-  },
-  submitButton: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginBottom: theme.sizes.margin
   }
 })
 

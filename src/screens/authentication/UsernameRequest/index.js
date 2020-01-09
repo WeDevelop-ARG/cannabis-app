@@ -1,22 +1,61 @@
 import React, { useState } from 'react'
-import { KeyboardAvoidingView, Image, TextInput, ActivityIndicator } from 'react-native'
-import { Text, Button } from '~/components'
-import Background from '~/helpers/Background'
+import { KeyboardAvoidingView, TextInput, ActivityIndicator, View } from 'react-native'
+import { SvgXml } from 'react-native-svg'
+import { Body, Description, Subtitle } from '~/components/texts'
+import { PrimaryButton, GrayButton } from '~/components/buttons'
 import * as AuthenticationService from '~/authenticationService'
 import * as DatabaseService from '~/databaseService'
 import NavigationService from '~/navigationService'
-import DrCannabis from '~/assets/images/DrCannabis.png'
-import styles from './styles'
+import usernameIcon from '~/assets/images/UsernameRequest/usernameIcon.svg'
+import styles, { PLACEHOLDER_TEXT_COLOR, ICON_WIDTH, ICON_HEIGHT } from './styles'
 
 const SubmitIndicator = ({ submitting }) => (
   submitting &&
     <ActivityIndicator
       style={styles.submitIndicator}
-      size='large' />
+      size='large'
+    />
 )
 
 const Error = ({ error }) => (
-  error && <Text fontVariant='h3' style={styles.error}>{error}</Text>
+  error && (
+    <Body
+      secondary
+      style={styles.error}
+    >
+      {error}
+    </Body>
+  )
+)
+
+const SubmitButton = ({ disabled, onPress }) => {
+  if (disabled) {
+    return (
+      <GrayButton>
+        <Description white>Continuar</Description>
+      </GrayButton>
+    )
+  } else {
+    return (
+      <PrimaryButton
+        onPress={onPress}
+      >
+        <Description white>Continuar</Description>
+      </PrimaryButton>
+    )
+  }
+}
+
+const Icon = () => (
+  <>
+    <View style={styles.iconBackground} />
+    <SvgXml
+      width={ICON_WIDTH}
+      height={ICON_HEIGHT}
+      style={styles.icon}
+      xml={usernameIcon}
+    />
+  </>
 )
 
 const UsernameRequest = (props) => {
@@ -30,21 +69,17 @@ const UsernameRequest = (props) => {
     let newUsernameCreated = false
 
     try {
-      if (textInputValue === '') {
-        setError('Nombre de usuario no válido')
+      if (await DatabaseService.usernameAlreadyInUse(textInputValue)) {
+        setError('Este nickname ya existe')
       } else {
-        if (await DatabaseService.usernameAlreadyInUse(textInputValue)) {
-          setError('Este nickname ya existe')
-        } else {
-          const user = await AuthenticationService.getCurrentUser()
+        const user = await AuthenticationService.getCurrentUser()
 
-          await DatabaseService.addNewUserData(user.uid, {
-            username: textInputValue,
-            email: user.email
-          })
+        await DatabaseService.addNewUserData(user.uid, {
+          username: textInputValue,
+          email: user.email
+        })
 
-          newUsernameCreated = true
-        }
+        newUsernameCreated = true
       }
     } catch (error) {
       setError('Error inesperado, pruebe más tarde.')
@@ -62,31 +97,31 @@ const UsernameRequest = (props) => {
   }
 
   return (
-    <Background>
+    <>
+      <Icon />
       <KeyboardAvoidingView style={styles.container}>
-        <Image
-          style={styles.drCannabisIcon}
-          source={DrCannabis}
-        />
-        <Text fontVariant='description' style={styles.information}>Antes de iniciar sesión vamos a necesitar un nombre para tu usuario.</Text>
-        <Text fontVariant='h1' style={styles.usernameTag}>Usuario</Text>
+        <Subtitle style={styles.title}>Creá tu nombre de usuario</Subtitle>
+        <Description
+          gray
+          style={styles.description}
+        >
+          Escribí un nombre de usuario para identificarte dentro de la plataforma
+        </Description>
         <TextInput
           style={styles.textInput}
-          placeholder='Escribinos un nombre de usuario'
-          placeholderTextColor='white'
+          placeholder='Nombre de usuario'
+          placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
           onChangeText={(text) => handleInputText(text)}
           value={textInputValue}
         />
         <Error error={error} />
         <SubmitIndicator submitting={submitting} />
-        <Button
-          style={styles.submitButton}
+        <SubmitButton
+          disabled={textInputValue === ''}
           onPress={submitHandler}
-        >
-          <Text>Aceptar</Text>
-        </Button>
+        />
       </KeyboardAvoidingView>
-    </Background>
+    </>
   )
 }
 
