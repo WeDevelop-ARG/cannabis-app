@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
-import { widthPercentageToDP } from 'react-native-responsive-screen'
+import { theme } from '~/constants'
+import { verticalScale, moderateScale } from 'react-native-size-matters/extend'
 
 const styles = StyleSheet.create({
   container: {
@@ -7,8 +8,32 @@ const styles = StyleSheet.create({
   },
   informationContainer: {
     flex: 1,
-    width: widthPercentageToDP('90%'),
-    alignSelf: 'center'
+    width: theme.sizes.containerWidth,
+    alignSelf: 'center',
+    top: verticalScale(-40)
+  },
+  comment: {
+    top: verticalScale(-24)
+  },
+  metadataContainer: {
+    top: verticalScale(-40),
+    width: theme.sizes.containerWidth,
+    height: verticalScale(80),
+    alignSelf: 'center',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginVertical: verticalScale(17),
+    marginBottom: verticalScale(32),
+    borderRadius: moderateScale(12),
+    backgroundColor: theme.colors.white,
+    elevation: 5
+  },
+  metadataAsColumn: {
+    flex: 1,
+    height: '65%',
+    alignItems: 'center',
+    justifyContent: 'space-around'
   }
 })
 
