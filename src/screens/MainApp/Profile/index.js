@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { View, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import NavigationService from '~/navigationService'
 import * as firebase from 'firebase'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
 import MessagingService from '~/messagingService'
-import { goToPrivacyPolicyURL } from '~/mixins/privacyPolicyMixins'
-import Icon from 'react-native-vector-icons/FontAwesome5'
-import { Text, Button } from '~/components'
+import { Button, Title, Subtitle, Description } from '~/components'
 import styles from './styles'
+import { SvgXml } from 'react-native-svg'
+import LogOutLogo from './resources/logout_logo.svg'
+import PolicyLogo from './resources/policy_logo.svg'
+import { createStackNavigator } from 'react-navigation-stack'
+import PrivacyPolicy from '~/screens/PrivacyPolicy'
 
-const LogOut = async () => {
+const goToPrivacyPolicyURL = () => {
+  NavigationService.navigate('PrivacyPolicy')
+}
+
+const logOut = async () => {
   try {
     await MessagingService.deleteFCMTokenForCurrentUser()
     await firebase.auth().signOut()
@@ -20,14 +27,16 @@ const LogOut = async () => {
   }
 }
 
-const ListItem = ({ text, onPress }) => {
+const ListItem = ({ text, onPress, imgSource }) => {
   return (
     <View style={styles.listItem}>
       <Button onPress={onPress} style={styles.itemButton}>
-        <Image style={styles.itemImage} />
-        <Text styles={styles.itemText} colorVariant='black'>
+        <View style={styles.itemImageContainer}>
+          <SvgXml style={styles.itemImage} xml={imgSource} />
+        </View>
+        <Description styles={styles.itemText} black>
           {text}
-        </Text>
+        </Description>
       </Button>
     </View>
   )
@@ -50,23 +59,28 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
-      <Text fontVariant='h1' colorVariant='black' style={styles.title}>Perfil</Text>
-      <ScrollView contentContainerStyle={styles.list}>
+      <ScrollView>
+        <Title black style={styles.title}>Mi cuenta</Title>
         <View style={styles.userContainer}>
-          <View style={styles.leftContainer}>
-            <Text fontVariant='h2' colorVariant='black'>{username}</Text>
-            <Text fontVariant='body' colorVariant='black'>{email}</Text>
-          </View>
-          <View style={styles.rightContainer}>
-            <TouchableOpacity onPress={() => { LogOut() }}>
-              <Icon type='font-awesome' name='power-off' size={30} />
-            </TouchableOpacity>
-          </View>
+          <Subtitle black style={styles.username}>{username}</Subtitle>
+          <Description gray>{email}</Description>
         </View>
-        <ListItem text='Política de Privacidad' onPress={goToPrivacyPolicyURL} />
+        <ListItem text='Política de privacidad' onPress={goToPrivacyPolicyURL} imgSource={PolicyLogo} />
+        <ListItem text='Cerrar sessión' onPress={logOut} imgSource={LogOutLogo} />
       </ScrollView>
     </View>
   )
 }
 
-export default Profile
+Profile.navigationOptions = () => ({
+  header: null
+})
+
+const Navigator = createStackNavigator(
+  {
+    Profile,
+    PrivacyPolicy
+  }
+)
+
+export default Navigator
