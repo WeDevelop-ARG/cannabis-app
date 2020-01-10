@@ -1,30 +1,29 @@
 import { StyleSheet } from 'react-native'
-import { scale, moderateScale } from 'react-native-size-matters'
+import { verticalScale } from 'react-native-size-matters/extend'
+import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
-    alignItems: 'center'
+    backgroundColor: theme.colors.gray3,
+    flex: 1
   },
-  image: {
-    height: moderateScale(150),
-    width: moderateScale(150),
-    backgroundColor: 'gray',
-    marginTop: scale(40),
-    marginBottom: scale(30)
+  scroll: {
+    alignItems: 'center',
+    flexDirection: 'column',
+    padding: theme.sizes.margin * 2
+  },
+  logo: {
+    marginTop: verticalScale(64)
   },
   button: {
-    padding: moderateScale(20),
-    margin: moderateScale(20)
-  },
-  buttonLink: {
-    backgroundColor: 'rgba(0,0,0,0)'
+    marginTop: verticalScale(43)
   },
   title: {
-    margin: moderateScale(10)
+    marginTop: verticalScale(32)
   },
   description: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop: verticalScale(12)
   }
 })
 

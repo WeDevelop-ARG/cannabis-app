@@ -1,7 +1,9 @@
 import React from 'react'
-import { View, Image } from 'react-native'
-import { Text, Button } from '~/components'
+import { View, ScrollView } from 'react-native'
+import { Title, Description, PrimaryButton } from '~/components'
 import styles from './styles'
+import { SvgXml } from 'react-native-svg'
+import Logo from './resources/logo.svg'
 
 const FinishRequest = ({ navigation }) => {
   const goToRequestNewDiagnose = () => {
@@ -15,17 +17,22 @@ const FinishRequest = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.image} />
-      <Text fontVariant='h2' colorVariant='black' style={styles.title}>Listo! Ya solicitaste tu diagnóstico</Text>
-      <Text fontVariant='description' colorVariant='black' style={styles.description}>En breve nuestros expertos responderán tus consultas</Text>
-      <Button variant='black' style={styles.button} onPress={goToRequestNewDiagnose}>
-        <Text>Solicitar nuevo diagnóstico</Text>
-      </Button>
-      <Button variant='primary' style={styles.buttonLink} onPress={goToMyRequests}>
-        <Text fontVariant='description' colorVariant='black'>Ver solicitudes</Text>
-      </Button>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <SvgXml xml={Logo} style={styles.logo} />
+        <Title black style={styles.title}>Listo! Ya enviaste tu consulta</Title>
+        <Description gray style={styles.description}>En breve nuestros expertos comenzarán a responederte.</Description>
+        <PrimaryButton style={styles.button} onPress={goToRequestNewDiagnose}>
+          <Description white>Solicitar nueva consulta</Description>
+        </PrimaryButton>
+        <Description primary style={styles.link} onPress={goToMyRequests}>Ver consultas</Description>
+      </ScrollView>
     </View>
   )
+}
+
+FinishRequest.navigationOptions = {
+  title: 'Nueva consulta',
+  headerLeft: null
 }
 
 export default FinishRequest
