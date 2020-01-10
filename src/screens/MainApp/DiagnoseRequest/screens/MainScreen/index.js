@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { View, Image } from 'react-native'
-import { ImageSelection, Text, Button } from '~/components'
+import { View } from 'react-native'
+import { ImageSelection, PrimaryButton, Title, Description } from '~/components'
 import styles from './styles'
+import { SvgXml } from 'react-native-svg'
+import Image from '../../resources/main-screen-logo.svg'
 
 export const MainScreen = ({ navigation }) => {
   const [showImageSelection, setShowImageSelection] = useState(false)
@@ -20,21 +22,18 @@ export const MainScreen = ({ navigation }) => {
         />
       )}
       <View style={styles.container}>
-        <Text fontVariant='h1' colorVariant='black' styles={styles.title}>
-          Estado de mi planta
-        </Text>
-        <Image style={styles.image} />
-        <Text fontVariant='h2' colorVariant='black' styles={styles.subtitle}>
+        <SvgXml width='54' height='65' xml={Image} style={styles.image} />
+        <Title black style={styles.title}>
           Conocé el estado de tu planta
-        </Text>
-        <Text fontVariant='description' colorVariant='black' style={styles.description}>
-          Agregá un mínimo de 3 fotos en detalle y bien iluminadas para que nuestros expertos puedan darte su opinión
-        </Text>
-        <Button variant='black' style={styles.button} onPress={() => setShowImageSelection(true)}>
-          <Text fontVariant='h3'>
+        </Title>
+        <Description gray style={styles.description}>
+          Agregá un mínimo de 3 fotos en detalle y bien iluminadas para que nuestros expertos puedan darte su opinión.
+        </Description>
+        <PrimaryButton variant='black' style={styles.button} onPress={() => setShowImageSelection(true)}>
+          <Description white>
             Agregar fotos
-          </Text>
-        </Button>
+          </Description>
+        </PrimaryButton>
       </View>
     </>
   )

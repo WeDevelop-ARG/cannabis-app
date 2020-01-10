@@ -1,3 +1,4 @@
+import fixtimerbug from '~/bugFixes/fixtimerbug' // this is just an import to load the fix
 import React from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
