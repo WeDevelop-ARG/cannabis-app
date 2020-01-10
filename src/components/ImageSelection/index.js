@@ -1,18 +1,23 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Overlay } from 'react-native-elements'
-import { Button, Text } from '~/components'
-import { verticalScale, moderateScale } from 'react-native-size-matters'
+import { PrimaryButton, Subtitle, Description, GrayButton } from '~/components'
+import { verticalScale, scale } from 'react-native-size-matters/extend'
 import * as ImageService from '~/imageService'
+import { theme } from '~/constants'
+import { moderateScale } from 'react-native-size-matters'
 
 const styles = StyleSheet.create({
+  innerContainer: {
+    padding: theme.sizes.padding * 2
+  },
   button: {
-    padding: moderateScale(20),
-    margin: moderateScale(5),
-    borderRadius: 2
+    width: '100%',
+    margin: 0,
+    marginTop: moderateScale(5)
   },
   title: {
-    marginBottom: verticalScale(10)
+    marginBottom: verticalScale(30)
   }
 })
 
@@ -46,39 +51,37 @@ const ImageSelection = ({ onImagesSelected, onCancel }) => {
 
   const cancel = async () => {
     setIsVisible(false)
-    ImageService.clean()
     if (onCancel) {
-      onCancel()
+      await onCancel()
     }
   }
 
   return (
     <Overlay
-      overlayStyle={styles.innerContainer}
       isVisible={isVisible}
       width='auto'
       height='auto'
       onBackdropPress={cancel}
     >
-      <View>
-        <Text fontVariant='h1' colorVariant='black' style={styles.title}>
+      <View style={styles.innerContainer}>
+        <Subtitle black style={styles.title}>
           Seleccionar desde:
-        </Text>
-        <Button variant='black' style={styles.button} onPress={callCamera}>
-          <Text fontVariant='h3' colorVariant='white'>
-            Camara
-          </Text>
-        </Button>
-        <Button variant='black' style={styles.button} onPress={callGallery}>
-          <Text fontVariant='h3' colorVariant='white'>
-            Galeria
-          </Text>
-        </Button>
-        <Button variant='black' style={styles.button} onPress={cancel}>
-          <Text fontVariant='h3' colorVariant='white'>
+        </Subtitle>
+        <PrimaryButton style={styles.button} onPress={callCamera}>
+          <Description white>
+            Cámara
+          </Description>
+        </PrimaryButton>
+        <PrimaryButton style={styles.button} onPress={callGallery}>
+          <Description white>
+            Galería
+          </Description>
+        </PrimaryButton>
+        <GrayButton style={styles.button} onPress={cancel}>
+          <Description white>
             Cancelar
-          </Text>
-        </Button>
+          </Description>
+        </GrayButton>
       </View>
     </Overlay>
   )
