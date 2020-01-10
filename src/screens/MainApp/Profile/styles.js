@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
     padding: theme.sizes.margin * 2
   },
   title: {
-    fontSize: 24,
     marginTop: verticalScale(16)
   },
   userContainer: {
