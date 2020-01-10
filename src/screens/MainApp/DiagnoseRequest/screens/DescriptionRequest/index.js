@@ -6,7 +6,7 @@ import * as StorageService from '~/storageService'
 import * as DatabaseService from '~/databaseService'
 import { theme } from '~/constants'
 import { BoxShadow } from 'react-native-shadow'
-import { scale, verticalScale } from 'react-native-size-matters/extend'
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters/extend'
 
 const DescriptionRequest = ({ navigation }) => {
   const [description, setDescription] = useState('')
@@ -72,9 +72,9 @@ const DescriptionRequest = ({ navigation }) => {
           setting={{
             width: scale(322),
             height: verticalScale(90),
-            border: 5,
+            border: moderateScale(5),
             opacity: 0.02,
-            radius: 5,
+            radius: moderateScale(5),
             style: styles.shadow
           }}
         >
@@ -96,7 +96,7 @@ const DescriptionRequest = ({ navigation }) => {
           progress={uploadProgress}
         >
           <Description white>
-            {((uploading) && 'Enviando...') || 'Enviar'}
+            {uploading ? 'Enviando...' : 'Enviar'}
           </Description>
         </ProgressButton>
       </ScrollView>
