@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { Button, ImageSelection } from '~/components'
+import * as AnalyticsService from '~/analyticsService'
 import NavigationService from '~/navigationService'
 import * as ImageService from '~/imageService'
+import { Button, ImageSelection } from '~/components'
+import Background from '~/components/Background'
 import ConfirmButton from './components/ConfirmButton'
 import AddMoreImagesButton from './components/AddMoreImagesButton'
 import Carousel from '~/components/Carousel'
@@ -18,6 +20,8 @@ const ImageVisualization = (props) => {
   const [submitError, setSubmitError] = useState(false)
   const [images, setImages] = useState(imagesFromPreviousStep)
   const [showImageSelection, setShowImageSelection] = useState(false)
+
+  AnalyticsService.setCurrentScreenName('Image Review')
 
   useEffect(() => {
     setImages(imagesFromPreviousStep)
@@ -94,7 +98,7 @@ const ImageVisualization = (props) => {
   }, [activeIndex, images.length])
 
   return (
-    <View>
+    <Background>
       {showImageSelection &&
         <ImageSelection
           onCancel={() => setShowImageSelection(false)}
@@ -115,7 +119,7 @@ const ImageVisualization = (props) => {
         <ConfirmButton errorState={submitError} onConfirm={confirmRequest} />
         {canAddMoreImages() && <AddMoreImagesButton onPress={getMorePhotos} />}
       </View>
-    </View>
+    </Background>
   )
 }
 

@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: theme.colors.gray3
+    backgroundColor: theme.colors.background
   },
   webview: {
     flex: 1,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import Background from '~/components/Background'
 import { Subtitle, Description } from '~/components/texts'
 import { PrimaryButton } from '~/components/buttons'
 import NavigationService from '~/navigationService'
@@ -10,7 +10,7 @@ const goToRequest = () => {
 }
 
 const NoDiagnoses = () => (
-  <View style={styles.container}>
+  <Background style={styles.container}>
     <Subtitle>Todavía no hay solicitudes!</Subtitle>
     <PrimaryButton
       style={styles.CTA}
@@ -18,7 +18,7 @@ const NoDiagnoses = () => (
     >
       <Description white>Haz una!</Description>
     </PrimaryButton>
-  </View>
+  </Background>
 )
 
 export default NoDiagnoses

@@ -84,7 +84,7 @@ const Onboarding = () => {
   ]
 
   return (
-    <View style={styles.container}>
+    <Background style={styles.container}>
       <View style={styles.carouselContainer}>
         <Carousel
           ref={carouselRef}
@@ -110,7 +110,7 @@ const Onboarding = () => {
         />
       </View>
       <Header onExitPress={handleExit} />
-    </View>
+    </Background>
   )
 }
 

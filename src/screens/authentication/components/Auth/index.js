@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import Background from '~/components/Background'
 import Title from './Title'
 import Navigation from './Navigation'
 import Form from './Form'
@@ -9,9 +9,9 @@ import PrivacyPolicy from './PrivacyPolicy'
 import styles from './styles'
 
 const Auth = ({ children }) => (
-  <View style={styles.container}>
+  <Background style={styles.container}>
     {children}
-  </View>
+  </Background>
 )
 
 Auth.Navigation = Navigation

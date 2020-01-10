@@ -3,10 +3,6 @@ import { verticalScale, moderateScale, scale } from 'react-native-size-matters'
 import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: theme.colors.gray3,
-    flex: 1
-  },
   scroll: {
     padding: theme.sizes.margin * 2
   },

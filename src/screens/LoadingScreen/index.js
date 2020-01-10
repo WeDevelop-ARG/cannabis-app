@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import { View, Image } from 'react-native'
+import { Image } from 'react-native'
 import * as firebase from 'firebase'
 import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
 import * as CacheService from '~/cacheService'
 import * as DatabaseService from '~/databaseService'
-import Background from '~/helpers/Background'
+import Background from '~/components/Background'
 import { Title } from '~/components/texts'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 import styles from './styles'
@@ -44,14 +44,12 @@ const LoadingScreen = () => {
   }, [])
 
   return (
-    <Background>
-      <View style={styles.container}>
-        <Image
-          style={styles.DrCannabisIcon}
-          source={DrCannabis}
-        />
-        <Title primary style={styles.DrCannabisText}>Dr. Cannabis</Title>
-      </View>
+    <Background style={styles.container}>
+      <Image
+        style={styles.DrCannabisIcon}
+        source={DrCannabis}
+      />
+      <Title primary style={styles.DrCannabisText}>Dr. Cannabis</Title>
     </Background>
   )
 }

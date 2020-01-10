@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
 import { isNull, isEmpty } from 'lodash'
+import * as AnalyticsService from '~/analyticsService'
 import { ForceRerenderOnNavigation } from '~/navigationService'
 import * as DatabaseService from '~/databaseService'
 import { sortDiagnosesByMostRecentCreation } from '~/mixins/diagnose'
 import { getURL } from '~/mixins/storage'
 import { renderDiagnoses } from './renderUtilities'
+import Background from '~/components/Background'
 import NoDiagnoses from './components/NoDiagnoses'
 import Header from './components/Header'
 import DetailedDiagnose from '../DetailedDiagnose'
@@ -20,6 +22,8 @@ const MyDiagnoses = () => {
   const [refetch, toggleRefetch] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [scrolling, setScrolling] = useState(false)
+
+  AnalyticsService.setCurrentScreenName('My Diagnoses')
 
   const refetchDiagnoses = () => {
     toggleRefetch(!refetch)
@@ -58,7 +62,7 @@ const MyDiagnoses = () => {
   }
 
   return (
-    <>
+    <Background>
       <View style={styles.container}>
         <ForceRerenderOnNavigation resetStateFunction={refetchDiagnoses} />
         <Header isScrolling={scrolling} />
@@ -88,7 +92,7 @@ const MyDiagnoses = () => {
             }}
           />}
       </View>
-    </>
+    </Background>
   )
 }
 

@@ -3,10 +3,6 @@ import { verticalScale } from 'react-native-size-matters/extend'
 import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: theme.colors.gray3,
-    flex: 1
-  },
   scroll: {
     alignItems: 'center',
     flexDirection: 'column',
