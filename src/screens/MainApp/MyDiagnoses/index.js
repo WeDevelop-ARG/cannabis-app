@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
 import { isNull, isEmpty } from 'lodash'
@@ -7,21 +7,26 @@ import * as DatabaseService from '~/databaseService'
 import { sortDiagnosesByMostRecentCreation } from '~/mixins/diagnose'
 import { getURL } from '~/mixins/storage'
 import { renderDiagnoses } from './renderUtilities'
-import NoDiagnoses from './NoDiagnoses'
+import NoDiagnoses from './components/NoDiagnoses'
+import Header from './components/Header'
 import DetailedDiagnose from '../DetailedDiagnose'
+import { OFFSET_THRESHOLD_TO_SNAP_FLATLIST } from './constants'
 import styles from './styles'
 
 const MyDiagnoses = () => {
+  const flatListRef = useRef()
   const [diagnoses, setDiagnoses] = useState(null)
   const [downloadingDiagnoses, setDownloadingDiagnoses] = useState(true)
-  const [refetchTrigger, toggleRefetch] = useState(false)
+  const [refetch, toggleRefetch] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
+  const [scrolling, setScrolling] = useState(false)
 
   const refetchDiagnoses = () => {
-    toggleRefetch(!refetchTrigger)
+    toggleRefetch(!refetch)
   }
 
   const getRenderedDiagnoses = async () => {
-    setDownloadingDiagnoses(true)
+    setRefreshing(true)
     try {
       const downloadedData = await DatabaseService.getDiagnosesFromCurrentUser()
 
@@ -40,35 +45,55 @@ const MyDiagnoses = () => {
       setDiagnoses(null)
     } finally {
       setDownloadingDiagnoses(false)
+      setRefreshing(false)
     }
   }
 
   useEffect(() => {
     getRenderedDiagnoses()
-  }, [refetchTrigger])
+  }, [refetch])
 
   if (!isNull(diagnoses) && isEmpty(diagnoses)) {
     return <NoDiagnoses />
   }
 
   return (
-    <View style={styles.container}>
-      <ForceRerenderOnNavigation resetStateFunction={refetchDiagnoses} />
-      {downloadingDiagnoses && <ActivityIndicator size='large' />}
-      {diagnoses &&
-        <FlatList
-          data={diagnoses}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => item}
-          keyExtractor={item => String(diagnoses.indexOf(item))}
-        />}
-    </View>
+    <>
+      <View style={styles.container}>
+        <ForceRerenderOnNavigation resetStateFunction={refetchDiagnoses} />
+        <Header isScrolling={scrolling} />
+        {downloadingDiagnoses && <ActivityIndicator size='large' />}
+        {diagnoses &&
+          <FlatList
+            ref={flatListRef}
+            data={diagnoses}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => item}
+            keyExtractor={item => String(diagnoses.indexOf(item))}
+            onRefresh={getRenderedDiagnoses}
+            refreshing={refreshing}
+            disableVirtualization={false}
+            onScrollBeginDrag={() => setScrolling(true)}
+            onScrollEndDrag={({ nativeEvent }) => {
+              const snapToTopIfScrollingNearTheFirstElement = () => {
+                if (nativeEvent.contentOffset.y < OFFSET_THRESHOLD_TO_SNAP_FLATLIST) {
+                  flatListRef.current.scrollToIndex({ animated: true, index: 0 })
+                  setScrolling(false)
+                } else {
+                  setScrolling(true)
+                }
+              }
+
+              snapToTopIfScrollingNearTheFirstElement()
+            }}
+          />}
+      </View>
+    </>
   )
 }
 
 MyDiagnoses.navigationOptions = () => ({
-  title: 'Mis solicitudes',
-  headerTitleStyle: styles.headerTitleStyle
+  header: null
 })
 
 const MyDiagnosesStack = createStackNavigator({

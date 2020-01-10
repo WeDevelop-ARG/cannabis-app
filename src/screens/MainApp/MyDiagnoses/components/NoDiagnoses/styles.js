@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen'
+import { verticalScale } from 'react-native-size-matters/extend'
 
 const styles = StyleSheet.create({
   container: {
@@ -8,8 +8,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   CTA: {
-    width: widthPercentageToDP(30),
-    height: heightPercentageToDP(5)
+    marginTop: verticalScale(30)
   }
 })
 
