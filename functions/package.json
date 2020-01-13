@@ -13,9 +13,11 @@
     "node": "8"
   },
   "dependencies": {
+    "node-fetch": "^2.6.0",
+    "@sendgrid/mail": "^6.4.0",
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.3.0",
-    "node-fetch": "^2.6.0"
+    "walk-sync": "^2.0.2"
   },
   "devDependencies": {
     "eslint": "^5.12.0",
