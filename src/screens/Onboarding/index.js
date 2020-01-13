@@ -85,7 +85,6 @@ const Onboarding = () => {
 
   return (
     <View style={styles.container}>
-      <Header onExitPress={handleExit} />
       <View style={styles.carouselContainer}>
         <Carousel
           ref={carouselRef}
@@ -110,6 +109,7 @@ const Onboarding = () => {
           style={styles.pagination}
         />
       </View>
+      <Header onExitPress={handleExit} />
     </View>
   )
 }

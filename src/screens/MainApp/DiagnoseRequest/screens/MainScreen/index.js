@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
-import { ImageSelection, PrimaryButton, Title, Description } from '~/components'
+import { ImageSelection, PrimaryButton, Subtitle, Description } from '~/components'
 import styles from './styles'
 import { SvgXml } from 'react-native-svg'
 import Image from '../../resources/main-screen-logo.svg'
@@ -23,9 +23,9 @@ export const MainScreen = ({ navigation }) => {
       )}
       <View style={styles.container}>
         <SvgXml width='54' height='65' xml={Image} style={styles.image} />
-        <Title black style={styles.title}>
+        <Subtitle black style={styles.title}>
           Conocé el estado de tu planta
-        </Title>
+        </Subtitle>
         <Description gray style={styles.description}>
           Agregá un mínimo de 3 fotos en detalle y bien iluminadas para que nuestros expertos puedan darte su opinión.
         </Description>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { TextInput, View, Alert, ScrollView } from 'react-native'
-import { ProgressButton, Description, Title } from '~/components'
+import { ProgressButton, Description, Subtitle } from '~/components'
 import styles from './styles'
 import * as StorageService from '~/storageService'
 import * as DatabaseService from '~/databaseService'
@@ -62,9 +62,9 @@ const DescriptionRequest = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Title black style={styles.title}>
+        <Subtitle black style={styles.title}>
           Describí las particularidades de tu planta
-        </Title>
+        </Subtitle>
         <Description gray style={styles.description}>
           Cuanta mas información escribas, mejor. Por favor, no incluyas datos de contacto.
         </Description>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, ScrollView } from 'react-native'
-import { Title, Description, PrimaryButton } from '~/components'
+import { Subtitle, Description, PrimaryButton } from '~/components'
 import styles from './styles'
 import { SvgXml } from 'react-native-svg'
 import Logo from './resources/logo.svg'
@@ -19,7 +19,7 @@ const FinishRequest = ({ navigation }) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <SvgXml xml={Logo} style={styles.logo} />
-        <Title black style={styles.title}>Listo! Ya enviaste tu consulta</Title>
+        <Subtitle black style={styles.title}>Listo! Ya enviaste tu consulta</Subtitle>
         <Description gray style={styles.description}>En breve nuestros expertos comenzarán a responederte.</Description>
         <PrimaryButton style={styles.button} onPress={goToRequestNewDiagnose}>
           <Description white>Solicitar nueva consulta</Description>
