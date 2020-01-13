@@ -66,7 +66,7 @@ const Profile = () => {
           <Description gray>{email}</Description>
         </View>
         <ListItem text='Política de privacidad' onPress={goToPrivacyPolicyURL} imgSource={PolicyLogo} />
-        <ListItem text='Cerrar sessión' onPress={logOut} imgSource={LogOutLogo} />
+        <ListItem text='Cerrar sesión' onPress={logOut} imgSource={LogOutLogo} />
       </ScrollView>
     </View>
   )

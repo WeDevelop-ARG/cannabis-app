@@ -13,6 +13,7 @@ import LoadingScreen from './screens/LoadingScreen'
 import Onboarding from './screens/Onboarding'
 import MainApp from './screens/MainApp'
 import PrivacyPolicy from './screens/PrivacyPolicy'
+import { buildStackNavigator } from '~/components/StackNavigator'
 
 // console.disableYellowBox = true // releases only
 
@@ -20,7 +21,7 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
 }
 
-const StackNavigator = createStackNavigator(
+const StackNavigator = buildStackNavigator(
   {
     SignUp,
     PrivacyPolicy
