@@ -1,4 +1,4 @@
-import { createStackNavigator, getActiveChildNavigationOptions } from 'react-navigation-stack'
+import { createStackNavigator } from 'react-navigation-stack'
 import { StyleSheet } from 'react-native'
 import { Header } from '~/components'
 import { theme } from '~/constants'
