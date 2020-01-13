@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { View, ScrollView } from 'react-native'
-import NavigationService from '~/navigationService'
+import { SvgXml } from 'react-native-svg'
 import * as firebase from 'firebase'
+import { createStackNavigator } from 'react-navigation-stack'
+import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
 import MessagingService from '~/messagingService'
 import { Button, Title, Subtitle, Description } from '~/components'
-import styles from './styles'
-import { SvgXml } from 'react-native-svg'
+import Background from '~/components/Background'
+import PrivacyPolicy from '~/screens/PrivacyPolicy'
 import LogOutLogo from './resources/logout_logo.svg'
 import PolicyLogo from './resources/policy_logo.svg'
-import { createStackNavigator } from 'react-navigation-stack'
-import PrivacyPolicy from '~/screens/PrivacyPolicy'
+import styles from './styles'
 
 const goToPrivacyPolicyURL = () => {
   NavigationService.navigate('PrivacyPolicy')
@@ -43,7 +44,7 @@ const ListItem = ({ text, onPress, imgSource }) => {
 }
 
 const Profile = () => {
-  AnalyticsService.setCurrentScreenName('Settings')
+  AnalyticsService.setCurrentScreenName('Profile')
 
   const [username, setUsername] = useState('')
   const email = firebase.auth().currentUser.email
@@ -58,7 +59,7 @@ const Profile = () => {
   )
 
   return (
-    <View style={styles.container}>
+    <Background style={styles.container}>
       <ScrollView>
         <Title black style={styles.title}>Mi cuenta</Title>
         <View style={styles.userContainer}>
@@ -68,7 +69,7 @@ const Profile = () => {
         <ListItem text='Política de privacidad' onPress={goToPrivacyPolicyURL} imgSource={PolicyLogo} />
         <ListItem text='Cerrar sesión' onPress={logOut} imgSource={LogOutLogo} />
       </ScrollView>
-    </View>
+    </Background>
   )
 }
 

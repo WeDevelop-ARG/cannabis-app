@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { KeyboardAvoidingView, TextInput, ActivityIndicator, View } from 'react-native'
 import { SvgXml } from 'react-native-svg'
+import * as AnalyticsService from '~/analyticsService'
+import Background from '~/components/Background'
 import { Body, Description, Subtitle } from '~/components/texts'
 import { PrimaryButton, GrayButton } from '~/components/buttons'
 import * as AuthenticationService from '~/authenticationService'
@@ -63,6 +65,8 @@ const UsernameRequest = (props) => {
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
+  AnalyticsService.setCurrentScreenName('Username Request')
+
   const submitHandler = async () => {
     setSubmitting(true)
     setError(null)
@@ -97,7 +101,7 @@ const UsernameRequest = (props) => {
   }
 
   return (
-    <>
+    <Background>
       <Icon />
       <KeyboardAvoidingView style={styles.container}>
         <Subtitle style={styles.title}>Creá tu nombre de usuario</Subtitle>
@@ -121,7 +125,7 @@ const UsernameRequest = (props) => {
           onPress={submitHandler}
         />
       </KeyboardAvoidingView>
-    </>
+    </Background>
   )
 }
 

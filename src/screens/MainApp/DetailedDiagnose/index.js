@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { View, FlatList } from 'react-native'
 import { isEmpty } from 'lodash'
 import pluralize from 'pluralize'
+import * as AnalyticsService from '~/analyticsService'
+import Background from '~/components/Background'
 import { Header as HeaderText } from '~/components/texts'
 import VerticalSeparator from '~/components/VerticalSeparator'
 import { firebaseTimestampToMoment } from '~/mixins/date'
@@ -24,6 +26,8 @@ const DetailedDiagnose = ({ navigation }) => {
   const [carouselSection, setCarouselSection] = useState(null)
   const date = firebaseTimestampToMoment(diagnose.createdAt, 'es').format('D MMM')
   const answers = []
+
+  AnalyticsService.setCurrentScreenName('Detailed Diagnose')
 
   if (diagnose.answer) {
     answers.push({
@@ -74,7 +78,7 @@ const DetailedDiagnose = ({ navigation }) => {
   }, [])
 
   return (
-    <View>
+    <Background>
       <HeaderForScrolling
         show={showHeaderForScroll}
         onGoBack={handleReturn}
@@ -109,7 +113,7 @@ const DetailedDiagnose = ({ navigation }) => {
           showSecondHeaderIfScrolling()
         }}
       />
-    </View>
+    </Background>
   )
 }
 

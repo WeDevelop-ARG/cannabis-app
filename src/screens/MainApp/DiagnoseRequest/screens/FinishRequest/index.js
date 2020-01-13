@@ -1,11 +1,15 @@
 import React from 'react'
-import { View, ScrollView } from 'react-native'
-import { Subtitle, Description, PrimaryButton } from '~/components'
-import styles from './styles'
+import { ScrollView } from 'react-native'
 import { SvgXml } from 'react-native-svg'
+import { Subtitle, Description, PrimaryButton } from '~/components'
+import * as AnalyticsService from '~/analyticsService'
+import Background from '~/components/Background'
 import Logo from './resources/logo.svg'
+import styles from './styles'
 
 const FinishRequest = ({ navigation }) => {
+  AnalyticsService.setCurrentScreenName('Finish Request')
+
   const goToRequestNewDiagnose = () => {
     navigation.popToTop()
   }
@@ -16,7 +20,7 @@ const FinishRequest = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <Background style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <SvgXml xml={Logo} style={styles.logo} />
         <Subtitle black style={styles.title}>Listo! Ya enviaste tu consulta</Subtitle>
@@ -26,7 +30,7 @@ const FinishRequest = ({ navigation }) => {
         </PrimaryButton>
         <Description primary style={styles.link} onPress={goToMyRequests}>Ver consultas</Description>
       </ScrollView>
-    </View>
+    </Background>
   )
 }
 

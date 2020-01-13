@@ -1,21 +1,25 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview'
-import { PrimaryButton, Description, Header } from '~/components'
-import privacyPolicy from '~/configs/privacyPolicy'
-import styles from './styles'
-import { HeaderBackButton } from 'react-navigation-stack'
-import { theme } from '~/constants'
 import { verticalScale } from 'react-native-size-matters/extend'
+import * as AnalyticsService from '~/analyticsService'
+import { PrimaryButton, Description, Header } from '~/components'
+import Background from '~/components/Background'
+import privacyPolicy from '~/configs/privacyPolicy'
+import { HeaderBackButton } from 'react-navigation-stack'
+import styles from './styles'
+import { theme } from '~/constants'
 
 const PrivacyPolicy = ({ navigation }) => {
+  AnalyticsService.setCurrentScreenName('Privacy Policy')
+
   return (
-    <View style={styles.container}>
+    <Background style={styles.container}>
       <WebView style={styles.webview} source={{ uri: privacyPolicy.url }} />
       <PrimaryButton style={styles.button} onPress={() => navigation.goBack()}>
         <Description white>Aceptar</Description>
       </PrimaryButton>
-    </View>
+    </Background>
   )
 }
 

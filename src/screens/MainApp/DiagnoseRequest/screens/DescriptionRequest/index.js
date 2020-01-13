@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import { TextInput, View, Alert, ScrollView } from 'react-native'
+import { TextInput, Alert, ScrollView } from 'react-native'
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters/extend'
+import { BoxShadow } from 'react-native-shadow'
 import { ProgressButton, Description, Subtitle } from '~/components'
-import styles from './styles'
+import * as AnalyticsService from '~/analyticsService'
 import * as StorageService from '~/storageService'
 import * as DatabaseService from '~/databaseService'
+import Background from '~/components/Background'
 import { theme } from '~/constants'
-import { BoxShadow } from 'react-native-shadow'
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters/extend'
+import styles from './styles'
 
 const DescriptionRequest = ({ navigation }) => {
   const [description, setDescription] = useState('')
@@ -14,6 +16,8 @@ const DescriptionRequest = ({ navigation }) => {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadEnabled, setUploadEnabled] = useState(false)
   const [inputEnabled, setInputEnabled] = useState(true)
+
+  AnalyticsService.setCurrentScreenName('Description Request')
 
   const imagesUris = navigation.getParam('images', [])
 
@@ -60,7 +64,7 @@ const DescriptionRequest = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <Background style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <Subtitle black style={styles.title}>
           Describí las particularidades de tu planta
@@ -100,7 +104,7 @@ const DescriptionRequest = ({ navigation }) => {
           </Description>
         </ProgressButton>
       </ScrollView>
-    </View>
+    </Background>
   )
 }
 

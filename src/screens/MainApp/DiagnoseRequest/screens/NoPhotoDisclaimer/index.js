@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import { SvgXml } from 'react-native-svg'
+import * as AnalyticsService from '~/analyticsService'
+import Background from '~/components/Background'
 import ImageSelection from '~/components/ImageSelection'
 import { PrimaryButton } from '~/components/buttons'
 import { Subtitle, Description } from '~/components/texts'
@@ -10,13 +12,15 @@ import styles, { ICON_WIDTH, ICON_HEIGHT } from './styles'
 const NoPhotoDisclaimer = ({ navigation }) => {
   const [showImageSelection, setShowImageSelection] = useState(false)
 
+  AnalyticsService.setCurrentScreenName('No Photo Disclaimer')
+
   const onImagesSelected = (images) => {
     setShowImageSelection(false)
     navigation.navigate('ImageReview', { images })
   }
 
   return (
-    <>
+    <Background>
       <View style={styles.iconBackground} />
       <SvgXml
         style={styles.icon}
@@ -43,7 +47,7 @@ const NoPhotoDisclaimer = ({ navigation }) => {
           <Description white>Agregar fotos</Description>
         </PrimaryButton>
       </View>
-    </>
+    </Background>
   )
 }
 

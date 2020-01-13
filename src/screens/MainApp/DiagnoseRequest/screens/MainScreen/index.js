@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
+import * as AnalyticsService from '~/analyticsService'
 import { ImageSelection, PrimaryButton, Subtitle, Description } from '~/components'
+import Background from '~/components/Background'
 import styles from './styles'
 import { SvgXml } from 'react-native-svg'
 import Image from '../../resources/main-screen-logo.svg'
@@ -8,13 +10,15 @@ import Image from '../../resources/main-screen-logo.svg'
 export const MainScreen = ({ navigation }) => {
   const [showImageSelection, setShowImageSelection] = useState(false)
 
+  AnalyticsService.setCurrentScreenName('Main Screen')
+
   const onImagesSelected = (images) => {
     setShowImageSelection(false)
     navigation.navigate('ImageReview', { images: images })
   }
 
   return (
-    <>
+    <Background>
       {showImageSelection && (
         <ImageSelection
           onCancel={() => setShowImageSelection(false)}
@@ -35,7 +39,7 @@ export const MainScreen = ({ navigation }) => {
           </Description>
         </PrimaryButton>
       </View>
-    </>
+    </Background>
   )
 }
 

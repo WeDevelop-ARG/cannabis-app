@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   text: {
     alignSelf: 'center',
     paddingHorizontal: theme.sizes.margin,
-    backgroundColor: theme.colors.gray3
+    backgroundColor: theme.colors.background
   },
   line: {
     top: verticalScale(14),
