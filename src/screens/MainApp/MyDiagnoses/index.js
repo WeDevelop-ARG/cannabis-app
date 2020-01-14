@@ -91,6 +91,7 @@ const MyDiagnoses = () => {
               snapToTopIfScrollingNearTheFirstElement()
             }}
             extraData={diagnoses}
+            contentContainerStyle={styles.flatListContainer}
           />}
       </View>
     </Background>
