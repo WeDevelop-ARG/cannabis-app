@@ -90,6 +90,7 @@ const MyDiagnoses = () => {
 
               snapToTopIfScrollingNearTheFirstElement()
             }}
+            extraData={diagnoses}
           />}
       </View>
     </Background>

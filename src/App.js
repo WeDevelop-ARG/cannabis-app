@@ -1,7 +1,6 @@
 import fixtimerbug from '~/bugFixes/fixtimerbug' // this is just an import to load the fix
 import React from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
-import { createStackNavigator } from 'react-navigation-stack'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
 import firebaseConfig from './configs/firebase'
@@ -15,7 +14,9 @@ import MainApp from './screens/MainApp'
 import PrivacyPolicy from './screens/PrivacyPolicy'
 import { buildStackNavigator } from '~/components/StackNavigator'
 
-// console.disableYellowBox = true // releases only
+if (!__DEV__) {
+  console.disableYellowBox = true
+}
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
