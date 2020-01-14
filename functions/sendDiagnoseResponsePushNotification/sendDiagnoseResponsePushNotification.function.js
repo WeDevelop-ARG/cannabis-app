@@ -12,8 +12,8 @@ const sendDiagnoseResponsePushNotification = functions
     if (notificationKey !== null) {
       const payload = {
         notification: {
-          title: '¡Tu solicitud de diagnóstico ha sido respondida!',
-          body: 'Ingresá a la aplicación para leer la respuesta del profesional.'
+          title: '¡Tu solicitud ha sido respondida!',
+          body: 'Ingresa para ver la nueva respuesta.'
         }
       }
 
