@@ -10,6 +10,12 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     paddingBottom: verticalScale(40)
+  },
+  noDiagnosesActivityIndicator: {
+    position: 'absolute',
+    alignSelf: 'center',
+    height: verticalScale(40),
+    top: verticalScale(10)
   }
 })
 
