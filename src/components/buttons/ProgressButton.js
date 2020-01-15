@@ -1,21 +1,36 @@
-import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
+import { View, StyleSheet, Animated } from 'react-native'
 import { PrimaryButton, GrayButton } from '~/components'
 import { theme } from '~/constants'
 
 const ProgressBar = ({ progress }) => {
+  const progressAnimated = useRef(new Animated.Value(0))
+
+  useEffect(() => {
+    Animated.timing(progressAnimated.current, {
+      toValue: progress,
+      duration: 300
+    }).start()
+  }, [progress])
+
+  const width = progressAnimated.current.interpolate({
+    inputRange: [0, 100],
+    outputRange: ['0%', '100%'],
+    extrapolate: 'clamp'
+  })
+
   const styles = StyleSheet.create({
-    container: StyleSheet.absoluteFillObject,
-    overlay: {
-      backgroundColor: theme.colors.primary,
-      width: `${progress}%`,
-      height: '100%'
-    }
+    container: StyleSheet.absoluteFillObject
   })
 
   return (
     <View style={styles.container}>
-      <View style={styles.overlay} />
+      <Animated.View style={{
+        backgroundColor: theme.colors.primary,
+        width,
+        height: '100%'
+      }}
+      />
     </View>
   )
 }
