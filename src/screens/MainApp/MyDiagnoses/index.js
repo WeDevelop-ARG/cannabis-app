@@ -19,7 +19,8 @@ const MyDiagnoses = () => {
   const flatListRef = useRef()
   const [diagnoses, setDiagnoses] = useState(null)
   const [downloadingDiagnoses, setDownloadingDiagnoses] = useState(true)
-  const [refetch, toggleRefetch] = useState(false)
+  const [downloadingDiagnosesWhenNoDiagnoses, setDownloadingDiagnosesWhenNoDiagnoses] = useState(true)
+  const [refetch, toggleRefetch] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
   const [scrolling, setScrolling] = useState(false)
 
@@ -30,6 +31,7 @@ const MyDiagnoses = () => {
   }
 
   const getRenderedDiagnoses = async () => {
+    setDownloadingDiagnosesWhenNoDiagnoses(true)
     setRefreshing(true)
     try {
       const downloadedData = await DatabaseService.getDiagnosesFromCurrentUser()
@@ -49,16 +51,27 @@ const MyDiagnoses = () => {
       setDiagnoses(null)
     } finally {
       setDownloadingDiagnoses(false)
+      setDownloadingDiagnosesWhenNoDiagnoses(false)
       setRefreshing(false)
     }
   }
 
   useEffect(() => {
-    getRenderedDiagnoses()
+    if (refetch !== null) {
+      getRenderedDiagnoses()
+    }
   }, [refetch])
 
   if (!isNull(diagnoses) && isEmpty(diagnoses)) {
-    return <NoDiagnoses />
+    return (
+      <Background>
+        <ForceRerenderOnNavigation resetStateFunction={refetchDiagnoses} />
+        <NoDiagnoses />
+        <View style={styles.noDiagnosesActivityIndicator}>
+          {downloadingDiagnosesWhenNoDiagnoses && <ActivityIndicator size='large' />}
+        </View>
+      </Background>
+    )
   }
 
   return (
@@ -90,7 +103,6 @@ const MyDiagnoses = () => {
 
               snapToTopIfScrollingNearTheFirstElement()
             }}
-            extraData={diagnoses}
             contentContainerStyle={styles.flatListContainer}
           />}
       </View>
