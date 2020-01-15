@@ -27,7 +27,7 @@ const DescriptionRequest = ({ navigation }) => {
   }
 
   const onProgress = async (snapshot) => {
-    setUploadProgress(v => v + ((snapshot.bytesTransferred / snapshot.totalBytes) * 100 / imagesUris.length))
+    setUploadProgress(v => v + ((snapshot.bytesTransferred / snapshot.totalBytes) * 90 / imagesUris.length))
   }
 
   const updateDatabase = async (uploadedImages) => {
@@ -51,12 +51,13 @@ const DescriptionRequest = ({ navigation }) => {
         const uid = await StorageService.uploadImageAndReturnReference(uri, onProgress)
         uploadedImages.push(uid)
       } catch (error) {
-        setUploadProgress(v => v + 100 / imagesUris.length)
+        setUploadProgress(v => v + 90 / imagesUris.length)
       }
     }
 
     if (uploadedImages.length > 0) {
       await updateDatabase(uploadedImages)
+      setUploadProgress(v => 100)
       navigation.navigate('FinishRequest')
     } else {
       Alert.alert('No se han podido subir las imagenes. Intente nuevamente o seleccione otras imagenes.')
