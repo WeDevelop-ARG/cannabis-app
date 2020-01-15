@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     color: theme.colors.secondary
   },
   errorMessage: {
-    paddingLeft: theme.sizes.padding,
+    marginLeft: theme.sizes.margin,
     color: theme.colors.secondary
   },
   submitButton: {
