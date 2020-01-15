@@ -7,10 +7,12 @@ const ProgressBar = ({ progress }) => {
   const progressAnimated = useRef(new Animated.Value(0))
 
   useEffect(() => {
-    Animated.timing(progressAnimated.current, {
+    const animation = Animated.timing(progressAnimated.current, {
       toValue: progress,
       duration: 300
     }).start()
+
+    return () => animation.stop()
   }, [progress])
 
   const width = progressAnimated.current.interpolate({
