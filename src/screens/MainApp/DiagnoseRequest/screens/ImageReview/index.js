@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome5'
 import * as AnalyticsService from '~/analyticsService'
 import NavigationService from '~/navigationService'
 import * as ImageService from '~/imageService'
-import { Button, ImageSelection } from '~/components'
+import { ImageSelection } from '~/components'
 import Background from '~/components/Background'
 import ConfirmButton from './components/ConfirmButton'
 import AddMoreImagesButton from './components/AddMoreImagesButton'
 import Carousel from '~/components/Carousel'
 import ImageList from './components/ImageList'
+import ReviewHeader from './components/ReviewHeader'
 import { MIN_IMAGES, MAX_IMAGES, TIMEOUT_TO_WAIT_FOR_RENDERING } from './constants'
-import styles from './styles'
 
 const ImageVisualization = (props) => {
   const imagesFromPreviousStep = props.navigation.state.params.images
@@ -20,6 +19,8 @@ const ImageVisualization = (props) => {
   const [submitError, setSubmitError] = useState(false)
   const [images, setImages] = useState(imagesFromPreviousStep)
   const [showImageSelection, setShowImageSelection] = useState(false)
+  const [carouselComponent, setCarouselComponent] = useState(null)
+  const [imageListComponent, setImageListComponent] = useState(null)
 
   AnalyticsService.setCurrentScreenName('Image Review')
 
@@ -67,54 +68,74 @@ const ImageVisualization = (props) => {
     return setSubmitError(images.length < MIN_IMAGES)
   }
 
+  const deleteImage = () => {
+    const currentImages = deleteActiveIndexImage()
+
+    if (currentImages.length === 0) {
+      NavigationService.navigate('NoPhotoDisclaimer')
+    } else if (activeIndex > 0) {
+      setActiveIndex(activeIndex - 1)
+    }
+  }
+
+  const changeImage = async () => {
+    try {
+      const [newImage] = await ImageService.openCamera()
+      const newImages = images.slice()
+
+      newImages[activeIndex] = newImage
+      setImages(newImages)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const goBack = () => {
+    props.navigation.pop()
+  }
+
   useEffect(() => {
     setSubmitErrorIfImageCountBelowMinimum()
 
-    const deleteImage = () => {
-      const currentImages = deleteActiveIndexImage()
-
-      if (currentImages.length === 0) {
-        props.navigation.popToTop()
-        NavigationService.navigate('NoPhotoDisclaimer')
-      } else if (activeIndex > 0) {
-        setActiveIndex(activeIndex - 1)
-      }
+    const buildCarousel = () => {
+      return (
+        <Carousel
+          images={images}
+          activeIndex={activeIndex}
+          onActiveIndexChange={setActiveIndex}
+        />
+      )
     }
 
-    const changeImage = async () => {
-      try {
-        const [newImage] = await ImageService.openCamera()
-        const newImages = images.slice()
-
-        newImages[activeIndex] = newImage
-        setImages(newImages)
-      } catch (error) {
-        console.log(error)
-      }
+    const buildImageList = () => {
+      return (
+        <ImageList
+          images={images}
+          activeIndex={activeIndex}
+          onActiveIndexChange={setActiveIndex}
+          onGetMoreImages={getMorePhotos}
+        />
+      )
     }
 
-    props.navigation.setParams({ deleteImage })
-    props.navigation.setParams({ changeImage })
-  }, [activeIndex, images.length])
+    setCarouselComponent(buildCarousel())
+    setImageListComponent(buildImageList())
+  }, [activeIndex, images])
 
   return (
     <Background>
+      <ReviewHeader
+        goBack={goBack}
+        changeImage={changeImage}
+        deleteImage={deleteImage}
+      />
       {showImageSelection &&
         <ImageSelection
           onCancel={() => setShowImageSelection(false)}
           onImagesSelected={onImagesSelected}
         />}
-      <Carousel
-        images={images}
-        activeIndex={activeIndex}
-        onActiveIndexChange={setActiveIndex}
-      />
-      <ImageList
-        images={images}
-        activeIndex={activeIndex}
-        onActiveIndexChange={setActiveIndex}
-        onGetMoreImages={getMorePhotos}
-      />
+      {carouselComponent}
+      {imageListComponent}
       <View>
         <ConfirmButton errorState={submitError} onConfirm={confirmRequest} />
         {canAddMoreImages() && <AddMoreImagesButton onPress={getMorePhotos} />}
@@ -123,17 +144,8 @@ const ImageVisualization = (props) => {
   )
 }
 
-ImageVisualization.navigationOptions = ({ navigation }) => ({
-  headerRight: () => (
-    <>
-      <Button style={styles.changeButton} onPress={navigation.getParam('changeImage')}>
-        <Icon name='redo' size={18} color='black' />
-      </Button>
-      <Button style={styles.deleteButton} onPress={navigation.getParam('deleteImage')}>
-        <Icon name='trash-alt' size={18} color='black' />
-      </Button>
-    </>
-  )
+ImageVisualization.navigationOptions = () => ({
+  header: null
 })
 
 export default ImageVisualization

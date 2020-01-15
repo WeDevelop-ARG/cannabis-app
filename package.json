@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint .",
     "admin:dev": "parcel admin-src/index.html",
-    "admin:build": "parcel build admin-src/index.html"
+    "admin:build": "parcel build admin-src/index.html",
+    "devtools": "react-devtools"
   },
   "dependencies": {
     "@react-native-firebase/analytics": "6.0.3",
@@ -26,6 +27,7 @@
     "prop-types": "^15.7.2",
     "react": "16.9.0",
     "react-bootstrap": "^1.0.0-beta.14",
+    "react-devtools": "^3.6.3",
     "react-dom": "^16.11.0",
     "react-firebaseui": "^4.0.0",
     "react-native": "0.61.2",

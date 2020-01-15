@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, memo } from 'react'
 import { Image, View } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import PropTypes from 'prop-types'
@@ -9,7 +9,6 @@ const CarouselImage = ({ uri }) => {
   return (
     <View style={styles.carouselImageContainer}>
       <Image
-        resizeMethod='scale'
         style={uri ? styles.carouselImage : styles.placeholder}
         source={uri ? { uri } : DrCannabisLogo}
       />
@@ -36,12 +35,14 @@ const MyCarousel = ({ images, activeIndex, onActiveIndexChange, style }) => {
       <Carousel
         ref={carouselRef}
         data={privateImages}
-        renderItem={({ item }) => <CarouselImage uri={item} />}
+        renderItem={({ item }) => <CarouselImage key={item} uri={item} />}
         sliderWidth={CAROUSEL_SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}
         itemHeight={ITEM_HEIGHT}
         onSnapToItem={(index) => onActiveIndexChange(index)}
         useScrollView
+        decelerationRate={0.10}
+        swipeThreshold={0.5}
       />
       <View style={styles.paginationContainer}>
         <Pagination
@@ -63,4 +64,4 @@ MyCarousel.propTypes = {
   onActiveIndexChange: PropTypes.func.isRequired
 }
 
-export default MyCarousel
+export default memo(MyCarousel)

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, memo } from 'react'
 import { FlatList } from 'react-native'
 import FlatListItem from './FlatListItem'
 import styles from './styles'
@@ -34,4 +34,4 @@ const ImageList = ({ images, activeIndex, onActiveIndexChange }) => {
   )
 }
 
-export default ImageList
+export default memo(ImageList)
