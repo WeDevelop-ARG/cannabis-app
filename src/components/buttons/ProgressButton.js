@@ -10,7 +10,9 @@ const ProgressBar = ({ progress }) => {
     const animation = Animated.timing(progressAnimated.current, {
       toValue: progress,
       duration: 300
-    }).start()
+    })
+
+    animation.start()
 
     return () => animation.stop()
   }, [progress])
