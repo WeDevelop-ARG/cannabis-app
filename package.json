@@ -60,11 +60,15 @@
     "babel-jest": "24.9.0",
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-root-import": "^6.4.1",
+    "copyfiles": "^2.1.1",
     "eslint": "6.5.1",
+    "firebase-tools": "^7.12.1",
     "jest": "24.9.0",
     "metro-react-native-babel-preset": "0.51.1",
+    "mkdirp": "^0.5.1",
     "parcel-bundler": "^1.12.4",
-    "react-test-renderer": "16.9.0"
+    "react-test-renderer": "16.9.0",
+    "rimraf": "^3.0.0"
   },
   "jest": {
     "preset": "react-native",
