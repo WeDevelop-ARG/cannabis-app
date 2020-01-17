@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet } from 'react-native'
+import React, { useRef } from 'react'
+import { StyleSheet, Linking } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { verticalScale } from 'react-native-size-matters/extend'
 import * as AnalyticsService from '~/analyticsService'
@@ -11,11 +11,27 @@ import styles from './styles'
 import { theme } from '~/constants'
 
 const PrivacyPolicy = ({ navigation }) => {
+  const webview = useRef()
   AnalyticsService.setCurrentScreenName('Privacy Policy')
+
+  const handleShouldStartLoadWithRequest = event => {
+    if (event.url !== privacyPolicy.url) {
+      Linking.openURL(event.url)
+
+      return false
+    }
+
+    return true
+  }
 
   return (
     <Background style={styles.container}>
-      <WebView style={styles.webview} source={{ uri: privacyPolicy.url }} />
+      <WebView
+        ref={webview}
+        style={styles.webview}
+        source={{ uri: privacyPolicy.url }}
+        onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
+      />
       <PrimaryButton style={styles.button} onPress={() => navigation.goBack()}>
         <Description white>Aceptar</Description>
       </PrimaryButton>
