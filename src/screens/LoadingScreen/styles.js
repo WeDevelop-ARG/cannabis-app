@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native'
 import { moderateScale, verticalScale } from 'react-native-size-matters/extend'
-import { theme } from '~/constants'
+
+export const LOGO_WIDTH = moderateScale(174)
+export const LOGO_HEIGHT = moderateScale(180)
 
 const styles = StyleSheet.create({
   container: {
@@ -9,13 +11,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   DrCannabisIcon: {
-    width: moderateScale(250),
-    height: moderateScale(250),
-    borderRadius: moderateScale(24),
     marginBottom: verticalScale(24)
   },
   DrCannabisText: {
-    fontSize: moderateScale(44)
+    fontSize: moderateScale(28, 1),
+    color: '#25CB80'
   }
 })
 

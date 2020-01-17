@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Image, ToastAndroid } from 'react-native'
+import { ToastAndroid } from 'react-native'
 import * as firebase from 'firebase'
 import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
@@ -7,13 +7,13 @@ import * as CacheService from '~/cacheService'
 import * as DatabaseService from '~/databaseService'
 import Background from '~/components/Background'
 import { Title } from '~/components/texts'
-import DrCannabis from '~/assets/images/DrCannabis.png'
-import styles from './styles'
+import Logo from '~/components/Logo'
+import styles, { LOGO_WIDTH, LOGO_HEIGHT } from './styles'
 
 const MILLISECONDS_SHOWING_SPLASH_SCREEN = 1500
 
 const getCurrentUser = () => {
-  return new Promise (resolve => {
+  return new Promise(resolve => {
     const unsuscribe = firebase.auth().onAuthStateChanged(async user => {
       unsuscribe()
       resolve(user || null)
@@ -69,9 +69,10 @@ const LoadingScreen = () => {
 
   return (
     <Background style={styles.container}>
-      <Image
+      <Logo
         style={styles.DrCannabisIcon}
-        source={DrCannabis}
+        width={LOGO_WIDTH}
+        height={LOGO_HEIGHT}
       />
       <Title primary style={styles.DrCannabisText}>Dr. Cannabis</Title>
     </Background>
