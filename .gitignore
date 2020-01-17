@@ -10,6 +10,8 @@ google-services.json
 .firebaserc
 .firebase
 public/
+release
+serviceAccount-*.json
 
 #All next is react-native .gitignore
 

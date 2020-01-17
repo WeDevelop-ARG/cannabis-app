@@ -9,7 +9,16 @@
     "test": "jest",
     "lint": "eslint .",
     "admin:dev": "parcel admin-src/index.html",
-    "admin:build": "parcel build admin-src/index.html",
+    "admin:build": "rimraf release/admin && mkdirp release/admin && parcel build admin-src/index.html -d release/admin",
+    "site:build": "rimraf release/site && mkdirp release/site && copyup \"website-src/*.*\" \"website-src/**/*.*\" release/site",
+    "admin:serve": "npm run admin:build && firebase serve --only hosting:admin",
+    "site:serve": "npm run site:build && firebase serve --only hosting:site",
+    "admin:deploy": "npm run admin:build && firebase deploy --only hosting:admin",
+    "site:deploy": "npm run site:build && firebase deploy --only hosting:site",
+    "functions:deploy": "cd functions && firebase deploy --only functions",
+    "all:deploy": "npm run admin:deploy && npm run site:deploy",
+    "generate:apk": "cd android && ./gradlew assembleRelease && mv ./app/build/outputs/apk/release/app-release.apk ../release/DrCannabis-$(date +%Y%m%d%H%M).apk",
+    "generate:aab": "cd android && ./gradlew bundleRelease && mv ./app/build/outputs/bundle/release/app.aab ../release/DrCannabis-$(date +%Y%m%d%H%M).aab",
     "devtools": "react-devtools"
   },
   "dependencies": {
