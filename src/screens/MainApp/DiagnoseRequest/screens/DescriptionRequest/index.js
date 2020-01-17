@@ -60,7 +60,7 @@ const DescriptionRequest = ({ navigation }) => {
       setUploadProgress(v => 100)
       navigation.navigate('FinishRequest')
     } else {
-      Alert.alert('No se han podido subir las imagenes. Intente nuevamente o seleccione otras imagenes.')
+      Alert.alert('No se han podido subir las imagenes. Intente nuevamente o seleccione otras imágenes.')
     }
   }
 
@@ -71,7 +71,7 @@ const DescriptionRequest = ({ navigation }) => {
           Describí las particularidades de tu planta
         </Subtitle>
         <Description gray style={styles.description}>
-          Cuanta mas información escribas, mejor. Por favor, no incluyas datos de contacto.
+          Cuanta más información escribas, mejor. Por favor, no incluyas datos de contacto.
         </Description>
         <BoxShadow
           setting={{

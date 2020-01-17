@@ -24,7 +24,7 @@ const FinishRequest = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scroll}>
         <SvgXml xml={Logo} style={styles.logo} />
         <Subtitle black style={styles.title}>Listo! Ya enviaste tu consulta</Subtitle>
-        <Description gray style={styles.description}>En breve nuestros expertos comenzarán a responederte.</Description>
+        <Description gray style={styles.description}>En breve nuestros expertos comenzarán a responderte.</Description>
         <PrimaryButton style={styles.button} onPress={goToRequestNewDiagnose}>
           <Description white>Solicitar nueva consulta</Description>
         </PrimaryButton>
