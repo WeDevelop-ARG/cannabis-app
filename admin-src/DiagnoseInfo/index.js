@@ -1,9 +1,13 @@
 import React from 'react'
+import { firebaseTimestampToMoment } from '../utils/date'
 
 export const DiagnoseInfo = ({ diagnose }) => (
   <div>
     <div>
       DIAGNOSE UUID: {diagnose.id}
+    </div>
+    <div>
+      CREATED AT: {firebaseTimestampToMoment(diagnose.createdAt).format('LLL')}
     </div>
     <div>
       USERNAME: {diagnose.username}

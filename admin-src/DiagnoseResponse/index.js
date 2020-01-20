@@ -4,6 +4,7 @@ import { ListGroup } from 'react-bootstrap'
 import { DiagnoseResponseForm } from '../DiagnoseResponseForm'
 import { DiagnoseInfo } from '../DiagnoseInfo'
 import { getDownloadURLFromImages } from '../utils'
+import { firebaseTimestampToMoment } from '../utils/date'
 import '../stylesheets/admin.css'
 
 export const DiagnoseResponse = () => {
@@ -90,7 +91,7 @@ export const DiagnoseResponse = () => {
       <ListGroup className='column'>
         {diagnoses && diagnoses.map((diagnose, index) => (
           <ListGroup.Item action key={index} onClick={() => fetchDiagnoseImagesAndSetAsCurrent(diagnoses[index])}>
-            {diagnose.id}{' '} - {diagnose.username}
+            {diagnose.id}{' '} - {diagnose.username} ({firebaseTimestampToMoment(diagnose.createdAt).format('LL')})
           </ListGroup.Item>
         ))}
       </ListGroup>
