@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     backgroundColor: theme.colors.white,
-    elevation: 100,
+    elevation: 1,
     opacity: 0,
     zIndex: 1
   },

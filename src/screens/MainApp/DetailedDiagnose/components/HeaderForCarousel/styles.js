@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'space-between',
     width: '100%',
-    top: verticalScale(4),
+    top: verticalScale(13),
     zIndex: 1
   },
   backButton: {

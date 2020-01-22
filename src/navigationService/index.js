@@ -27,6 +27,14 @@ export const ForceRerenderOnNavigation = ({ resetStateFunction }) => (
   />
 )
 
+export const ForceCleanUpOnScreenLeave = ({ cleanUpFunction }) => (
+  <NavigationEvents
+    onWillBlur={() => {
+      cleanUpFunction()
+    }}
+  />
+)
+
 export default {
   navigate,
   setTopLevelNavigator

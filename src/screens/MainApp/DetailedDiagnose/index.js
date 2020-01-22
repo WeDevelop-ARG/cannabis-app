@@ -3,6 +3,7 @@ import { View, FlatList } from 'react-native'
 import { isEmpty } from 'lodash'
 import pluralize from 'pluralize'
 import * as AnalyticsService from '~/analyticsService'
+import { ForceCleanUpOnScreenLeave, ForceRerenderOnNavigation } from '~/navigationService'
 import Background from '~/components/Background'
 import { Header as HeaderText } from '~/components/texts'
 import VerticalSeparator from '~/components/VerticalSeparator'
@@ -14,6 +15,9 @@ import Metadata from './components/Metadata'
 import HeaderForCarousel from './components/HeaderForCarousel'
 import HeaderForScrolling from './components/HeaderForScrolling'
 import ProblemDescription from './components/ProblemDescription'
+import AppDefaultStatusBar from '~/components/statusBars/AppDefaultStatusBar'
+import StatusBarForCarousel from './components/StatusBarForCarousel'
+import StatusBarOnScroll from './components/StatusBarOnScroll'
 import calendar from '~/assets/images/DetailedDiagnose/calendar.svg'
 import comments from '~/assets/images/DetailedDiagnose/comments.svg'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
@@ -22,7 +26,7 @@ import styles from './styles'
 const DetailedDiagnose = ({ navigation }) => {
   const diagnose = navigation.state.params.diagnose
   const flatListRef = useRef()
-  const [showHeaderForScroll, setShowHeaderForScroll] = useState(false)
+  const [isScrolling, setIsScrolling] = useState(false)
   const [carouselSection, setCarouselSection] = useState(null)
   const date = firebaseTimestampToMoment(diagnose.createdAt, 'es').format('D MMM')
   const answers = []
@@ -41,10 +45,17 @@ const DetailedDiagnose = ({ navigation }) => {
     navigation.goBack()
   }
 
+  const cleanCarouselStatusBar = () => AppDefaultStatusBar.setAsCurrent()
+
+  const rerenderCorrectStatusBar = () => {
+    isScrolling ? StatusBarOnScroll.setAsCurrent() : StatusBarForCarousel.setAsCurrent()
+  }
+
   useEffect(() => {
     const buildCarouselSection = () => {
       return (
         <>
+          <StatusBarForCarousel />
           <HeaderForCarousel
             photoQuantity={diagnose.imageReferences.length}
             onGoBack={handleReturn}
@@ -79,8 +90,11 @@ const DetailedDiagnose = ({ navigation }) => {
 
   return (
     <Background>
+      <ForceCleanUpOnScreenLeave cleanUpFunction={cleanCarouselStatusBar} />
+      <ForceRerenderOnNavigation resetStateFunction={rerenderCorrectStatusBar} />
+      {isScrolling && <StatusBarOnScroll show={isScrolling} />}
       <HeaderForScrolling
-        show={showHeaderForScroll}
+        show={isScrolling}
         onGoBack={handleReturn}
         date={date}
         commentCount={answers.length}
@@ -102,15 +116,15 @@ const DetailedDiagnose = ({ navigation }) => {
         keyExtractor={(item, index) => String(index)}
         disableVirtualization={false}
         onScroll={({ nativeEvent }) => {
-          const showSecondHeaderIfScrolling = () => {
+          const showHiddenComponentsIfScrolling = () => {
             if (nativeEvent.contentOffset.y > OFFSET_THRESHOLD_TO_CHANGE_HEADER) {
-              setShowHeaderForScroll(true)
+              setIsScrolling(true)
             } else {
-              setShowHeaderForScroll(false)
+              setIsScrolling(false)
             }
           }
 
-          showSecondHeaderIfScrolling()
+          showHiddenComponentsIfScrolling()
         }}
       />
     </Background>
