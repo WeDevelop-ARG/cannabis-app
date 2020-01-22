@@ -9,9 +9,9 @@ const MyStatusBar = (props) => {
     ...restProps
   } = props
 
-  let contentColor
-  contentColor = (lightContent) ? 'light-content' : 'default'
-  contentColor = (darkContent) ? 'dark-content' : 'default'
+  let contentColor = 'default'
+  if (lightContent) contentColor = 'light-content'
+  if (darkContent) contentColor = 'dark-content'
 
   return (
     <View style={style}>
