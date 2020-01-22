@@ -1,5 +1,5 @@
-import React from 'react'
-import { ScrollView } from 'react-native'
+import React, { useRef } from 'react'
+import { ScrollView, BackHandler } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import { Subtitle, Description, PrimaryButton } from '~/components'
 import * as AnalyticsService from '~/analyticsService'
@@ -9,6 +9,14 @@ import styles from './styles'
 
 const FinishRequest = ({ navigation }) => {
   AnalyticsService.setCurrentScreenName('Finish Request')
+
+  React.useEffect(() => {
+    const handler = BackHandler.addEventListener('hardwareBackPress', () => {
+      navigation.popToTop()
+      return true
+    })
+    return () => handler.remove()
+  }, [])
 
   const goToRequestNewDiagnose = () => {
     navigation.popToTop()

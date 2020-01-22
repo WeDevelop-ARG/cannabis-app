@@ -12,8 +12,8 @@ import ImageList from './components/ImageList'
 import ReviewHeader from './components/ReviewHeader'
 import { MIN_IMAGES, MAX_IMAGES, TIMEOUT_TO_WAIT_FOR_RENDERING } from './constants'
 
-const ImageVisualization = (props) => {
-  const imagesFromPreviousStep = props.navigation.state.params.images
+const ImageVisualization = ({ navigation }) => {
+  const imagesFromPreviousStep = navigation.state.params.images
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [submitError, setSubmitError] = useState(false)
@@ -29,7 +29,7 @@ const ImageVisualization = (props) => {
   }, [imagesFromPreviousStep])
 
   const confirmRequest = () => {
-    NavigationService.navigate('DescriptionRequest', { images })
+    navigation.push('DescriptionRequest', { images })
   }
 
   const canAddMoreImages = () => (
@@ -91,7 +91,7 @@ const ImageVisualization = (props) => {
   }
 
   const goBack = () => {
-    props.navigation.pop()
+    navigation.pop()
   }
 
   useEffect(() => {

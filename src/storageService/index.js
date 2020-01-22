@@ -19,9 +19,7 @@ export const uploadImageAndReturnReference = async (imageURI, onProgress) => {
     const blob = await BlobService.buildBlobFromURI(imageURI)
     const uuid = uuidv4()
     const imageRef = firebase.storage().ref('images').child(uuid).put(blob, metadata)
-    imageRef.on('state_changed', onProgress)
-    await imageRef
-    return uuid
+    return new Promise((resolve, reject) => imageRef.on('state_changed', onProgress, reject, () => resolve(uuid)))
   } catch (error) {
     throw new StorageError('Could not upload image.')
   }
