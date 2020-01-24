@@ -81,30 +81,19 @@ const getFirstDocumentDataFromQuerySnapshot = (querySnapshot) => querySnapshot.d
 
 const hasDocuments = (querySnapshot) => querySnapshot.size > 0
 
-const addDiagnoseIDToCurrentUser = async (diagnoseID, collectionPath = 'users') => {
-  try {
-    const currentUserUUID = AuthenticationService.getCurrentUserUID()
-    await update(`${collectionPath}/${currentUserUUID}`, {
-      diagnoses: firebase.firestore.FieldValue.arrayUnion(diagnoseID)
-    })
-  } catch (error) {
-    throw new DatabaseError(error.message)
-  }
-}
-
-export const addDiagnose = async (imageReferences, text, diagnosePath = 'diagnoses') => {
+export const addDiagnose = async (imageReferences, text) => {
   try {
     if (!Array.isArray(imageReferences)) imageReferences = [imageReferences]
 
     const user = AuthenticationService.getCurrentUserUID()
+    const diagnosePath = `users/${user}/requests`
     const newDiagnoseData = {
       user,
       text,
       imageReferences,
-      answered: false
+      amountOfAnswers: 0
     }
     const newDiagnoseReference = await add(diagnosePath, newDiagnoseData)
-    await addDiagnoseIDToCurrentUser(newDiagnoseReference.id)
 
     await AnalyticsService.logEvent('new_diagnose_request', {
       id: newDiagnoseReference.id,
@@ -116,34 +105,38 @@ export const addDiagnose = async (imageReferences, text, diagnosePath = 'diagnos
   }
 }
 
-export const getAnsweredDiagnosesForCurrentUser = async (howMany = 25, diagnosePath = 'diagnoses') => {
+const getDocumentsFromCollectionOrderedByCreationDate = async (path, howMany = 25) => {
   try {
-    const currentUserUID = AuthenticationService.getCurrentUserUID()
     const querySnapshot = await firebase
       .firestore()
-      .collection(diagnosePath)
-      .where('user', '==', currentUserUID)
-      .where('answered', '==', true)
+      .collection(path)
+      .orderBy('createdAt', 'desc')
       .limit(howMany)
       .get()
 
-    return querySnapshot.docs.map(doc => (doc.data()))
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   } catch (error) {
     throw new DatabaseError(error.message)
   }
 }
 
-export const getDiagnosesFromCurrentUser = async (howMany = 25, diagnosePath = 'diagnoses') => {
+export const getResponsesForDiagnose = async (diagnoseUID) => {
   try {
     const currentUserUID = AuthenticationService.getCurrentUserUID()
-    const querySnapshot = await firebase
-      .firestore()
-      .collection(diagnosePath)
-      .where('user', '==', currentUserUID)
-      .limit(howMany)
-      .get()
+    const responsePath = `users/${currentUserUID}/requests/${diagnoseUID}/responses`
 
-    return querySnapshot.docs.map(doc => (doc.data()))
+    return await getDocumentsFromCollectionOrderedByCreationDate(responsePath)
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
+export const getDiagnosesFromCurrentUser = async (howMany = 25) => {
+  try {
+    const currentUserUID = AuthenticationService.getCurrentUserUID()
+    const diagnosePath = `users/${currentUserUID}/requests`
+
+    return await getDocumentsFromCollectionOrderedByCreationDate(diagnosePath)
   } catch (error) {
     throw new DatabaseError(error.message)
   }
