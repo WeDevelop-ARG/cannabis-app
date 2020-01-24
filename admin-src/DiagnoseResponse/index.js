@@ -6,17 +6,19 @@ import { DiagnoseInfo } from '../DiagnoseInfo'
 import { getDownloadURLFromImages } from '../utils'
 import { firebaseTimestampToMoment } from '../utils/date'
 import '../stylesheets/admin.css'
+import { getUserUIDFromDiagnoseRef } from '../utils/diagnose'
 
 export const DiagnoseResponse = () => {
   const [currentDiagnose, setCurrentDiagnose] = useState(null)
   const [diagnoses, setDiagnoses] = useState([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     const attachQueryListenerForUnansweredDiagnoses = () => {
       firebase
         .firestore()
-        .collection('diagnoses')
-        .where('answered', '==', false)
+        .collectionGroup('requests')
+        .where('amountOfAnswers', '==', 0)
         .onSnapshot(async (querySnapshot) => {
           let unanswered = diagnoses
 
@@ -28,10 +30,13 @@ export const DiagnoseResponse = () => {
               if (changeType === 'added') {
                 if (!unanswered.find(diagnose => diagnose.id === doc.id)) {
                   const docData = doc.data()
-                  const userSnap = await firebase.firestore().collection('users').doc(docData.user).get()
+                  const userUID = getUserUIDFromDiagnoseRef(doc.ref)
+                  const userSnap = await firebase.firestore().collection('users').doc(userUID).get()
                   const username = userSnap.get('username')
                   unanswered.push({
                     id: doc.id,
+                    ref: doc.ref,
+                    userUID,
                     username,
                     ...docData
                   })
@@ -66,16 +71,37 @@ export const DiagnoseResponse = () => {
   }, [diagnoses])
 
   const handleSubmit = async (values) => {
-    const dataToUpdate = {
-      answer: values.answer,
-      answeredBy: values.answeredBy,
-      answered: true,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    setIsSubmitting(true)
+
+    const writeNewResponse = async () => {
+      const newResponse = {
+        answer: values.answer,
+        answeredBy: values.answeredBy,
+        answeredByUID: firebase.auth().currentUser.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }
+
+      await firebase
+        .firestore()
+        .collection(`users/${currentDiagnose.userUID}/requests/${currentDiagnose.id}/responses`)
+        .add(newResponse)
     }
 
-    await firebase.firestore().collection('diagnoses').doc(currentDiagnose.id).update(dataToUpdate)
+    const changeUpdateAtFieldForRequest = async () => {
+      await firebase
+        .firestore()
+        .doc(`users/${currentDiagnose.userUID}/requests/${currentDiagnose.id}`)
+        .update({
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+    }
+
+    await writeNewResponse()
+    await changeUpdateAtFieldForRequest()
+
     setDiagnoses(diagnoses.filter(diagnose => diagnose.id !== currentDiagnose.id))
     setCurrentDiagnose(null)
+    setIsSubmitting(false)
   }
 
   const fetchDiagnoseImagesAndSetAsCurrent = async (diagnose) => {
@@ -99,7 +125,7 @@ export const DiagnoseResponse = () => {
         {currentDiagnose && <DiagnoseInfo diagnose={currentDiagnose} />}
       </div>
       <div className='column'>
-        {currentDiagnose && <DiagnoseResponseForm handleSubmit={handleSubmit} />}
+        {currentDiagnose && <DiagnoseResponseForm handleSubmit={handleSubmit} isSubmitting={isSubmitting} />}
       </div>
     </div>
   )

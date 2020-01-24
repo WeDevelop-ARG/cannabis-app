@@ -33,7 +33,7 @@ const answerAs = [
   'cogollosano'
 ]
 
-export const DiagnoseResponseForm = ({ handleSubmit }) => {
+export const DiagnoseResponseForm = ({ handleSubmit, isSubmitting }) => {
   return (
     <Formik
       initialValues={initialValues}
@@ -56,7 +56,7 @@ export const DiagnoseResponseForm = ({ handleSubmit }) => {
             <ErrorMessage name='answeredBy' />
           </div>
           <div>
-            <button type='submit'>Submit</button>
+            <button disabled={isSubmitting} type='submit'>Submit</button>
           </div>
         </Form>
       )}
