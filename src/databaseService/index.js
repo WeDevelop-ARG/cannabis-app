@@ -104,7 +104,7 @@ export const addDiagnose = async (imageReferences, text) => {
   }
 }
 
-const getDocumentsFromCollectionOrderedByDate = async (path, howMany = 25) => {
+const getDocumentsFromCollectionOrderedByCreationDate = async (path, howMany = 25) => {
   try {
     const querySnapshot = await firebase
       .firestore()
@@ -124,7 +124,7 @@ export const getResponsesForDiagnose = async (diagnoseUID) => {
     const currentUserUID = AuthenticationService.getCurrentUserUID()
     const responsePath = `users/${currentUserUID}/requests/${diagnoseUID}/responses`
 
-    return await getDocumentsFromCollectionOrderedByDate(responsePath)
+    return await getDocumentsFromCollectionOrderedByCreationDate(responsePath)
   } catch (error) {
     throw new DatabaseError(error.message)
   }
@@ -135,7 +135,7 @@ export const getDiagnosesFromCurrentUser = async (howMany = 25) => {
     const currentUserUID = AuthenticationService.getCurrentUserUID()
     const diagnosePath = `users/${currentUserUID}/requests`
 
-    return await getDocumentsFromCollectionOrderedByDate(diagnosePath)
+    return await getDocumentsFromCollectionOrderedByCreationDate(diagnosePath)
   } catch (error) {
     throw new DatabaseError(error.message)
   }
