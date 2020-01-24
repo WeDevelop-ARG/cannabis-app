@@ -20,11 +20,11 @@ function navigate (routeName, params) {
 // this is our functions
 
 export const ForceRerenderOnNavigation = ({ resetStateFunction }) => (
-  <NavigationEvents
-    onWillFocus={() => {
-      resetStateFunction()
-    }}
-  />
+  <NavigationEvents onWillFocus={resetStateFunction} />
+)
+
+export const ForceCleanUpOnScreenLeave = ({ cleanUpFunction }) => (
+  <NavigationEvents onWillBlur={cleanUpFunction} />
 )
 
 export default {

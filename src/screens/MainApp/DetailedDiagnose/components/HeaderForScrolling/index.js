@@ -7,7 +7,7 @@ import calendar from '~/assets/images/DetailedDiagnose/calendar.svg'
 import comments from '~/assets/images/DetailedDiagnose/comments.svg'
 import styles from './styles'
 
-const TRANSITION_DURATION = 250
+const TRANSITION_DURATION = 100
 
 const HeaderForScrolling = ({ show, onGoBack, date, commentCount }) => {
   const ref = useRef()

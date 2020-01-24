@@ -3,6 +3,7 @@ import React from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
+import AppDefaultStatusBar from '~/components/statusBars/AppDefaultStatusBar'
 import firebaseConfig from './configs/firebase'
 import NavigationService from './navigationService'
 import SignUp from './screens/authentication/SignUp'
@@ -43,11 +44,14 @@ const MainNavigator = createSwitchNavigator(
 const AppContainer = createAppContainer(MainNavigator)
 
 const App = () => (
-  <AppContainer
-    ref={navigatorRef => {
-      NavigationService.setTopLevelNavigator(navigatorRef)
-    }}
-  />
+  <>
+    <AppDefaultStatusBar />
+    <AppContainer
+      ref={navigatorRef => {
+        NavigationService.setTopLevelNavigator(navigatorRef)
+      }}
+    />
+  </>
 )
 
 export default App
