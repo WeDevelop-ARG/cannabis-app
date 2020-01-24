@@ -90,7 +90,8 @@ export const addDiagnose = async (imageReferences, text) => {
     const newDiagnoseData = {
       user,
       text,
-      imageReferences
+      imageReferences,
+      amountOfAnswers: 0
     }
     const newDiagnoseReference = await add(diagnosePath, newDiagnoseData)
 
