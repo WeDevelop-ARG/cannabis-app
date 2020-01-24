@@ -1,7 +1,7 @@
 import React from 'react'
-import { StatusBar, View } from 'react-native'
+import { StatusBar as ReactStatusBar, View } from 'react-native'
 
-const MyStatusBar = (props) => {
+const StatusBar = (props) => {
   const {
     style,
     lightContent,
@@ -15,7 +15,7 @@ const MyStatusBar = (props) => {
 
   return (
     <View style={style}>
-      <StatusBar
+      <ReactStatusBar
         animated
         barStyle={contentColor}
         {...restProps}
@@ -24,9 +24,9 @@ const MyStatusBar = (props) => {
   )
 }
 
-MyStatusBar.setBackgroundColor = StatusBar.setBackgroundColor
-MyStatusBar.setDarkContent = () => StatusBar.setBarStyle('dark-content', true)
-MyStatusBar.setLightContent = () => StatusBar.setBarStyle('light-content', true)
-MyStatusBar.setTranslucent = StatusBar.setTranslucent
+StatusBar.setBackgroundColor = ReactStatusBar.setBackgroundColor
+StatusBar.setDarkContent = () => ReactStatusBar.setBarStyle('dark-content', true)
+StatusBar.setLightContent = () => ReactStatusBar.setBarStyle('light-content', true)
+StatusBar.setTranslucent = ReactStatusBar.setTranslucent
 
-export default MyStatusBar
+export default StatusBar
