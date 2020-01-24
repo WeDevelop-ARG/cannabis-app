@@ -8,22 +8,28 @@ const setAmountOfAnswersInExistingAnsweredRequests = async () => {
     const answeredRequests = admin
       .firestore()
       .collectionGroup('requests')
-      .where('answered', '==', true)
 
     const snapshots = await answeredRequests.get()
 
     await Promise.all(
       snapshots.docs.map(async (doc) => {
         console.log(`Setting amount of answers for ${doc.id}`)
+        const { answered, ...data } = doc.data()
 
-        const responses = await admin
-          .firestore()
-          .collection(`users/${doc.ref.parent.parent.id}/requests/${doc.id}/responses`)
-          .get()
+        if (answered) {
+          const responses = await admin
+            .firestore()
+            .collection(`users/${doc.ref.parent.parent.id}/requests/${doc.id}/responses`)
+            .get()
 
-        await doc.ref.update({
-          amountOfAnswers: responses.docs.length
-        })
+          await doc.ref.update({
+            amountOfAnswers: responses.docs.length
+          })
+        } else {
+          await doc.ref.update({
+            amountOfAnswers: 0
+          })
+        }
       })
     )
   } catch (error) {
