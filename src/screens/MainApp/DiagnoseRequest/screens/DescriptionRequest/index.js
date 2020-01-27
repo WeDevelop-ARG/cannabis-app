@@ -27,9 +27,10 @@ const DescriptionRequest = ({ navigation }) => {
       navigation.setParams({
         hideBack: true
       })
-      const handler = BackHandler.addEventListener('hardwareBackPress', () => {
-        return true
-      })
+      const handler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => true
+      )
       return () => {
         handler.remove()
       }
@@ -65,9 +66,9 @@ const DescriptionRequest = ({ navigation }) => {
       try {
         const uid = await StorageService.uploadImageAndReturnReference(uri, onProgress)
         uploadedImages.push(uid)
-      } catch (error) {
+      } finally {
+        currentProgress.current += 90 / imagesUris.length
       }
-      currentProgress.current += 90 / imagesUris.length
     }
 
     if (uploadedImages.length > 0) {
