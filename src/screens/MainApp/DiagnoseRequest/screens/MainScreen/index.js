@@ -14,7 +14,7 @@ export const MainScreen = ({ navigation }) => {
 
   const onImagesSelected = (images) => {
     setShowImageSelection(false)
-    navigation.push('ImageReview', { images: images })
+    navigation.navigate('ImageReview', { images: images })
   }
 
   return (

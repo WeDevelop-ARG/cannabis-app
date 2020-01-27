@@ -74,7 +74,7 @@ const DescriptionRequest = ({ navigation }) => {
       await updateDatabase(uploadedImages)
       setUploadProgress(100)
       setUploading(false)
-      navigation.push('FinishRequest')
+      navigation.navigate('FinishRequest')
     } else {
       Alert.alert('No se han podido subir las imagenes. Intente nuevamente o seleccione otras imágenes.')
     }

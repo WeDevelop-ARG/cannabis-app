@@ -29,7 +29,7 @@ const ImageVisualization = ({ navigation }) => {
   }, [imagesFromPreviousStep])
 
   const confirmRequest = () => {
-    navigation.push('DescriptionRequest', { images })
+    navigation.navigate('DescriptionRequest', { images })
   }
 
   const canAddMoreImages = () => (
