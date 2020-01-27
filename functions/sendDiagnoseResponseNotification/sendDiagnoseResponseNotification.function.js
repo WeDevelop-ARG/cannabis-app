@@ -53,7 +53,7 @@ const sendDiagnoseResponseNotification = functions
 
     const user = await snapshot.ref.parent.parent.parent.parent.get()
 
-    if (user) await sendNotification(user)
+    if (user) await sendNotification(user.data())
   })
 
 module.exports = sendDiagnoseResponseNotification
