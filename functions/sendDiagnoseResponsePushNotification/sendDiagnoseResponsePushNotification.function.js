@@ -6,9 +6,10 @@ const sendDiagnoseResponsePushNotification = functions
   .firestore
   .document('users/{userUID}/requests/{diagnoseUID}/responses/{responseUID}')
   .onCreate(async (snapshot, context) => {
-    if (snapshot.get('answeredByUID') === context.params.userUID) return
+    const userUID = context.params.userUID
+    if (snapshot.get('answeredByUID') === userUID) return
 
-    const notificationKeyName = `appUser-${context.params.userUID}`
+    const notificationKeyName = `appUser-${userUID}`
     const notificationKey = await getNotificationKey(notificationKeyName)
 
     if (notificationKey !== null) {
