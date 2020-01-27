@@ -3,6 +3,7 @@ import { View, FlatList } from 'react-native'
 import { isEmpty } from 'lodash'
 import pluralize from 'pluralize'
 import * as AnalyticsService from '~/analyticsService'
+import * as DatabaseService from '~/databaseService'
 import { ForceCleanUpOnScreenLeave, ForceRerenderOnNavigation } from '~/navigationService'
 import Background from '~/components/Background'
 import { Header as HeaderText } from '~/components/texts'
@@ -18,6 +19,7 @@ import ProblemDescription from './components/ProblemDescription'
 import AppDefaultStatusBar from '~/components/statusBars/AppDefaultStatusBar'
 import StatusBarForCarousel from './components/StatusBarForCarousel'
 import StatusBarOnScroll from './components/StatusBarOnScroll'
+import NewComment from './components/NewComment'
 import calendar from '~/assets/images/DetailedDiagnose/calendar.svg'
 import comments from '~/assets/images/DetailedDiagnose/comments.svg'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
@@ -28,17 +30,17 @@ const DetailedDiagnose = ({ navigation }) => {
   const flatListRef = useRef()
   const [isScrolling, setIsScrolling] = useState(false)
   const [carouselSection, setCarouselSection] = useState(null)
+  const [answers, setAnswers] = useState([])
   const date = firebaseTimestampToMoment(diagnose.createdAt, 'es').format('D MMM')
-  const answers = []
 
   AnalyticsService.setCurrentScreenName('Detailed Diagnose')
 
-  if (diagnose.answer) {
-    answers.push({
+  if (diagnose.answers) {
+    setAnswers([{
       answer: diagnose.answer,
       by: diagnose.answeredBy,
       date: firebaseTimestampToMoment(diagnose.updatedAt, 'es').format('l')
-    })
+    }])
   }
 
   const handleReturn = () => {
@@ -88,6 +90,11 @@ const DetailedDiagnose = ({ navigation }) => {
     setCarouselSection(buildCarouselSection())
   }, [])
 
+  const onNewComment = async (answer) => {
+    const response = await DatabaseService.addDiagnoseResponse(diagnose.id, answer)
+    setAnswers([response, ...answers])
+  }
+
   return (
     <Background>
       <ForceCleanUpOnScreenLeave cleanUpFunction={cleanCarouselStatusBar} />
@@ -127,6 +134,7 @@ const DetailedDiagnose = ({ navigation }) => {
           showHiddenComponentsIfScrolling()
         }}
       />
+      <NewComment onNewComment={onNewComment} />
     </Background>
   )
 }
