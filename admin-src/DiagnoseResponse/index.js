@@ -105,6 +105,7 @@ export const DiagnoseResponse = () => {
   }
 
   const fetchDiagnoseImagesAndSetAsCurrent = async (diagnose) => {
+    setCurrentDiagnose(null)
     const imagesSources = await getDownloadURLFromImages(diagnose.imageReferences)
     setCurrentDiagnose({
       ...diagnose,
