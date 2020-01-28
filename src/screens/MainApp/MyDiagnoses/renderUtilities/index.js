@@ -2,17 +2,14 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import NavigationService from '~/navigationService'
 import Diagnose from '../components/Diagnose'
+import { isRequestSolved } from '~/mixins/diagnose/isRequestSolved'
 
 const goToDetailedDiagnoseScreen = (diagnose) => {
   NavigationService.navigate('DetailedDiagnose', { diagnose })
 }
 
 const renderDiagnose = (diagnose, key) => {
-  let answerQuantity = 0
-
-  if (diagnose.answer) {
-    answerQuantity = 1
-  }
+  const answerQuantity = diagnose.amountOfAnswers || 0
 
   return (
     <TouchableOpacity
@@ -24,6 +21,7 @@ const renderDiagnose = (diagnose, key) => {
         firebaseTimestamp={diagnose.createdAt}
         description={diagnose.text}
         answerQuantity={answerQuantity}
+        solved={isRequestSolved(diagnose)}
       />
     </TouchableOpacity>
   )
