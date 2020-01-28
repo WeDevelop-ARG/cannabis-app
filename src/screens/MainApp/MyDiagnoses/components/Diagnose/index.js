@@ -11,9 +11,9 @@ const Diagnose = ({ thumbnail, firebaseTimestamp, description, answerQuantity, s
   const date = firebaseTimestampToMoment(firebaseTimestamp)
   let state
 
-  if (solved) state = <Body primary>Resuelto</Body>
+  if (solved) state = <Body primary>Resuelta</Body>
   else if (answerQuantity) state = <Body secondary>En discusión</Body>
-  else state = <Body secondary>Abierto</Body>
+  else state = <Body secondary>Abierta</Body>
 
   return (
     <View style={styles.container}>
