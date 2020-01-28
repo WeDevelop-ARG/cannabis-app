@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     width: '100%',
+    top: verticalScale(12),
     backgroundColor: theme.colors.white,
     elevation: 1,
     opacity: 0,

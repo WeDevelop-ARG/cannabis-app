@@ -12,9 +12,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     top: verticalScale(-40)
   },
-  comment: {
-    top: verticalScale(-24)
-  },
   metadataContainer: {
     top: verticalScale(-40),
     width: theme.sizes.containerWidth,
