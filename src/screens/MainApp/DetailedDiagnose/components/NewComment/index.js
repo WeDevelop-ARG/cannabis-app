@@ -10,8 +10,10 @@ const NewComment = ({ onNewComment }) => {
 
   const sendEnabled = (comment.length > 0)
   const handlePress = async () => {
+    const savedComment = comment.slice()
     setInputEnabled(false)
-    if (onNewComment) await onNewComment(comment)
+    setComment('')
+    if (onNewComment) await onNewComment(savedComment)
     setInputEnabled(true)
   }
 
