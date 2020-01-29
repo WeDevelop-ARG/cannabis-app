@@ -30,8 +30,12 @@ const styles = StyleSheet.create({
   description: {
     flex: 2
   },
-  answers: {
+  metadata: {
+    flexDirection: 'row',
     marginTop: verticalScale(11)
+  },
+  separator: {
+    marginHorizontal: scale(12)
   }
 })
 
