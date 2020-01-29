@@ -45,15 +45,15 @@ const sendNotification = async (user) => {
 
 const sendDiagnoseResponseNotification = functions
   .firestore
-  .document('diagnoses/{diagnoseId}')
-  .onUpdate(async (snapshot, context) => {
-    const diagnose = snapshot.after.data()
-    const answerBefore = snapshot.before.data().answered
-    const answerAfter = diagnose.answered
-    if (!answerBefore && answerAfter) {
-      const user = await database.getUserByUID(diagnose.user)
-      if (user) await sendNotification(user)
-    }
+  .document('users/{userUID}/requests/{diagnoseUID}/responses/{responseUID}')
+  .onCreate(async (snapshot, context) => {
+    const userUID = context.params.userUID
+
+    if (snapshot.get('answeredByUID') === userUID) return
+
+    const user = await snapshot.ref.parent.parent.parent.parent.get()
+
+    if (user) await sendNotification(user.data())
   })
 
 module.exports = sendDiagnoseResponseNotification
