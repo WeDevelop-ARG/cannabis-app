@@ -6,9 +6,6 @@ let _handlerEnabled = true
 let _notificationsHandler = (notification) => {}
 
 const _options = {
-  onRegister: (token) => {
-    console.log('TOKEN:', token)
-  },
   onNotification: (notification) => {
     if (notification.userInteraction && _handlerEnabled) {
       _notificationsHandler(notification)
