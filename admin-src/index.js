@@ -38,19 +38,19 @@ const App = () => {
 
           <TabPanel>
             <h2>New Requests</h2>
-            <DiagnoseResponse filter='unanswered' />
+            <DiagnoseResponse state='unanswered' />
           </TabPanel>
           <TabPanel>
             <h2>Requests in Discussion</h2>
-            <DiagnoseResponse filter='in discussion' />
+            <DiagnoseResponse state='in discussion' />
           </TabPanel>
           <TabPanel>
             <h2>Stale Requests</h2>
-            <DiagnoseResponse filter='stale' />
+            <DiagnoseResponse state='stale' />
           </TabPanel>
           <TabPanel>
             <h2>Solved Requests</h2>
-            <DiagnoseResponse filter='solved' />
+            <DiagnoseResponse state='solved' />
           </TabPanel>
         </Tabs>
       </>

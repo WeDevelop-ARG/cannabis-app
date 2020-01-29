@@ -10,7 +10,7 @@ import { getUserUIDFromDiagnoseRef } from '../utils/diagnose'
 
 const STALE_STATUS_AFTER_DAYS = 10
 
-export const DiagnoseResponse = ({ filter }) => {
+export const DiagnoseResponse = ({ state }) => {
   const [currentDiagnose, setCurrentDiagnose] = useState(null)
   const [diagnoses, setDiagnoses] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -77,7 +77,7 @@ export const DiagnoseResponse = ({ filter }) => {
       .firestore()
       .collectionGroup('requests')
       .where('amountOfAnswers', '>', 0)
-      .onSnapshot((snapshot) => onSnapshot(snapshot, filterInDiscussion))
+      .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterInDiscussion))
   }
 
   const staleQuery = () => {
@@ -85,30 +85,30 @@ export const DiagnoseResponse = ({ filter }) => {
       .firestore()
       .collectionGroup('requests')
       .where('amountOfAnswers', '>', 0)
-      .onSnapshot((snapshot) => onSnapshot(snapshot, filterStale))
+      .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterStale))
   }
 
   const solvedQuery = () => {
     return firebase
       .firestore()
       .collectionGroup('requests')
-      .onSnapshot((snapshot) => onSnapshot(snapshot, filterBySolved))
+      .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterBySolved))
   }
 
   useEffect(() => {
     const attachQueryListener = () => {
-      if (filter === 'unanswered') {
-        unansweredQuery()
-      } else if (filter === 'in discussion') {
-        inDiscussionQuery()
-      } else if (filter === 'stale') {
-        staleQuery()
-      } else if (filter === 'solved') {
-        solvedQuery()
+      if (state === 'unanswered') {
+        return unansweredQuery()
+      } else if (state === 'in discussion') {
+        return inDiscussionQuery()
+      } else if (state === 'stale') {
+        return staleQuery()
+      } else if (state === 'solved') {
+        return solvedQuery()
       }
     }
 
-    attachQueryListener()
+    return attachQueryListener()
   }, [])
 
   useEffect(() => {
