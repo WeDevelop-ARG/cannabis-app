@@ -5,6 +5,8 @@ import * as firebase from 'firebase'
 import { DiagnoseResponse } from './DiagnoseResponse'
 import { LoginScreen } from './LoginScreen'
 import { Button, Row } from 'react-bootstrap'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import 'react-tabs/style/react-tabs.css'
 
 const App = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false)
@@ -26,7 +28,31 @@ const App = () => {
             Log out
           </Button>
         </Row>
-        <DiagnoseResponse />
+        <Tabs>
+          <TabList>
+            <Tab>New Requests</Tab>
+            <Tab>In Discussion</Tab>
+            <Tab>Stale</Tab>
+            <Tab>Solved</Tab>
+          </TabList>
+
+          <TabPanel>
+            <h2>New Requests</h2>
+            <DiagnoseResponse filter='unanswered' />
+          </TabPanel>
+          <TabPanel>
+            <h2>Requests in Discussion</h2>
+            <DiagnoseResponse filter='in discussion' />
+          </TabPanel>
+          <TabPanel>
+            <h2>Stale Requests</h2>
+            <DiagnoseResponse filter='stale' />
+          </TabPanel>
+          <TabPanel>
+            <h2>Solved Requests</h2>
+            <DiagnoseResponse filter='solved' />
+          </TabPanel>
+        </Tabs>
       </>
     )
   } else {

@@ -8,52 +8,102 @@ import { firebaseTimestampToMoment } from '../utils/date'
 import '../stylesheets/admin.css'
 import { getUserUIDFromDiagnoseRef } from '../utils/diagnose'
 
-export const DiagnoseResponse = () => {
+const STALE_STATUS_AFTER_DAYS = 10
+
+export const DiagnoseResponse = ({ filter }) => {
   const [currentDiagnose, setCurrentDiagnose] = useState(null)
   const [diagnoses, setDiagnoses] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  useEffect(() => {
-    const attachQueryListenerForUnansweredDiagnoses = () => {
-      firebase
-        .firestore()
-        .collectionGroup('requests')
-        .where('amountOfAnswers', '==', 0)
-        .onSnapshot(async (querySnapshot) => {
-          let unanswered = diagnoses
+  const onSnapshot = async (querySnapshot, filter) => {
+    let newDiagnoses = diagnoses
 
-          await Promise.all(
-            querySnapshot.docChanges().map(async docChange => {
-              const doc = docChange.doc
-              const changeType = docChange.type
+    await Promise.all(
+      querySnapshot.docChanges().map(async docChange => {
+        const doc = docChange.doc
+        const changeType = docChange.type
 
-              if (changeType === 'added') {
-                if (!unanswered.find(diagnose => diagnose.id === doc.id)) {
-                  const docData = doc.data()
-                  const userUID = getUserUIDFromDiagnoseRef(doc.ref)
-                  const userSnap = await firebase.firestore().collection('users').doc(userUID).get()
-                  const username = userSnap.get('username')
-                  unanswered.push({
-                    id: doc.id,
-                    ref: doc.ref,
-                    userUID,
-                    username,
-                    ...docData
-                  })
-                }
-              }
-
-              if (changeType === 'removed') {
-                unanswered = unanswered.filter(diagnose => diagnose.id !== doc.id)
-              }
+        if (changeType === 'added') {
+          if (!newDiagnoses.find(diagnose => diagnose.id === doc.id)) {
+            const docData = doc.data()
+            const userUID = getUserUIDFromDiagnoseRef(doc.ref)
+            const userSnap = await firebase.firestore().collection('users').doc(userUID).get()
+            const username = userSnap.get('username')
+            newDiagnoses.push({
+              id: doc.id,
+              ref: doc.ref,
+              userUID,
+              username,
+              ...docData
             })
-          )
+          }
+        }
 
-          setDiagnoses([...unanswered])
-        })
+        if (changeType === 'removed') {
+          newDiagnoses = newDiagnoses.filter(diagnose => diagnose.id !== doc.id)
+        }
+      })
+    )
+
+    if (filter) {
+      newDiagnoses = newDiagnoses.filter(filter)
     }
 
-    attachQueryListenerForUnansweredDiagnoses()
+    setDiagnoses([...newDiagnoses])
+  }
+
+  const unansweredQuery = () => {
+    return firebase
+      .firestore()
+      .collectionGroup('requests')
+      .where('amountOfAnswers', '==', 0)
+      .onSnapshot(onSnapshot)
+  }
+
+  const filterByNotSolved = (diagnose) => !diagnose.solved
+  const filterByLastActivity = (diagnose) => diagnose.updatedAt >= (new Date() - STALE_STATUS_AFTER_DAYS)
+  const filterByAmountOfAnswers = (diagnose) => diagnose.amountOfAnswers > 0
+  const filterStale = (diagnose) => !filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
+  const filterInDiscussion = (diagnose) => filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
+
+  const inDiscussionQuery = () => {
+    return firebase
+      .firestore()
+      .collectionGroup('requests')
+      .where('amountOfAnswers', '>', 0)
+      .onSnapshot((snapshot) => onSnapshot(snapshot, filterInDiscussion))
+  }
+
+  const staleQuery = () => {
+    return firebase
+      .firestore()
+      .collectionGroup('requests')
+      .where('amountOfAnswers', '>', 0)
+      .onSnapshot((snapshot) => onSnapshot(snapshot, filterStale))
+  }
+
+  const solvedQuery = () => {
+    return firebase
+      .firestore()
+      .collectionGroup('requests')
+      .where('solved', '==', 'true')
+      .onSnapshot(onSnapshot)
+  }
+
+  useEffect(() => {
+    const attachQueryListener = () => {
+      if (filter === 'unanswered') {
+        unansweredQuery()
+      } else if (filter === 'in discussion') {
+        inDiscussionQuery()
+      } else if (filter === 'stale') {
+        staleQuery()
+      } else if (filter === 'solved') {
+        solvedQuery()
+      }
+    }
+
+    attachQueryListener()
   }, [])
 
   useEffect(() => {
