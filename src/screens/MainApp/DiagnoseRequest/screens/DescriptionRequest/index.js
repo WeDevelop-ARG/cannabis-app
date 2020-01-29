@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { TextInput, Alert, ScrollView } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { TextInput, Alert, ScrollView, BackHandler } from 'react-native'
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters/extend'
 import { BoxShadow } from 'react-native-shadow'
 import { ProgressButton, Description, Subtitle } from '~/components'
@@ -16,18 +16,34 @@ const DescriptionRequest = ({ navigation }) => {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadEnabled, setUploadEnabled] = useState(false)
   const [inputEnabled, setInputEnabled] = useState(true)
+  const currentProgress = useRef(0)
 
   AnalyticsService.setCurrentScreenName('Description Request')
 
   const imagesUris = navigation.getParam('images', [])
+
+  React.useEffect(() => {
+    if (uploading) {
+      navigation.setParams({
+        hideBack: true
+      })
+      const handler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => true
+      )
+      return () => {
+        handler.remove()
+      }
+    }
+  }, [uploading])
 
   const handleInput = (text) => {
     setUploadEnabled(text !== '')
     setDescription(text)
   }
 
-  const onProgress = async (snapshot) => {
-    setUploadProgress(v => v + ((snapshot.bytesTransferred / snapshot.totalBytes) * 90 / imagesUris.length))
+  const onProgress = (snapshot) => {
+    setUploadProgress(currentProgress.current + (snapshot.bytesTransferred / snapshot.totalBytes) * 90 / imagesUris.length)
   }
 
   const updateDatabase = async (uploadedImages) => {
@@ -50,14 +66,15 @@ const DescriptionRequest = ({ navigation }) => {
       try {
         const uid = await StorageService.uploadImageAndReturnReference(uri, onProgress)
         uploadedImages.push(uid)
-      } catch (error) {
-        setUploadProgress(v => v + 90 / imagesUris.length)
+      } finally {
+        currentProgress.current += 90 / imagesUris.length
       }
     }
 
     if (uploadedImages.length > 0) {
       await updateDatabase(uploadedImages)
-      setUploadProgress(v => 100)
+      setUploadProgress(100)
+      setUploading(false)
       navigation.navigate('FinishRequest')
     } else {
       Alert.alert('No se han podido subir las imagenes. Intente nuevamente o seleccione otras imágenes.')
@@ -109,8 +126,19 @@ const DescriptionRequest = ({ navigation }) => {
   )
 }
 
-DescriptionRequest.navigationOptions = {
-  title: 'Nueva consulta'
+DescriptionRequest.navigationOptions = ({ navigation }) => {
+  const options = {
+    title: 'Nueva consulta'
+  }
+
+  if (navigation.state.params && navigation.state.params.hideBack) {
+    return {
+      ...options,
+      headerLeft: null
+    }
+  }
+
+  return options
 }
 
 export default DescriptionRequest
