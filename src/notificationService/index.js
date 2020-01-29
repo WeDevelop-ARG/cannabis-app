@@ -17,14 +17,7 @@ const _options = {
     badge: true,
     sound: true
   },
-  // Should the initial notification be popped automatically
-  // default: true
   popInitialNotification: false,
-  /**
-   * (optional) default: true
-   * - Specified if permissions (ios) and token (android and ios) will requested or not,
-   * - if not, you must call PushNotificationsHandler.requestPermissions() later
-   */
   requestPermissions: true
 }
 
