@@ -168,6 +168,7 @@ export const addDiagnoseResponse = async (diagnoseUID, response) => {
 
     const responseReference = await add(responsePath, responseData)
     const responseFetch = await responseReference.get()
+
     return responseFetch.data()
   } catch (error) {
     throw new DatabaseError(error.message)

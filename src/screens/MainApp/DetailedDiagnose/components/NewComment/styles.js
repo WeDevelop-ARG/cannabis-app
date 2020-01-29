@@ -3,8 +3,6 @@ import { theme } from '~/constants'
 import { verticalScale, moderateScale } from 'react-native-size-matters/extend'
 
 const styles = StyleSheet.create({
-  container: {
-  },
   input: {
     backgroundColor: theme.colors.white,
     color: theme.colors.black,
