@@ -18,9 +18,6 @@ export const DiagnoseInfo = ({ diagnose }) => {
         DESCRIPTION: {diagnose.text}
       </div>
       <Responses diagnose={diagnose} />
-      {diagnose.imagesSources && diagnose.imagesSources.map((imageSource, index) => (
-        <img key={index} className='diagnose-image' src={imageSource} />
-      ))}
     </div>
   )
 }

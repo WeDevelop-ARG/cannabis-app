@@ -1,6 +1,7 @@
 import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import classes from './styles.css'
 
 const initialValues = {
   answer: '',
@@ -41,12 +42,12 @@ export const DiagnoseResponseForm = ({ handleSubmit, isSubmitting }) => {
       onSubmit={(values) => handleSubmit(values)}
     >
       {() => (
-        <Form>
+        <Form className={classes.answerFormContainer}>
           <div>
-            <Field className='answer-field' component='textarea' name='answer' placeholder='answer here' />
+            <Field className={classes.answerField} component='textarea' name='answer' placeholder='answer here' />
             <ErrorMessage name='answer' />
           </div>
-          <div>
+          <div className={classes.adminSelect}>
             <Field name='answeredBy' component='select'>
               <option value='' label='Answer as' />
               {answerAs.map((user, index) => (

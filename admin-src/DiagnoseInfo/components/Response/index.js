@@ -1,21 +1,19 @@
 import React from 'react'
-import './styles.css'
+import classnames from 'classnames'
+import classes from './styles.scss'
 
 const Response = ({ text, date, isAdmin = false }) => {
-  let messageClassname = 'response'
-
-  if (isAdmin) {
-    messageClassname += ' adminResponse'
-  } else {
-    messageClassname += ' userResponse'
-  }
+  const messageClassname = classnames(classes.response, {
+    [classes.adminResponse]: isAdmin,
+    [classes.userResponse]: !isAdmin
+  })
 
   return (
     <div className={messageClassname}>
-      <div className='text'>
+      <div className={classes.text}>
         {text}
       </div>
-      <div className='date'>
+      <div className={classes.date}>
         {date}
       </div>
     </div>

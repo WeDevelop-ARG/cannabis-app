@@ -3,11 +3,10 @@ import { isEmpty } from 'lodash'
 import { queryAllResponsesForRequest } from '../../../services/database/queryAllResponsesForRequest'
 import { firebaseTimestampToMoment } from '../../../utils/date'
 import Response from '../Response'
-import './styles.css'
+import classes from './styles.css'
 
 const Responses = ({ diagnose }) => {
   const [responses, setResponses] = useState([])
-  const scrollToBottomRef = React.createRef()
 
   useEffect(() => {
     const buildResponses = async () => {
@@ -28,19 +27,16 @@ const Responses = ({ diagnose }) => {
     buildResponses()
   }, [])
 
-  useEffect(() => {
-    const scrollToBottom = () => {
-      scrollToBottomRef.current.scrollTop = scrollToBottomRef.current.scrollHeight
-    }
-
-    if (scrollToBottomRef.current) {
-      scrollToBottom()
-    }
-  }, [scrollToBottomRef])
+  const scrollToBottom = (ref) => {
+    ref.scrollTop = ref.scrollHeight
+  }
 
   return (
     !isEmpty(responses) && (
-      <div ref={scrollToBottomRef} className='responses'>
+      <div
+        ref={ref => scrollToBottom(ref)}
+        className={classes.responses}
+      >
         {responses}
       </div>
     )
