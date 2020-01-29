@@ -29,6 +29,8 @@ export const DiagnoseResponse = ({ filter }) => {
             const userUID = getUserUIDFromDiagnoseRef(doc.ref)
             const userSnap = await firebase.firestore().collection('users').doc(userUID).get()
             const username = userSnap.get('username')
+
+            console.log(docData)
             newDiagnoses.push({
               id: doc.id,
               ref: doc.ref,
@@ -59,13 +61,17 @@ export const DiagnoseResponse = ({ filter }) => {
       .where('amountOfAnswers', '==', 0)
       .onSnapshot(onSnapshot)
   }
-
+  const dateDaysAgo = (daysAgo) => {
+    const date = new Date(Date.now())
+    date.setDate(date.getDate() - daysAgo)
+    return date
+  }
+  const filterBySolved = (diagnose) => diagnose.solved
   const filterByNotSolved = (diagnose) => !diagnose.solved
-  const filterByLastActivity = (diagnose) => diagnose.updatedAt >= (new Date() - STALE_STATUS_AFTER_DAYS)
+  const filterByLastActivity = (diagnose) => (diagnose.updatedAt !== undefined) && diagnose.updatedAt.toDate() >= dateDaysAgo(STALE_STATUS_AFTER_DAYS)
   const filterByAmountOfAnswers = (diagnose) => diagnose.amountOfAnswers > 0
   const filterStale = (diagnose) => !filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
   const filterInDiscussion = (diagnose) => filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
-
   const inDiscussionQuery = () => {
     return firebase
       .firestore()
@@ -86,8 +92,7 @@ export const DiagnoseResponse = ({ filter }) => {
     return firebase
       .firestore()
       .collectionGroup('requests')
-      .where('solved', '==', 'true')
-      .onSnapshot(onSnapshot)
+      .onSnapshot((snapshot) => onSnapshot(snapshot, filterBySolved))
   }
 
   useEffect(() => {
