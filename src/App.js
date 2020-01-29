@@ -1,5 +1,5 @@
 import fixtimerbug from '~/bugFixes/fixtimerbug' // this is just an import to load the fix
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
@@ -14,6 +14,8 @@ import Onboarding from './screens/Onboarding'
 import MainApp from './screens/MainApp'
 import PrivacyPolicy from './screens/PrivacyPolicy'
 import { buildStackNavigator } from '~/components/StackNavigator'
+import notificationService from '~/notificationService'
+import navigationService from './navigationService'
 
 if (!__DEV__) {
   console.disableYellowBox = true
@@ -42,6 +44,9 @@ const MainNavigator = createSwitchNavigator(
 )
 
 const AppContainer = createAppContainer(MainNavigator)
+
+notificationService.configure()
+notificationService.setNotificationHandler(() => navigationService.navigate('MyDiagnoses'))
 
 const App = () => (
   <>
