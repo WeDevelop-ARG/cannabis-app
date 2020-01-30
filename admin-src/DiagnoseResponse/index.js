@@ -8,9 +8,7 @@ import { firebaseTimestampToMoment } from '../utils/date'
 import '../stylesheets/admin.css'
 import { getUserUIDFromDiagnoseRef } from '../utils/diagnose'
 
-const STALE_STATUS_AFTER_DAYS = 10
-
-export const DiagnoseResponse = ({ state }) => {
+export const DiagnoseResponse = ({ query }) => {
   const [currentDiagnose, setCurrentDiagnose] = useState(null)
   const [diagnoses, setDiagnoses] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -30,7 +28,6 @@ export const DiagnoseResponse = ({ state }) => {
             const userSnap = await firebase.firestore().collection('users').doc(userUID).get()
             const username = userSnap.get('username')
 
-            console.log(docData)
             newDiagnoses.push({
               id: doc.id,
               ref: doc.ref,
@@ -54,58 +51,9 @@ export const DiagnoseResponse = ({ state }) => {
     setDiagnoses([...newDiagnoses])
   }
 
-  const unansweredQuery = () => {
-    return firebase
-      .firestore()
-      .collectionGroup('requests')
-      .where('amountOfAnswers', '==', 0)
-      .onSnapshot(onSnapshot)
-  }
-  const dateDaysAgo = (daysAgo) => {
-    const date = new Date(Date.now())
-    date.setDate(date.getDate() - daysAgo)
-    return date
-  }
-  const filterBySolved = (diagnose) => diagnose.solved
-  const filterByNotSolved = (diagnose) => !diagnose.solved
-  const filterByLastActivity = (diagnose) => (diagnose.updatedAt !== undefined) && diagnose.updatedAt.toDate() >= dateDaysAgo(STALE_STATUS_AFTER_DAYS)
-  const filterByAmountOfAnswers = (diagnose) => diagnose.amountOfAnswers > 0
-  const filterStale = (diagnose) => !filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
-  const filterInDiscussion = (diagnose) => filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
-  const inDiscussionQuery = () => {
-    return firebase
-      .firestore()
-      .collectionGroup('requests')
-      .where('amountOfAnswers', '>', 0)
-      .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterInDiscussion))
-  }
-
-  const staleQuery = () => {
-    return firebase
-      .firestore()
-      .collectionGroup('requests')
-      .where('amountOfAnswers', '>', 0)
-      .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterStale))
-  }
-
-  const solvedQuery = () => {
-    return firebase
-      .firestore()
-      .collectionGroup('requests')
-      .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterBySolved))
-  }
-
   useEffect(() => {
     const attachQueryListener = () => {
-      if (state === 'unanswered') {
-        return unansweredQuery()
-      } else if (state === 'in discussion') {
-        return inDiscussionQuery()
-      } else if (state === 'stale') {
-        return staleQuery()
-      } else if (state === 'solved') {
-        return solvedQuery()
-      }
+      return query(onSnapshot)
     }
 
     return attachQueryListener()
