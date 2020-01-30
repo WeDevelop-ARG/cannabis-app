@@ -9,7 +9,8 @@ const styles = StyleSheet.create({
   commentContainer: {
     width: theme.sizes.containerWidth,
     alignSelf: 'center',
-    marginBottom: verticalScale(24)
+    marginBottom: verticalScale(24),
+    top: verticalScale(-24)
   },
   metadataContainer: {
     flexDirection: 'row',

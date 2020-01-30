@@ -26,7 +26,6 @@ const StatusBarOnScroll = ({ show }) => {
       <StatusBar
         darkContent
         backgroundColor={BACKGROUND_COLOR}
-        translucent={false}
       />
     </Animated.View>
   )
@@ -35,7 +34,6 @@ const StatusBarOnScroll = ({ show }) => {
 StatusBarOnScroll.setAsCurrent = () => {
   StatusBar.setBackgroundColor(BACKGROUND_COLOR, true)
   StatusBar.setDarkContent()
-  StatusBar.setTranslucent(false, true)
 }
 
 export default StatusBarOnScroll
