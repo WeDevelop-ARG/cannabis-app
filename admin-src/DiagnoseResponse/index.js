@@ -9,52 +9,55 @@ import DiagnoseImages from '../DiagnoseImages'
 import classes from '../stylesheets/admin.css'
 import { getUserUIDFromDiagnoseRef } from '../utils/diagnose'
 
-export const DiagnoseResponse = () => {
+export const DiagnoseResponse = ({ query }) => {
   const [currentDiagnose, setCurrentDiagnose] = useState(null)
   const [diagnoses, setDiagnoses] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  useEffect(() => {
-    const attachQueryListenerForUnansweredDiagnoses = () => {
-      firebase
-        .firestore()
-        .collectionGroup('requests')
-        .where('amountOfAnswers', '==', 0)
-        .onSnapshot(async (querySnapshot) => {
-          let unanswered = diagnoses
+  const onSnapshot = async (querySnapshot, filter) => {
+    let newDiagnoses = diagnoses
 
-          await Promise.all(
-            querySnapshot.docChanges().map(async docChange => {
-              const doc = docChange.doc
-              const changeType = docChange.type
+    await Promise.all(
+      querySnapshot.docChanges().map(async docChange => {
+        const doc = docChange.doc
+        const changeType = docChange.type
 
-              if (changeType === 'added') {
-                if (!unanswered.find(diagnose => diagnose.id === doc.id)) {
-                  const docData = doc.data()
-                  const userUID = getUserUIDFromDiagnoseRef(doc.ref)
-                  const userSnap = await firebase.firestore().collection('users').doc(userUID).get()
-                  const username = userSnap.get('username')
-                  unanswered.push({
-                    id: doc.id,
-                    ref: doc.ref,
-                    userUID,
-                    username,
-                    ...docData
-                  })
-                }
-              }
+        if (changeType === 'added') {
+          if (!newDiagnoses.find(diagnose => diagnose.id === doc.id)) {
+            const docData = doc.data()
+            const userUID = getUserUIDFromDiagnoseRef(doc.ref)
+            const userSnap = await firebase.firestore().collection('users').doc(userUID).get()
+            const username = userSnap.get('username')
 
-              if (changeType === 'removed') {
-                unanswered = unanswered.filter(diagnose => diagnose.id !== doc.id)
-              }
+            newDiagnoses.push({
+              id: doc.id,
+              ref: doc.ref,
+              userUID,
+              username,
+              ...docData
             })
-          )
+          }
+        }
 
-          setDiagnoses([...unanswered])
-        })
+        if (changeType === 'removed') {
+          newDiagnoses = newDiagnoses.filter(diagnose => diagnose.id !== doc.id)
+        }
+      })
+    )
+
+    if (filter) {
+      newDiagnoses = newDiagnoses.filter(filter)
     }
 
-    attachQueryListenerForUnansweredDiagnoses()
+    setDiagnoses([...newDiagnoses])
+  }
+
+  useEffect(() => {
+    const attachQueryListener = () => {
+      return query(onSnapshot)
+    }
+
+    return attachQueryListener()
   }, [])
 
   useEffect(() => {
