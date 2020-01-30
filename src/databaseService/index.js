@@ -154,6 +154,26 @@ export const addNewUserData = async (userUID, userData) => {
   }
 }
 
+export const addDiagnoseResponse = async (diagnoseUID, response) => {
+  try {
+    const userUID = AuthenticationService.getCurrentUserUID()
+    const { username } = await get(`users/${userUID}`)
+    const responsePath = `users/${userUID}/requests/${diagnoseUID}/responses`
+
+    const responseData = {
+      answer: response,
+      answeredByUID: userUID
+    }
+
+    const responseReference = await add(responsePath, responseData)
+    const responseFetch = await responseReference.get()
+
+    return responseFetch.data()
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
 export default {
   get,
   update,
