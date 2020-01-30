@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, memo } from 'react'
 import { Image, View } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import PropTypes from 'prop-types'
 import DrCannabisLogo from '~/assets/images/DrCannabis.png'
@@ -8,7 +9,7 @@ import styles, { CAROUSEL_SLIDER_WIDTH, ITEM_WIDTH, ITEM_HEIGHT } from './styles
 const CarouselImage = ({ uri }) => {
   return (
     <View style={styles.carouselImageContainer}>
-      <Image
+      <FastImage
         style={uri ? styles.carouselImage : styles.placeholder}
         source={uri ? { uri } : DrCannabisLogo}
       />
