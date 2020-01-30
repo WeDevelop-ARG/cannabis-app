@@ -162,7 +162,6 @@ export const addDiagnoseResponse = async (diagnoseUID, response) => {
 
     const responseData = {
       answer: response,
-      answeredBy: username,
       answeredByUID: userUID
     }
 
