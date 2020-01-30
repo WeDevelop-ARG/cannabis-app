@@ -9,6 +9,7 @@ import Background from '~/components/Background'
 import { Title } from '~/components/texts'
 import Logo from '~/components/Logo'
 import styles, { LOGO_WIDTH, LOGO_HEIGHT } from './styles'
+import notificationService from '../../notificationService'
 
 const MILLISECONDS_SHOWING_SPLASH_SCREEN = 1500
 
@@ -33,8 +34,12 @@ const getNextScreen = async () => {
   if (user) {
     const username = await getUsernameFromUser(user)
 
-    if (username) return 'MainApp'
-    else return 'UsernameRequest'
+    if (username) {
+      if (notificationService.popInitialNotification()) {
+        return 'MyDiagnoses'
+      }
+      return 'MainApp'
+    } else return 'UsernameRequest'
   }
 
   return 'SignUp'

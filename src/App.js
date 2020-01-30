@@ -14,6 +14,7 @@ import Onboarding from './screens/Onboarding'
 import MainApp from './screens/MainApp'
 import PrivacyPolicy from './screens/PrivacyPolicy'
 import { buildStackNavigator } from '~/components/StackNavigator'
+import * as notificationService from '~/notificationService'
 
 if (!__DEV__) {
   console.disableYellowBox = true
@@ -42,6 +43,9 @@ const MainNavigator = createSwitchNavigator(
 )
 
 const AppContainer = createAppContainer(MainNavigator)
+
+notificationService.configure()
+notificationService.setNotificationHandler(() => NavigationService.navigate('MyDiagnoses'))
 
 const App = () => (
   <>
