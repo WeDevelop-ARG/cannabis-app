@@ -9,7 +9,7 @@ import Background from '~/components/Background'
 import { Title } from '~/components/texts'
 import Logo from '~/components/Logo'
 import styles, { LOGO_WIDTH, LOGO_HEIGHT } from './styles'
-import notificationService from '../../notificationService'
+import * as notificationService from '../../notificationService'
 
 const MILLISECONDS_SHOWING_SPLASH_SCREEN = 1500
 
