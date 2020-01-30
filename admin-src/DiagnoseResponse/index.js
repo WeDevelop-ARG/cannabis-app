@@ -5,7 +5,8 @@ import { DiagnoseResponseForm } from '../DiagnoseResponseForm'
 import { DiagnoseInfo } from '../DiagnoseInfo'
 import { getDownloadURLFromImages } from '../utils'
 import { firebaseTimestampToMoment } from '../utils/date'
-import '../stylesheets/admin.css'
+import DiagnoseImages from '../DiagnoseImages'
+import classes from '../stylesheets/admin.css'
 import { getUserUIDFromDiagnoseRef } from '../utils/diagnose'
 
 export const DiagnoseResponse = () => {
@@ -105,6 +106,7 @@ export const DiagnoseResponse = () => {
   }
 
   const fetchDiagnoseImagesAndSetAsCurrent = async (diagnose) => {
+    setCurrentDiagnose(null)
     const imagesSources = await getDownloadURLFromImages(diagnose.imageReferences)
     setCurrentDiagnose({
       ...diagnose,
@@ -113,19 +115,18 @@ export const DiagnoseResponse = () => {
   }
 
   return (
-    <div className='row'>
-      <ListGroup className='column'>
+    <div className={classes.row}>
+      <ListGroup className={classes.column}>
         {diagnoses && diagnoses.map((diagnose, index) => (
           <ListGroup.Item action key={index} onClick={() => fetchDiagnoseImagesAndSetAsCurrent(diagnoses[index])}>
             {diagnose.id}{' '} - {diagnose.username} ({firebaseTimestampToMoment(diagnose.createdAt).format('LL')})
           </ListGroup.Item>
         ))}
       </ListGroup>
-      <div className='diagnose-info-column'>
+      <div className={classes.diagnoseInfoColumn}>
         {currentDiagnose && <DiagnoseInfo diagnose={currentDiagnose} />}
-      </div>
-      <div className='column'>
         {currentDiagnose && <DiagnoseResponseForm handleSubmit={handleSubmit} isSubmitting={isSubmitting} />}
+        {currentDiagnose && <DiagnoseImages imagesSources={currentDiagnose.imagesSources} />}
       </div>
     </div>
   )
