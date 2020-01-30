@@ -47,11 +47,3 @@ export const disableHandler = () => {
 export const popInitialNotification = () => {
   return _notifications.shift()
 }
-
-export default {
-  configure,
-  setNotificationHandler,
-  enableHandler,
-  disableHandler,
-  popInitialNotification
-}
