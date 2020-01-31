@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import { ToastAndroid } from 'react-native'
-import NetInfo from '@react-native-community/netinfo'
 import * as firebase from 'firebase'
 import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
@@ -11,6 +10,7 @@ import { Title } from '~/components/texts'
 import Logo from '~/components/Logo'
 import styles, { LOGO_WIDTH, LOGO_HEIGHT } from './styles'
 import * as notificationService from '~/notificationService'
+import NetInfo from '@react-native-community/netinfo'
 
 const MILLISECONDS_SHOWING_SPLASH_SCREEN = 1500
 
@@ -54,34 +54,27 @@ const showToast = message => {
   ToastAndroid.show(message, ToastAndroid.LONG)
 }
 
-const delayedNavigate = async (waitTime, screenToNavigate) => {
-  await new Promise((resolve) => setTimeout(resolve, waitTime))
-  NavigationService.navigate(screenToNavigate)
-}
-
 const LoadingScreen = () => {
   AnalyticsService.setCurrentScreenName('Loading Screen')
-  const [screenToNavigate, setScreenToNavigate] = useState('')
-  const [mountedMilliseconds, setMountedMilliseconds] = useState(null)
-  const [alreadyNavigate, setAlreadyNavigate] = useState(false)
 
   useEffect(() => {
-    if (screenToNavigate && !alreadyNavigate) {
-      const timeEllapsed = Date.now() - mountedMilliseconds
-      setAlreadyNavigate(true)
-      delayedNavigate(MILLISECONDS_SHOWING_SPLASH_SCREEN - timeEllapsed, screenToNavigate)
-    }
-  }, [screenToNavigate])
+    let screenToNavigate
+    let timeoutFired = false
 
-  useEffect(() => {
-    setMountedMilliseconds(Date.now())
+    setTimeout(() => {
+      if (screenToNavigate) NavigationService.navigate(screenToNavigate)
 
-    getNextScreen()
-      .then(nextScreen => setScreenToNavigate(nextScreen))
-      .catch(err => {
-        console.error(err)
-        showToast('An error occurred, try again later')
-      })
+      timeoutFired = true
+    }, MILLISECONDS_SHOWING_SPLASH_SCREEN)
+
+    getNextScreen().then(nextScreen => {
+      if (timeoutFired) NavigationService.navigate(nextScreen)
+
+      screenToNavigate = nextScreen
+    }).catch(err => {
+      console.error(err)
+      showToast('An error occurred, try again later')
+    })
   }, [])
 
   return (
