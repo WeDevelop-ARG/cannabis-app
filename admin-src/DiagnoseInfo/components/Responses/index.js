@@ -17,7 +17,7 @@ const Responses = ({ diagnose }) => {
           key={key}
           text={response.answer}
           date={firebaseTimestampToMoment(response.createdAt).format('LLL')}
-          isAdmin={response.answeredBy !== diagnose.username}
+          isAdmin={Boolean(response.answeredBy)}
         />
       )
 
@@ -28,7 +28,9 @@ const Responses = ({ diagnose }) => {
   }, [])
 
   const scrollToBottom = (ref) => {
-    ref.scrollTop = ref.scrollHeight
+    if (ref && ref.scrollHeight) {
+      ref.scrollTop = ref.scrollHeight
+    }
   }
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { View, ActivityIndicator } from 'react-native'
 import Carousel from '~/components/Carousel'
 import { isEmpty } from 'lodash'
@@ -52,4 +52,4 @@ const MyCarousel = ({ images }) => {
   )
 }
 
-export default MyCarousel
+export default memo(MyCarousel)

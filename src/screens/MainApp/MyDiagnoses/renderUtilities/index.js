@@ -1,7 +1,7 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
 import NavigationService from '~/navigationService'
 import Diagnose from '../components/Diagnose'
+import Button from '~/components/buttons/Button'
 import { isRequestSolved } from '~/mixins/diagnose/isRequestSolved'
 
 const goToDetailedDiagnoseScreen = (diagnose) => {
@@ -12,7 +12,7 @@ const renderDiagnose = (diagnose, key) => {
   const answerQuantity = diagnose.amountOfAnswers || 0
 
   return (
-    <TouchableOpacity
+    <Button
       onPress={() => goToDetailedDiagnoseScreen(diagnose)}
     >
       <Diagnose
@@ -23,7 +23,7 @@ const renderDiagnose = (diagnose, key) => {
         answerQuantity={answerQuantity}
         solved={isRequestSolved(diagnose)}
       />
-    </TouchableOpacity>
+    </Button>
   )
 }
 

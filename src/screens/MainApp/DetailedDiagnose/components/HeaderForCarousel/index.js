@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { View } from 'react-native'
 import pluralize from 'pluralize'
 import { BackButton } from '~/components/buttons'
@@ -22,4 +22,4 @@ const Header = ({ photoQuantity, onGoBack }) => (
   </View>
 )
 
-export default Header
+export default memo(Header)
