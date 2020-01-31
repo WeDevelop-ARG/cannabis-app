@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, memo } from 'react'
-import { Image, View } from 'react-native'
+import { View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import PropTypes from 'prop-types'
