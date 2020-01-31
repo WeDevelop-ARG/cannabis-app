@@ -28,7 +28,7 @@ const Responses = ({ diagnose }) => {
   }, [])
 
   const scrollToBottom = (ref) => {
-    if (ref && ref.scrollTop && ref.scrollHeight) {
+    if (ref && ref.scrollHeight) {
       ref.scrollTop = ref.scrollHeight
     }
   }
