@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { ToastAndroid } from 'react-native'
+import NetInfo from '@react-native-community/netinfo'
 import * as firebase from 'firebase'
 import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
@@ -9,7 +10,7 @@ import Background from '~/components/Background'
 import { Title } from '~/components/texts'
 import Logo from '~/components/Logo'
 import styles, { LOGO_WIDTH, LOGO_HEIGHT } from './styles'
-import notificationService from '../../notificationService'
+import * as notificationService from '~/notificationService'
 
 const MILLISECONDS_SHOWING_SPLASH_SCREEN = 1500
 
@@ -25,6 +26,10 @@ const getCurrentUser = () => {
 const getUsernameFromUser = user => DatabaseService.queryUsernameFromEmail(user.email)
 
 const getNextScreen = async () => {
+  const netStatus = await NetInfo.fetch()
+
+  if (!netStatus.isConnected) return 'NoConnection'
+
   const onboardingSeen = await CacheService.getItem('OnboardingSeen')
 
   if (!onboardingSeen) return 'Onboarding'
@@ -49,27 +54,34 @@ const showToast = message => {
   ToastAndroid.show(message, ToastAndroid.LONG)
 }
 
+const delayedNavigate = async (waitTime, screenToNavigate) => {
+  await new Promise((resolve) => setTimeout(resolve, waitTime))
+  NavigationService.navigate(screenToNavigate)
+}
+
 const LoadingScreen = () => {
   AnalyticsService.setCurrentScreenName('Loading Screen')
+  const [screenToNavigate, setScreenToNavigate] = useState('')
+  const [mountedMilliseconds, setMountedMilliseconds] = useState(null)
+  const [alreadyNavigate, setAlreadyNavigate] = useState(false)
 
   useEffect(() => {
-    let screenToNavigate
-    let timeoutFired = false
+    if (screenToNavigate && !alreadyNavigate) {
+      const timeEllapsed = Date.now() - mountedMilliseconds
+      setAlreadyNavigate(true)
+      delayedNavigate(MILLISECONDS_SHOWING_SPLASH_SCREEN - timeEllapsed, screenToNavigate)
+    }
+  }, [screenToNavigate])
 
-    setTimeout(() => {
-      if (screenToNavigate) NavigationService.navigate(screenToNavigate)
+  useEffect(() => {
+    setMountedMilliseconds(Date.now())
 
-      timeoutFired = true
-    }, MILLISECONDS_SHOWING_SPLASH_SCREEN)
-
-    getNextScreen().then(nextScreen => {
-      if (timeoutFired) NavigationService.navigate(nextScreen)
-
-      screenToNavigate = nextScreen
-    }).catch(err => {
-      console.error(err)
-      showToast('An error occurred, try again later')
-    })
+    getNextScreen()
+      .then(nextScreen => setScreenToNavigate(nextScreen))
+      .catch(err => {
+        console.error(err)
+        showToast('An error occurred, try again later')
+      })
   }, [])
 
   return (

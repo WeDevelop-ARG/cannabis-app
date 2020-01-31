@@ -13,6 +13,7 @@ import LoadingScreen from './screens/LoadingScreen'
 import Onboarding from './screens/Onboarding'
 import MainApp from './screens/MainApp'
 import PrivacyPolicy from './screens/PrivacyPolicy'
+import NoConnection from './screens/NoConnection'
 import { buildStackNavigator } from '~/components/StackNavigator'
 import * as notificationService from '~/notificationService'
 
@@ -38,7 +39,8 @@ const MainNavigator = createSwitchNavigator(
     Login,
     UsernameRequest,
     Onboarding,
-    StackNavigator
+    StackNavigator,
+    NoConnection
   }
 )
 
