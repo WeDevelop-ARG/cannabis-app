@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { ListGroup } from 'react-bootstrap'
 import { DiagnoseResponseForm } from '../DiagnoseResponseForm'
 import { DiagnoseInfo } from '../DiagnoseInfo'
-import { getDownloadURLFromImages } from '../utils'
+import { getDownloadURLFromImages } from '../services/storage/getDownloadURLFromImages'
 import { firebaseTimestampToMoment } from '../utils/date'
 import DiagnoseImages from '../DiagnoseImages'
 import classes from '../stylesheets/admin.css'
@@ -110,10 +110,10 @@ export const DiagnoseResponse = ({ query }) => {
 
   const fetchDiagnoseImagesAndSetAsCurrent = async (diagnose) => {
     setCurrentDiagnose(null)
-    const imagesSources = await getDownloadURLFromImages(diagnose.imageReferences)
+    const images = await getDownloadURLFromImages(diagnose.imageReferences)
     setCurrentDiagnose({
       ...diagnose,
-      imagesSources
+      images
     })
   }
 
@@ -129,7 +129,7 @@ export const DiagnoseResponse = ({ query }) => {
       <div className={classes.diagnoseInfoColumn}>
         {currentDiagnose && <DiagnoseInfo diagnose={currentDiagnose} />}
         {currentDiagnose && <DiagnoseResponseForm handleSubmit={handleSubmit} isSubmitting={isSubmitting} />}
-        {currentDiagnose && <DiagnoseImages imagesSources={currentDiagnose.imagesSources} />}
+        {currentDiagnose && <DiagnoseImages images={currentDiagnose.images} />}
       </div>
     </div>
   )
