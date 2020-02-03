@@ -10,9 +10,10 @@ import { getURL } from '~/mixins/storage'
 import { renderDiagnoses } from './renderUtilities'
 import Background from '~/components/Background'
 import NoDiagnoses from './components/NoDiagnoses'
-import Header from './components/Header'
+import StaticHeader from './components/StaticHeader'
 import DetailedDiagnose from '../DetailedDiagnose'
-import { OFFSET_THRESHOLD_TO_SNAP_FLATLIST } from './constants'
+import HeaderForScrolling from './components/HeaderForScrolling'
+import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
 import styles from './styles'
 
 const MyDiagnoses = () => {
@@ -76,34 +77,32 @@ const MyDiagnoses = () => {
 
   return (
     <Background>
+      <HeaderForScrolling show={scrolling} />
       <View style={styles.container}>
         <ForceRerenderOnNavigation resetStateFunction={refetchDiagnoses} />
-        <Header isScrolling={scrolling} />
         {downloadingDiagnoses && <ActivityIndicator size='large' />}
         {diagnoses &&
           <FlatList
             ref={flatListRef}
             data={diagnoses}
             showsVerticalScrollIndicator={false}
+            ListHeaderComponent={<StaticHeader />}
             renderItem={({ item }) => item}
             keyExtractor={item => String(diagnoses.indexOf(item))}
             onRefresh={getRenderedDiagnoses}
             refreshing={refreshing}
             disableVirtualization={false}
-            onScrollBeginDrag={() => setScrolling(true)}
-            onScrollEndDrag={({ nativeEvent }) => {
-              const snapToTopIfScrollingNearTheFirstElement = () => {
-                if (nativeEvent.contentOffset.y < OFFSET_THRESHOLD_TO_SNAP_FLATLIST) {
-                  flatListRef.current.scrollToIndex({ animated: true, index: 0 })
-                  setScrolling(false)
-                } else {
+            onScroll={({ nativeEvent }) => {
+              const showHiddenComponentsIfScrolling = () => {
+                if (nativeEvent.contentOffset.y > OFFSET_THRESHOLD_TO_CHANGE_HEADER) {
                   setScrolling(true)
+                } else {
+                  setScrolling(false)
                 }
               }
 
-              snapToTopIfScrollingNearTheFirstElement()
+              showHiddenComponentsIfScrolling()
             }}
-            contentContainerStyle={styles.flatListContainer}
           />}
       </View>
     </Background>

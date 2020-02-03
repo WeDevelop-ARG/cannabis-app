@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { View } from 'react-native'
 import pluralize from 'pluralize'
 import { firebaseTimestampToMoment } from '~/mixins/date'
@@ -42,4 +42,4 @@ const Diagnose = ({ thumbnail, firebaseTimestamp, description, answerQuantity, s
   )
 }
 
-export default Diagnose
+export default memo(Diagnose)

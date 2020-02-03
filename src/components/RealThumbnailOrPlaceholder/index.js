@@ -1,12 +1,13 @@
 import React from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import { scale } from 'react-native-size-matters'
 import DrCannabis from '~/assets/images/DrCannabis.png'
 
 const THUMBNAIL_SIZE = scale(50)
 
 const RealThumbnailOrPlaceholder = ({ thumbnail, style }) => (
-  <Image
+  <FastImage
     source={thumbnail ? { uri: thumbnail } : DrCannabis}
     style={[baseStyles.thumbnail, style]}
   />

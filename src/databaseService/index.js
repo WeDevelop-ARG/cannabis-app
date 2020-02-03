@@ -156,7 +156,6 @@ export const addNewUserData = async (userUID, userData) => {
 export const addDiagnoseResponse = async (diagnoseUID, response) => {
   try {
     const userUID = AuthenticationService.getCurrentUserUID()
-    const { username } = await get(`users/${userUID}`)
     const responsePath = `users/${userUID}/requests/${diagnoseUID}/responses`
 
     const responseData = {
