@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
-import { createStackNavigator } from 'react-navigation-stack'
-import { isEmpty } from 'lodash'
+import { isEmpty, intersection } from 'lodash'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
 import { renderDiagnose } from './renderUtilities'
@@ -10,6 +9,7 @@ import NoDiagnoses from './components/NoDiagnoses'
 import StaticHeader from './components/StaticHeader'
 import DetailedDiagnose from '../DetailedDiagnose'
 import HeaderForScrolling from './components/HeaderForScrolling'
+import { buildStackNavigator } from '~/components/StackNavigator'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
 import styles from './styles'
 
@@ -107,9 +107,24 @@ MyDiagnoses.navigationOptions = () => ({
   header: null
 })
 
-const MyDiagnosesStack = createStackNavigator({
-  MyDiagnoses: MyDiagnoses,
-  DetailedDiagnose: DetailedDiagnose
-})
+const MyDiagnosesStack = buildStackNavigator(
+  {
+    MyDiagnoses,
+    DetailedDiagnose
+  },
+  {
+    initialRouteName: 'MyDiagnoses'
+  }
+)
+
+const allowedRoutesToShowTabBar = ['MyDiagnoses']
+
+MyDiagnosesStack.navigationOptions = ({ navigation }) => {
+  if (navigation.state.routes.length <= 1) return {}
+
+  const routesInHistoryWithTabBar = intersection(navigation.state.routes, allowedRoutesToShowTabBar)
+
+  return { tabBarVisible: !isEmpty(routesInHistoryWithTabBar) }
+}
 
 export default MyDiagnosesStack
