@@ -182,6 +182,16 @@ export const getUsernameByUID = async (userUID) => {
   }
 }
 
+export const fetchDiagnosesFromCurrentUser = async (onSnapshot) => {
+  const userUID = AuthenticationService.getCurrentUserUID()
+
+  return firebase
+    .firestore()
+    .collection(`users/${userUID}/requests`)
+    .orderBy('createdAt', 'asc')
+    .onSnapshot(onSnapshot)
+}
+
 export default {
   get,
   update,

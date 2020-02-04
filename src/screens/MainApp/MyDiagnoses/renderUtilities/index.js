@@ -8,7 +8,7 @@ const goToDetailedDiagnoseScreen = (diagnose) => {
   NavigationService.navigate('DetailedDiagnose', { diagnose })
 }
 
-const renderDiagnose = (diagnose, key) => {
+export const renderDiagnose = (diagnose, key) => {
   const answerQuantity = diagnose.amountOfAnswers || 0
 
   return (

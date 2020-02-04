@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
-import { isNull, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 import * as AnalyticsService from '~/analyticsService'
-import { ForceRerenderOnNavigation } from '~/navigationService'
 import * as DatabaseService from '~/databaseService'
-import { sortDiagnosesByMostRecentCreation } from '~/mixins/diagnose'
-import { getURL } from '~/mixins/storage'
-import { renderDiagnoses } from './renderUtilities'
+import { renderDiagnose } from './renderUtilities'
 import Background from '~/components/Background'
 import NoDiagnoses from './components/NoDiagnoses'
 import StaticHeader from './components/StaticHeader'
@@ -16,60 +13,70 @@ import HeaderForScrolling from './components/HeaderForScrolling'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
 import styles from './styles'
 
+const buildDiagnose = (doc) => {
+  const diagnose = doc.data({ serverTimestamps: 'estimate' })
+  diagnose.thumbnail = diagnose.imageReferences[0]
+  return diagnose
+}
+
+const processAddedDiagnose = (diagnoses, doc) => {
+  const _diagnoses = [...diagnoses]
+  const builtDiagnose = buildDiagnose(doc)
+  _diagnoses.unshift({ builtDiagnose, id: doc.id })
+  return _diagnoses
+}
+
+const processModifiedDiagnose = (diagnoses, doc) => {
+  const _diagnoses = [...diagnoses]
+  const builtDiagnose = buildDiagnose(doc)
+  const index = _diagnoses.findIndex(diagnose => diagnose.id === doc.id)
+  _diagnoses[index] = { builtDiagnose, id: doc.id }
+  return _diagnoses
+}
+
+const processRemovedDiagnose = (diagnoses, doc) => {
+  return diagnoses.filter((diagnose) => diagnose.id !== doc.id)
+}
+
+const isScrollWithinSnapThreshold = (nativeEvent) => {
+  return nativeEvent.contentOffset.y > OFFSET_THRESHOLD_TO_CHANGE_HEADER
+}
+
 const MyDiagnoses = () => {
   const flatListRef = useRef()
-  const [diagnoses, setDiagnoses] = useState(null)
+  const [diagnoses, setDiagnoses] = useState([])
   const [downloadingDiagnoses, setDownloadingDiagnoses] = useState(true)
-  const [downloadingDiagnosesWhenNoDiagnoses, setDownloadingDiagnosesWhenNoDiagnoses] = useState(true)
-  const [refetch, toggleRefetch] = useState(null)
-  const [refreshing, setRefreshing] = useState(false)
   const [scrolling, setScrolling] = useState(false)
 
   AnalyticsService.setCurrentScreenName('My Diagnoses')
 
-  const refetchDiagnoses = () => {
-    toggleRefetch(!refetch)
-  }
+  useEffect(
+    () => {
+      const unsuscribe = DatabaseService.fetchDiagnosesFromCurrentUser(async (snapshot) => {
+        setDownloadingDiagnoses(true)
+        snapshot.docChanges().map(docChange => {
+          const doc = docChange.doc
+          const changeType = docChange.type
 
-  const getRenderedDiagnoses = async () => {
-    setDownloadingDiagnosesWhenNoDiagnoses(true)
-    setRefreshing(true)
-    try {
-      const downloadedData = await DatabaseService.getDiagnosesFromCurrentUser()
-
-      const downloadedDataWithThumbnail = await Promise.all(
-        downloadedData.map(async (diagnose, index) => {
-          diagnose.thumbnail = await getURL(diagnose.imageReferences[0])
-          return diagnose
+          switch (changeType) {
+            case 'added': setDiagnoses(v => processAddedDiagnose(v, doc)); break
+            case 'modified': setDiagnoses(v => processModifiedDiagnose(v, doc)); break
+            case 'removed': setDiagnoses(v => processRemovedDiagnose(v, doc)); break
+          }
         })
-      )
+        setDownloadingDiagnoses(false)
+      })
+      return () => { unsuscribe() }
+    },
+    []
+  )
 
-      const sortedData = sortDiagnosesByMostRecentCreation(downloadedDataWithThumbnail)
-      const renderedDiagnoses = renderDiagnoses(sortedData)
-
-      setDiagnoses(renderedDiagnoses)
-    } catch (error) {
-      setDiagnoses(null)
-    } finally {
-      setDownloadingDiagnoses(false)
-      setDownloadingDiagnosesWhenNoDiagnoses(false)
-      setRefreshing(false)
-    }
-  }
-
-  useEffect(() => {
-    if (refetch !== null) {
-      getRenderedDiagnoses()
-    }
-  }, [refetch])
-
-  if (!isNull(diagnoses) && isEmpty(diagnoses)) {
+  if (isEmpty(diagnoses)) {
     return (
       <Background>
-        <ForceRerenderOnNavigation resetStateFunction={refetchDiagnoses} />
         <NoDiagnoses />
         <View style={styles.noDiagnosesActivityIndicator}>
-          {downloadingDiagnosesWhenNoDiagnoses && <ActivityIndicator size='large' />}
+          {downloadingDiagnoses && <ActivityIndicator size='large' />}
         </View>
       </Background>
     )
@@ -79,30 +86,17 @@ const MyDiagnoses = () => {
     <Background>
       <HeaderForScrolling show={scrolling} />
       <View style={styles.container}>
-        <ForceRerenderOnNavigation resetStateFunction={refetchDiagnoses} />
-        {downloadingDiagnoses && <ActivityIndicator size='large' />}
         {diagnoses &&
           <FlatList
             ref={flatListRef}
             data={diagnoses}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<StaticHeader />}
-            renderItem={({ item }) => item}
-            keyExtractor={item => String(diagnoses.indexOf(item))}
-            onRefresh={getRenderedDiagnoses}
-            refreshing={refreshing}
+            renderItem={({ item }) => renderDiagnose(item.builtDiagnose, item.id)}
+            keyExtractor={item => item.id}
             disableVirtualization={false}
-            onScroll={({ nativeEvent }) => {
-              const showHiddenComponentsIfScrolling = () => {
-                if (nativeEvent.contentOffset.y > OFFSET_THRESHOLD_TO_CHANGE_HEADER) {
-                  setScrolling(true)
-                } else {
-                  setScrolling(false)
-                }
-              }
-
-              showHiddenComponentsIfScrolling()
-            }}
+            contentContainerStyle={styles.flatListContainer}
+            onScroll={({ nativeEvent }) => { setScrolling(isScrollWithinSnapThreshold(nativeEvent)) }}
           />}
       </View>
     </Background>
