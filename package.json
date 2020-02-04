@@ -22,6 +22,7 @@
     "devtools": "react-devtools"
   },
   "dependencies": {
+    "@react-native-community/netinfo": "^5.3.3",
     "@react-native-firebase/analytics": "6.0.3",
     "@react-native-firebase/app": "6.0.3",
     "@react-native-firebase/messaging": "6.0.3",
