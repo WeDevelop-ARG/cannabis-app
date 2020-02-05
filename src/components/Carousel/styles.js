@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     width: '100%',
     resizeMode: 'center',
     alignSelf: 'center',
-    backgroundColor: theme.colors.gray2
+    backgroundColor: theme.colors.black
   }
 })
 
