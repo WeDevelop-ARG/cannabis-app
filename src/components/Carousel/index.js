@@ -3,17 +3,30 @@ import { View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import PropTypes from 'prop-types'
-import DrCannabisLogo from '~/assets/images/DrCannabis.png'
+import { SvgXml } from 'react-native-svg'
+import logo from '~/assets/images/logo.svg'
 import styles, { CAROUSEL_SLIDER_WIDTH, ITEM_WIDTH, ITEM_HEIGHT } from './styles'
 
 const CarouselImage = ({ uri }) => {
   return (
-    <View style={styles.carouselImageContainer}>
-      <FastImage
-        style={uri ? styles.carouselImage : styles.placeholder}
-        source={uri ? { uri } : DrCannabisLogo}
-      />
-    </View>
+    uri ? (
+      <View style={styles.carouselImageContainer}>
+        <FastImage
+          style={styles.carouselImage}
+          source={{ uri }}
+        />
+      </View>
+    ) : (
+      <View style={styles.carouselImageContainer}>
+        <View style={styles.placeholder}>
+          <SvgXml
+            width='100%'
+            height='100%'
+            xml={logo}
+          />
+        </View>
+      </View>
+    )
   )
 }
 

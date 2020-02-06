@@ -182,7 +182,7 @@ export const getUsernameByUID = async (userUID) => {
   }
 }
 
-export const fetchDiagnosesFromCurrentUser = async (onSnapshot) => {
+export const fetchDiagnosesFromCurrentUser = (onSnapshot) => {
   const userUID = AuthenticationService.getCurrentUserUID()
 
   return firebase

@@ -15,7 +15,9 @@ import styles from './styles'
 
 const buildDiagnose = (doc) => {
   const diagnose = doc.data({ serverTimestamps: 'estimate' })
+  diagnose.id = doc.id
   diagnose.thumbnail = diagnose.imageReferences[0]
+
   return diagnose
 }
 
@@ -23,6 +25,7 @@ const processAddedDiagnose = (diagnoses, doc) => {
   const _diagnoses = [...diagnoses]
   const builtDiagnose = buildDiagnose(doc)
   _diagnoses.unshift({ builtDiagnose, id: doc.id })
+
   return _diagnoses
 }
 
@@ -31,6 +34,7 @@ const processModifiedDiagnose = (diagnoses, doc) => {
   const builtDiagnose = buildDiagnose(doc)
   const index = _diagnoses.findIndex(diagnose => diagnose.id === doc.id)
   _diagnoses[index] = { builtDiagnose, id: doc.id }
+
   return _diagnoses
 }
 
