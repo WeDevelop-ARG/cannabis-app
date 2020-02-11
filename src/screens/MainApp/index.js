@@ -1,5 +1,5 @@
 import React from 'react'
-import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation-tabs'
 import Profile from './Profile'
 import DiagnoseRequest from './DiagnoseRequest'
 import MyDiagnoses from './MyDiagnoses'
@@ -9,7 +9,7 @@ import DiagnoseRequestIcon from './resources/tabIcons/MyDiagnosesTabSVG'
 import ProfileIcon from './resources/tabIcons/ProfileTabSVG'
 import { theme } from '~/constants'
 
-const MainApp = createBottomTabNavigator(
+const MainApp = createMaterialTopTabNavigator(
   {
     DiagnoseRequest: {
       screen: DiagnoseRequest,
@@ -39,11 +39,15 @@ const MainApp = createBottomTabNavigator(
       }
     }
   }, {
+    tabBarPosition: 'bottom',
+    swipeEnabled: true,
     tabBarOptions: {
       showLabel: false,
       activeTintColor: theme.colors.primary,
       inactiveTintColor: theme.colors.gray,
-      style: styles.tabBarStyle
+      style: styles.tabBarStyle,
+      indicatorStyle: styles.indicatorStyle,
+      showIcon: true
     },
     initialRouteName: 'DiagnoseRequest'
   }

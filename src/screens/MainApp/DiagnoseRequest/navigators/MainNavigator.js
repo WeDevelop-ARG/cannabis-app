@@ -22,21 +22,16 @@ const Navigator = buildStackNavigator(
 
 const MainNavigator = createAppContainer(Navigator)
 
+const allowedRoutesToShowTabBar = ['MainScreen', 'NoPhotoDisclaimer', 'FinishRequest']
+
 MainNavigator.navigationOptions = ({ navigation }) => {
-  let tabBarVisible
-  const allowedRoutesToShowTabBar = ['MainScreen', 'NoPhotoDisclaimer', 'FinishRequest']
+  if (navigation.state.routes.length <= 1) return {}
 
-  if (navigation.state.routes.length > 1) {
-    navigation.state.routes.map(route => {
-      if (includes(allowedRoutesToShowTabBar, route.routeName)) {
-        tabBarVisible = true
-      } else {
-        tabBarVisible = false
-      }
-    })
-  }
+  const routes = navigation.state.routes
+  const latestRouteName = routes[routes.length - 1].routeName
+  const tabBarVisible = includes(allowedRoutesToShowTabBar, latestRouteName)
 
-  return { tabBarVisible }
+  return { tabBarVisible, swipeEnabled: tabBarVisible }
 }
 
 export default MainNavigator

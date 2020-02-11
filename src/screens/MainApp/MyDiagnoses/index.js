@@ -137,6 +137,6 @@ MyDiagnosesStack.navigationOptions = ({ navigation }) => {
   const latestRouteName = routes[routes.length - 1].routeName
   const tabBarVisible = includes(allowedRoutesToShowTabBar, latestRouteName)
 
-  return { tabBarVisible }
+  return { tabBarVisible, swipeEnabled: tabBarVisible }
 }
 export default MyDiagnosesStack
