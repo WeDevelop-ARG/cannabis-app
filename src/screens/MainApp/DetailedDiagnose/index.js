@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { View, FlatList } from 'react-native'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
+import { View, FlatList, Alert } from 'react-native'
 import { isEmpty } from 'lodash'
 import pluralize from 'pluralize'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
-import { ForceCleanUpOnScreenLeave, ForceRerenderOnNavigation } from '~/navigationService'
+import NavigationService, { ForceCleanUpOnScreenLeave, ForceRerenderOnNavigation } from '~/navigationService'
 import Background from '~/components/Background'
 import { Header as HeaderText } from '~/components/texts'
 import VerticalSeparator from '~/components/VerticalSeparator'
@@ -22,9 +22,54 @@ import StatusBarOnScroll from './components/StatusBarOnScroll'
 import NewComment from './components/NewComment'
 import calendar from '~/assets/images/DetailedDiagnose/calendar.svg'
 import comments from '~/assets/images/DetailedDiagnose/comments.svg'
+import solved from '~/assets/images/DetailedDiagnose/solved.svg'
 import { renderResponses, renderResponse } from './renderUtilities'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
+import { useActionSheet } from '@expo/react-native-action-sheet'
 import styles from './styles'
+
+const goToSolveDiagnoseScreen = (diagnose) => {
+  NavigationService.navigate('SolutionRequest', { diagnose })
+}
+
+const reopenDiagnose = async (diagnose) => {
+  try {
+    await DatabaseService.setDiagnoseSolvedMark(diagnose.id, false)
+  } catch (error) {
+    Alert.alert(
+      'Error',
+      'No se pudo volver a abrir su solicitud. Intente nuevamente más tarde.'
+    )
+  }
+}
+
+const removeDiagnose = async (diagnose, navigation) => {
+  try {
+    await DatabaseService.setDiagnoseRemovedMark(diagnose.id, true)
+    navigation.pop()
+  } catch (error) {
+    Alert.alert(
+      'Error',
+      'No se pudo eliminar su solicitud. Intente nuevamente más tarde.'
+    )
+  }
+}
+
+const askForDeleteConfirmation = (diagnose, navigation) => {
+  Alert.alert(
+    'Eliminar consulta',
+    '¿Está seguro de que desea eliminar su consulta?',
+    [
+      {
+        text: 'Si',
+        onPress: () => removeDiagnose(diagnose, navigation)
+      },
+      {
+        text: 'No'
+      }
+    ]
+  )
+}
 
 const DetailedDiagnose = ({ navigation }) => {
   const diagnose = navigation.state.params.diagnose
@@ -35,6 +80,7 @@ const DetailedDiagnose = ({ navigation }) => {
   const [amountOfResponses, setAmountOfResponses] = useState(diagnose.amountOfAnswers || 0)
   const [fetchedResponses, setFetchedResponses] = useState(false)
   const [error, setError] = useState(null)
+  const { showActionSheetWithOptions } = useActionSheet()
   const date = firebaseTimestampToMoment(diagnose.createdAt, 'es').format('D MMM')
 
   AnalyticsService.setCurrentScreenName('Detailed Diagnose')
@@ -53,6 +99,38 @@ const DetailedDiagnose = ({ navigation }) => {
     isScrolling ? StatusBarOnScroll.setAsCurrent() : StatusBarForCarousel.setAsCurrent()
   }
 
+  const decideIfCloseOrOpen = useCallback(
+    () => {
+      if (!diagnose.isSolved) {
+        goToSolveDiagnoseScreen(diagnose)
+      } else {
+        reopenDiagnose(diagnose)
+      }
+    },
+    [diagnose]
+  )
+
+  const goToSolveCurrentDiagnose = useCallback(() => goToSolveDiagnoseScreen(diagnose), [diagnose])
+  const reopenCurrentDiagnose = useCallback(() => reopenDiagnose(diagnose), [diagnose])
+
+  const onThreeDotsPress = useCallback(() => {
+    const options = [(diagnose.isSolved) ? 'Reabrir solicitud' : 'Resolver solicitud', 'Eliminar', 'Cancelar']
+    const cancelButtonIndex = 2
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 0: decideIfCloseOrOpen(); break
+          case 1: askForDeleteConfirmation(diagnose, navigation); break
+        }
+      }
+    )
+  }, [diagnose, navigation])
+
   useEffect(() => {
     const buildResponses = async () => {
       const rawResponses = await DatabaseService.getResponsesForDiagnose(diagnose.id)
@@ -65,6 +143,8 @@ const DetailedDiagnose = ({ navigation }) => {
     buildResponses()
   }, [])
 
+  const solvedIcon = (diagnose.isSolved) ? 'Resuelto' : 'Abierto'
+
   useEffect(() => {
     const buildCarouselSection = () => {
       return (
@@ -73,6 +153,7 @@ const DetailedDiagnose = ({ navigation }) => {
           <HeaderForCarousel
             photoQuantity={diagnose.imageReferences.length}
             onGoBack={handleReturn}
+            onThreeDotsPress={onThreeDotsPress}
           />
           <Carousel images={diagnose.imageReferences} />
           <Metadata metadataContainerStyle={styles.metadataContainer}>
@@ -80,6 +161,12 @@ const DetailedDiagnose = ({ navigation }) => {
               style={styles.metadataAsColumn}
               data={date}
               svg={calendar}
+            />
+            <VerticalSeparator />
+            <Metadata.Item
+              style={styles.metadataAsColumn}
+              data={solvedIcon}
+              svg={solved}
             />
             <VerticalSeparator />
             <Metadata.Item
@@ -123,6 +210,9 @@ const DetailedDiagnose = ({ navigation }) => {
         onGoBack={handleReturn}
         date={date}
         commentCount={amountOfResponses}
+        solved={diagnose.isSolved}
+        onSolveTapped={goToSolveCurrentDiagnose}
+        onReopenTapped={reopenCurrentDiagnose}
       />
       <FlatList
         ref={flatListRef}

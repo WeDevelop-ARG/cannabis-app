@@ -16,6 +16,7 @@ import PrivacyPolicy from './screens/PrivacyPolicy'
 import NoConnection from './screens/NoConnection'
 import { buildStackNavigator } from '~/components/StackNavigator'
 import * as notificationService from '~/notificationService'
+import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 
 if (!__DEV__) {
   console.disableYellowBox = true
@@ -52,11 +53,13 @@ notificationService.setNotificationHandler(() => NavigationService.navigate('MyD
 const App = () => (
   <>
     <AppDefaultStatusBar />
-    <AppContainer
-      ref={navigatorRef => {
-        NavigationService.setTopLevelNavigator(navigatorRef)
-      }}
-    />
+    <ActionSheetProvider>
+      <AppContainer
+        ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef)
+        }}
+      />
+    </ActionSheetProvider>
   </>
 )
 

@@ -22,7 +22,15 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(4),
     paddingHorizontal: scale(16),
     borderRadius: moderateScale(2, 1),
-    marginRight: scale(24)
+    marginRight: scale(14)
+  },
+  rightContainer: {
+    flexDirection: 'row'
+  },
+  threeDotsButton: {
+    paddingVertical: verticalScale(4),
+    paddingHorizontal: scale(4),
+    marginRight: scale(16)
   }
 })
 

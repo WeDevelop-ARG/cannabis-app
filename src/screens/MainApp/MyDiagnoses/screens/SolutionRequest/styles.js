@@ -1,10 +1,15 @@
 import { StyleSheet } from 'react-native'
-import { verticalScale, moderateScale } from 'react-native-size-matters'
+import { verticalScale, moderateScale, scale } from 'react-native-size-matters'
 import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   scroll: {
     padding: theme.sizes.margin * 2
+  },
+  logo: {
+    marginTop: verticalScale(56),
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   title: {
     textAlign: 'center',
@@ -28,6 +33,9 @@ const styles = StyleSheet.create({
   },
   shadow: {
     marginTop: verticalScale(50)
+  },
+  cancel: {
+    marginRight: scale(20)
   }
 })
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
-import { isEmpty, intersection } from 'lodash'
+import { isEmpty, includes } from 'lodash'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
 import { renderDiagnose } from './renderUtilities'
@@ -8,6 +8,8 @@ import Background from '~/components/Background'
 import NoDiagnoses from './components/NoDiagnoses'
 import StaticHeader from './components/StaticHeader'
 import DetailedDiagnose from '../DetailedDiagnose'
+import SolutionRequest from './screens/SolutionRequest'
+import FinishScreen from './screens/FinishScreen'
 import HeaderForScrolling from './components/HeaderForScrolling'
 import { buildStackNavigator } from '~/components/StackNavigator'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
@@ -15,6 +17,7 @@ import styles from './styles'
 
 const buildDiagnose = (doc) => {
   const diagnose = doc.data({ serverTimestamps: 'estimate' })
+
   diagnose.id = doc.id
   diagnose.thumbnail = diagnose.imageReferences[0]
 
@@ -24,6 +27,7 @@ const buildDiagnose = (doc) => {
 const processAddedDiagnose = (diagnoses, doc) => {
   const _diagnoses = [...diagnoses]
   const builtDiagnose = buildDiagnose(doc)
+
   _diagnoses.unshift({ builtDiagnose, id: doc.id })
 
   return _diagnoses
@@ -33,6 +37,7 @@ const processModifiedDiagnose = (diagnoses, doc) => {
   const _diagnoses = [...diagnoses]
   const builtDiagnose = buildDiagnose(doc)
   const index = _diagnoses.findIndex(diagnose => diagnose.id === doc.id)
+
   _diagnoses[index] = { builtDiagnose, id: doc.id }
 
   return _diagnoses
@@ -114,21 +119,24 @@ MyDiagnoses.navigationOptions = () => ({
 const MyDiagnosesStack = buildStackNavigator(
   {
     MyDiagnoses,
-    DetailedDiagnose
+    DetailedDiagnose,
+    SolutionRequest,
+    FinishScreen
   },
   {
     initialRouteName: 'MyDiagnoses'
   }
 )
 
-const allowedRoutesToShowTabBar = ['MyDiagnoses']
+const allowedRoutesToShowTabBar = ['MyDiagnoses', 'FinishScreen']
 
 MyDiagnosesStack.navigationOptions = ({ navigation }) => {
   if (navigation.state.routes.length <= 1) return {}
 
-  const routesInHistoryWithTabBar = intersection(navigation.state.routes, allowedRoutesToShowTabBar)
+  const routes = navigation.state.routes
+  const latestRouteName = routes[routes.length - 1].routeName
+  const tabBarVisible = includes(allowedRoutesToShowTabBar, latestRouteName)
 
-  return { tabBarVisible: !isEmpty(routesInHistoryWithTabBar) }
+  return { tabBarVisible }
 }
-
 export default MyDiagnosesStack

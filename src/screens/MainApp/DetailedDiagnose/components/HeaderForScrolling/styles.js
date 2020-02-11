@@ -12,7 +12,12 @@ const styles = StyleSheet.create({
     top: verticalScale(12),
     backgroundColor: theme.colors.white,
     elevation: 1,
-    opacity: 0,
+    opacity: 0
+  },
+  hidden: {
+    zIndex: 0
+  },
+  visible: {
     zIndex: 1
   },
   backButton: {

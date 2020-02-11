@@ -91,7 +91,9 @@ export const addDiagnose = async (imageReferences, text) => {
       user,
       text,
       imageReferences,
-      amountOfAnswers: 0
+      amountOfAnswers: 0,
+      removedAt: 0,
+      isSolved: false
     }
     const newDiagnoseReference = await add(diagnosePath, newDiagnoseData)
 
@@ -184,12 +186,35 @@ export const getUsernameByUID = async (userUID) => {
 
 export const fetchDiagnosesFromCurrentUser = (onSnapshot) => {
   const userUID = AuthenticationService.getCurrentUserUID()
-
   return firebase
     .firestore()
     .collection(`users/${userUID}/requests`)
+    .where('removedAt', '==', 0)
     .orderBy('createdAt', 'asc')
     .onSnapshot(onSnapshot)
+}
+
+export const setDiagnoseRemovedMark = async (diagnoseUID, isRemoved) => {
+  try {
+    const userUID = AuthenticationService.getCurrentUserUID()
+    const removedData = {
+      removedAt: (isRemoved) ? firebase.firestore.FieldValue.serverTimestamp() : 0
+    }
+
+    return await update(`users/${userUID}/requests/${diagnoseUID}`, removedData)
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
+export const setDiagnoseSolvedMark = async (diagnoseUID, isSolved) => {
+  try {
+    const userUID = AuthenticationService.getCurrentUserUID()
+
+    return await update(`users/${userUID}/requests/${diagnoseUID}`, { isSolved: !!isSolved })
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
 }
 
 export default {

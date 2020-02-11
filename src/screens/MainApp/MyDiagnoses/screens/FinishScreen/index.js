@@ -1,18 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ScrollView, BackHandler } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import { Subtitle, Description, PrimaryButton } from '~/components'
 import * as AnalyticsService from '~/analyticsService'
 import Background from '~/components/Background'
-import Logo from './resources/logo.svg'
 import styles from './styles'
+import logo from '~/assets/images/FinishScreen/logo.svg'
 
-const FinishRequest = ({ navigation }) => {
-  AnalyticsService.setCurrentScreenName('Finish Request')
+const FinishScreen = ({ navigation }) => {
+  AnalyticsService.setCurrentScreenName('Finish Screen')
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handler = BackHandler.addEventListener('hardwareBackPress', () => {
       navigation.popToTop()
+
       return true
     })
     return () => handler.remove()
@@ -20,6 +21,7 @@ const FinishRequest = ({ navigation }) => {
 
   const goToRequestNewDiagnose = () => {
     navigation.popToTop()
+    navigation.navigate('DiagnoseRequest')
   }
 
   const goToMyRequests = () => {
@@ -30,9 +32,9 @@ const FinishRequest = ({ navigation }) => {
   return (
     <Background style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <SvgXml xml={Logo} style={styles.logo} />
-        <Subtitle black style={styles.title}>Listo! Ya enviaste tu consulta</Subtitle>
-        <Description gray style={styles.description}>En breve nuestros expertos comenzarán a responderte.</Description>
+        <SvgXml xml={logo} style={styles.logo} />
+        <Subtitle black style={styles.title}>Listo! Tu consulta fue resuelta</Subtitle>
+        <Description gray style={styles.description}>Nos alegra que nuestros expertos hayan podido ayudarte.</Description>
         <PrimaryButton style={styles.button} onPress={goToRequestNewDiagnose}>
           <Description white>Solicitar nueva consulta</Description>
         </PrimaryButton>
@@ -42,9 +44,10 @@ const FinishRequest = ({ navigation }) => {
   )
 }
 
-FinishRequest.navigationOptions = {
-  title: 'Nueva consulta',
-  headerLeft: null
+FinishScreen.navigationOptions = {
+  title: 'Resolver solicitud',
+  headerLeft: null,
+  headerRight: null
 }
 
-export default FinishRequest
+export default FinishScreen

@@ -7,17 +7,19 @@ const PrimaryButton = (props) => {
   const {
     style,
     children,
+    disabled,
     ...restProps
   } = props
 
   const buttonStyles = [
-    styles.primary,
+    (disabled) ? styles.disabled : styles.primary,
     style
   ]
 
   return (
     <ThemedButton
       style={buttonStyles}
+      disabled={disabled}
       {...restProps}
     >
       {children}
@@ -28,6 +30,9 @@ const PrimaryButton = (props) => {
 const styles = StyleSheet.create({
   primary: {
     backgroundColor: theme.colors.primary
+  },
+  disabled: {
+    backgroundColor: theme.colors.gray
   }
 })
 

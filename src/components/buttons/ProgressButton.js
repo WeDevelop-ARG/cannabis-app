@@ -3,13 +3,13 @@ import { View, StyleSheet, Animated } from 'react-native'
 import { PrimaryButton, GrayButton } from '~/components'
 import { theme } from '~/constants'
 
-const ProgressBar = ({ progress }) => {
+const ProgressBar = ({ progress, animationDuration }) => {
   const progressAnimated = useRef(new Animated.Value(0))
 
   useEffect(() => {
     const animation = Animated.timing(progressAnimated.current, {
       toValue: progress,
-      duration: 300
+      duration: animationDuration || 300
     })
 
     animation.start()
