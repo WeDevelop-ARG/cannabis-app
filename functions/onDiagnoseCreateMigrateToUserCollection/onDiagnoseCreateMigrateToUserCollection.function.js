@@ -9,7 +9,14 @@ const onDiagnoseCreateMigrateToUserCollection = functions
       const data = snapshot.data()
       const { user, ...dataWithoutUser } = data
       const diagnoseId = snapshot.id
-      await admin.firestore().doc(`users/${data.user}/requests/${diagnoseId}`).set(dataWithoutUser)
+      const dataToUpload = {
+        ...dataWithoutUser,
+        removedAt: 0,
+        isSolved: false,
+        amountOfAnswers: 0
+      }
+
+      await admin.firestore().doc(`users/${data.user}/requests/${diagnoseId}`).set(dataToUpload)
     } catch (error) {
       console.log(error.message)
     }
