@@ -1,1 +1,1 @@
-export const isRequestSolved = (request) => false
+export const isRequestSolved = (request) => request.isSolved

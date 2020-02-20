@@ -7,19 +7,23 @@ export const unansweredQuery = (onSnapshot) => {
     .firestore()
     .collectionGroup('requests')
     .where('amountOfAnswers', '==', 0)
-    .onSnapshot(onSnapshot)
+    .onSnapshot(onSnapshot, filterUnanswered)
 }
+
 export const dateDaysAgo = (daysAgo) => {
   const date = new Date(Date.now())
   date.setDate(date.getDate() - daysAgo)
   return date
 }
+
 const filterBySolved = (diagnose) => diagnose.solved
 const filterByNotSolved = (diagnose) => !diagnose.solved
 const filterByLastActivity = (diagnose) => (diagnose.updatedAt !== undefined) && diagnose.updatedAt.toDate() >= dateDaysAgo(STALE_STATUS_AFTER_DAYS)
 const filterByAmountOfAnswers = (diagnose) => diagnose.amountOfAnswers > 0
-const filterStale = (diagnose) => !filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
-const filterInDiscussion = (diagnose) => filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
+const filterStale = (diagnose) => !filterByRemoved(diagnose) && !filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
+const filterInDiscussion = (diagnose) => !filterByRemoved(diagnose) && filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
+const filterUnanswered = (diagnose) => !filterByRemoved(diagnose)
+const filterByRemoved = (diagnose) => (diagnose.removedAt)
 
 export const inDiscussionQuery = (onSnapshot) => {
   return firebase
@@ -42,4 +46,11 @@ export const solvedQuery = (onSnapshot) => {
     .firestore()
     .collectionGroup('requests')
     .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterBySolved))
+}
+
+export const removedQuery = (onSnapshot) => {
+  return firebase
+    .firestore()
+    .collectionGroup('requests')
+    .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterByRemoved))
 }

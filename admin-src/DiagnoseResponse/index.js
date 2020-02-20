@@ -91,17 +91,7 @@ export const DiagnoseResponse = ({ query }) => {
         .add(newResponse)
     }
 
-    const changeUpdateAtFieldForRequest = async () => {
-      await firebase
-        .firestore()
-        .doc(`users/${currentDiagnose.userUID}/requests/${currentDiagnose.id}`)
-        .update({
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
-    }
-
     await writeNewResponse()
-    await changeUpdateAtFieldForRequest()
 
     setDiagnoses(diagnoses.filter(diagnose => diagnose.id !== currentDiagnose.id))
     setCurrentDiagnose(null)

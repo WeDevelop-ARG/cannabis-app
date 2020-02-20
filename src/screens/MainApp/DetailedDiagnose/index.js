@@ -9,6 +9,8 @@ import Background from '~/components/Background'
 import { Header as HeaderText } from '~/components/texts'
 import VerticalSeparator from '~/components/VerticalSeparator'
 import { firebaseTimestampToMoment } from '~/mixins/date'
+import { isRequestSolved } from '~/mixins/diagnose/isRequestSolved'
+import { getRequestStateText } from '~/mixins/diagnose/getRequestStateText'
 import Carousel from './components/Carousel'
 import NoCommentsYet from './components/NoCommentsYet'
 import Metadata from './components/Metadata'
@@ -22,7 +24,7 @@ import StatusBarOnScroll from './components/StatusBarOnScroll'
 import NewComment from './components/NewComment'
 import calendar from '~/assets/images/DetailedDiagnose/calendar.svg'
 import comments from '~/assets/images/DetailedDiagnose/comments.svg'
-import solved from '~/assets/images/DetailedDiagnose/solved.svg'
+import solvedSVG from '~/assets/images/DetailedDiagnose/solved.svg'
 import { renderResponses, renderResponse } from './renderUtilities'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
 import { useActionSheet } from '@expo/react-native-action-sheet'
@@ -30,17 +32,6 @@ import styles from './styles'
 
 const goToSolveDiagnoseScreen = (diagnose) => {
   NavigationService.navigate('SolutionRequest', { diagnose })
-}
-
-const reopenDiagnose = async (diagnose) => {
-  try {
-    await DatabaseService.setDiagnoseSolvedMark(diagnose.id, false)
-  } catch (error) {
-    Alert.alert(
-      'Error',
-      'No se pudo volver a abrir su solicitud. Intente nuevamente más tarde.'
-    )
-  }
 }
 
 const removeDiagnose = async (diagnose, navigation) => {
@@ -80,10 +71,25 @@ const DetailedDiagnose = ({ navigation }) => {
   const [amountOfResponses, setAmountOfResponses] = useState(diagnose.amountOfAnswers || 0)
   const [fetchedResponses, setFetchedResponses] = useState(false)
   const [error, setError] = useState(null)
+  const [solved, setSolved] = useState(isRequestSolved(diagnose))
+  const [solvedText, setSolvedText] = useState(getRequestStateText(diagnose))
   const { showActionSheetWithOptions } = useActionSheet()
   const date = firebaseTimestampToMoment(diagnose.createdAt, 'es').format('D MMM')
 
   AnalyticsService.setCurrentScreenName('Detailed Diagnose')
+
+  const reopenDiagnose = useCallback(async (diagnose) => {
+    try {
+      await DatabaseService.setDiagnoseSolvedMark(diagnose.id, false)
+      setSolvedText('En discusión')
+      setSolved(false)
+    } catch (error) {
+      Alert.alert(
+        'Error',
+        'No se pudo volver a abrir su solicitud. Intente nuevamente más tarde.'
+      )
+    }
+  }, [])
 
   const handleReturn = () => {
     navigation.goBack()
@@ -101,20 +107,20 @@ const DetailedDiagnose = ({ navigation }) => {
 
   const decideIfCloseOrOpen = useCallback(
     () => {
-      if (!diagnose.isSolved) {
+      if (!solved) {
         goToSolveDiagnoseScreen(diagnose)
       } else {
         reopenDiagnose(diagnose)
       }
     },
-    [diagnose]
+    [diagnose, solved, reopenDiagnose]
   )
 
   const goToSolveCurrentDiagnose = useCallback(() => goToSolveDiagnoseScreen(diagnose), [diagnose])
-  const reopenCurrentDiagnose = useCallback(() => reopenDiagnose(diagnose), [diagnose])
+  const reopenCurrentDiagnose = useCallback(() => reopenDiagnose(diagnose), [diagnose, reopenDiagnose])
 
   const onThreeDotsPress = useCallback(() => {
-    const options = [(diagnose.isSolved) ? 'Reabrir solicitud' : 'Resolver solicitud', 'Eliminar', 'Cancelar']
+    const options = [(solved) ? 'Reabrir solicitud' : 'Resolver solicitud', 'Eliminar', 'Cancelar']
     const cancelButtonIndex = 2
 
     showActionSheetWithOptions(
@@ -129,7 +135,7 @@ const DetailedDiagnose = ({ navigation }) => {
         }
       }
     )
-  }, [diagnose, navigation])
+  }, [diagnose, navigation, solved, decideIfCloseOrOpen])
 
   useEffect(() => {
     const buildResponses = async () => {
@@ -142,8 +148,6 @@ const DetailedDiagnose = ({ navigation }) => {
 
     buildResponses()
   }, [])
-
-  const solvedIcon = (diagnose.isSolved) ? 'Resuelto' : 'Abierto'
 
   useEffect(() => {
     const buildCarouselSection = () => {
@@ -165,8 +169,8 @@ const DetailedDiagnose = ({ navigation }) => {
             <VerticalSeparator />
             <Metadata.Item
               style={styles.metadataAsColumn}
-              data={solvedIcon}
-              svg={solved}
+              data={solvedText}
+              svg={solvedSVG}
             />
             <VerticalSeparator />
             <Metadata.Item
@@ -187,7 +191,7 @@ const DetailedDiagnose = ({ navigation }) => {
     }
 
     setCarouselSection(buildCarouselSection())
-  }, [responses, fetchedResponses, amountOfResponses])
+  }, [responses, fetchedResponses, amountOfResponses, solvedText, onThreeDotsPress])
 
   const onNewComment = async (answer) => {
     try {
@@ -210,7 +214,7 @@ const DetailedDiagnose = ({ navigation }) => {
         onGoBack={handleReturn}
         date={date}
         commentCount={amountOfResponses}
-        solved={diagnose.isSolved}
+        solved={solved}
         onSolveTapped={goToSolveCurrentDiagnose}
         onReopenTapped={reopenCurrentDiagnose}
       />
@@ -236,7 +240,7 @@ const DetailedDiagnose = ({ navigation }) => {
           showHiddenComponentsIfScrolling()
         }}
       />
-      <NewComment onNewComment={onNewComment} />
+      {!solved && <NewComment onNewComment={onNewComment} />}
     </Background>
   )
 }

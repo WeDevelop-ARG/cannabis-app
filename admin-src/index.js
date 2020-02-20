@@ -7,7 +7,7 @@ import { LoginScreen } from './LoginScreen'
 import { Button, Row } from 'react-bootstrap'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
-import { unansweredQuery, inDiscussionQuery, staleQuery, solvedQuery } from './utils/queries'
+import { unansweredQuery, inDiscussionQuery, staleQuery, solvedQuery, removedQuery } from './utils/queries'
 
 const App = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false)
@@ -35,6 +35,7 @@ const App = () => {
             <Tab>In Discussion</Tab>
             <Tab>Stale</Tab>
             <Tab>Solved</Tab>
+            <Tab>Removed</Tab>
           </TabList>
 
           <TabPanel>
@@ -52,6 +53,10 @@ const App = () => {
           <TabPanel>
             <h2>Solved Requests</h2>
             <DiagnoseResponse query={solvedQuery} />
+          </TabPanel>
+          <TabPanel>
+            <h2>Removed Requests</h2>
+            <DiagnoseResponse query={removedQuery} />
           </TabPanel>
         </Tabs>
       </>

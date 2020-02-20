@@ -9,7 +9,7 @@ import DiagnoseRequestIcon from './resources/tabIcons/MyDiagnosesTabSVG'
 import ProfileIcon from './resources/tabIcons/ProfileTabSVG'
 import { theme } from '~/constants'
 
-const MainApp = createMaterialTopTabNavigator(
+const MainApp = createBottomTabNavigator(
   {
     DiagnoseRequest: {
       screen: DiagnoseRequest,
