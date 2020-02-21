@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native'
-import { verticalScale } from 'react-native-size-matters/extend'
+import { verticalScale, scale } from 'react-native-size-matters/extend'
 
 const styles = StyleSheet.create({
   headerContainer: {
-    width: '100%'
+    width: '100%',
+    paddingHorizontal: scale(24),
+    marginBottom: verticalScale(20)
   },
   headerWhileStatic: {
     textAlign: 'left',

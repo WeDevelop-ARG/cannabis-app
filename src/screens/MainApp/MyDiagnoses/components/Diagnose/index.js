@@ -26,7 +26,7 @@ const Diagnose = ({ thumbnail, firebaseTimestamp, description, answerQuantity, s
   else state = <Body secondary>Abierta</Body>
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View>
         <RealThumbnailOrPlaceholder
           thumbnail={imageThumbnail}
