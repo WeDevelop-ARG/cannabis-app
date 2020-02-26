@@ -26,7 +26,7 @@ import calendar from '~/assets/images/DetailedDiagnose/calendar.svg'
 import comments from '~/assets/images/DetailedDiagnose/comments.svg'
 import solvedSVG from '~/assets/images/DetailedDiagnose/solved.svg'
 import { renderResponses, renderResponse } from './renderUtilities'
-import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
+import { OFFSET_THRESHOLD_TO_CHANGE_HEADER, OFFSET_THRESHOLD_TO_HIDE_STATUS_BAR } from './constants'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import styles from './styles'
 
@@ -153,7 +153,6 @@ const DetailedDiagnose = ({ navigation }) => {
     const buildCarouselSection = () => {
       return (
         <>
-          <StatusBarForCarousel />
           <HeaderForCarousel
             photoQuantity={diagnose.imageReferences.length}
             onGoBack={handleReturn}
@@ -207,6 +206,7 @@ const DetailedDiagnose = ({ navigation }) => {
 
   return (
     <Background>
+      <StatusBarForCarousel />
       <ForceCleanUpOnScreenLeave cleanUpFunction={cleanCarouselStatusBar} />
       <ForceRerenderOnNavigation resetStateFunction={rerenderCorrectStatusBar} />
       <HeaderForScrolling
@@ -233,7 +233,11 @@ const DetailedDiagnose = ({ navigation }) => {
               StatusBarOnScroll.setAsCurrent()
             } else {
               setIsScrolling(false)
-              StatusBarForCarousel.setAsCurrent()
+              if (nativeEvent.contentOffset.y < OFFSET_THRESHOLD_TO_HIDE_STATUS_BAR) {
+                StatusBarForCarousel.setAsCurrent()
+              } else {
+                StatusBarForCarousel.setHidden(true, true)
+              }
             }
           }
 

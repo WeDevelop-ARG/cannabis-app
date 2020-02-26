@@ -34,6 +34,9 @@ const StatusBarOnScroll = ({ show }) => {
 StatusBarOnScroll.setAsCurrent = () => {
   StatusBar.setBackgroundColor(BACKGROUND_COLOR, true)
   StatusBar.setDarkContent()
+  StatusBar.setHidden(false, true)
 }
+
+StatusBarOnScroll.setHidden = StatusBar.setHidden
 
 export default StatusBarOnScroll

@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: moderateScale(33, 1),
     height: moderateScale(35, 1),
-    top: verticalScale(13),
+    top: verticalScale(12),
     right: scale(14),
     borderRadius: theme.sizes.border,
     backgroundColor: theme.colors.primary

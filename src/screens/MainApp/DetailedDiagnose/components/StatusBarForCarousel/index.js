@@ -15,6 +15,9 @@ const StatusBarForCarousel = () => (
 StatusBarForCarousel.setAsCurrent = () => {
   StatusBar.setBackgroundColor(BACKGROUND_COLOR, true)
   StatusBar.setLightContent()
+  StatusBar.setHidden(false, true)
 }
+
+StatusBarForCarousel.setHidden = StatusBar.setHidden
 
 export default StatusBarForCarousel

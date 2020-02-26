@@ -28,5 +28,6 @@ StatusBar.setBackgroundColor = ReactStatusBar.setBackgroundColor
 StatusBar.setDarkContent = () => ReactStatusBar.setBarStyle('dark-content', true)
 StatusBar.setLightContent = () => ReactStatusBar.setBarStyle('light-content', true)
 StatusBar.setTranslucent = ReactStatusBar.setTranslucent
+StatusBar.setHidden = ReactStatusBar.setHidden
 
 export default StatusBar
