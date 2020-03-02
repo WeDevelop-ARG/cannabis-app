@@ -5,6 +5,7 @@ import DescriptionRequest from '../screens/DescriptionRequest'
 import FinishRequest from '../screens/FinishRequest'
 import ImageReview from '../screens/ImageReview'
 import NoPhotoDisclaimer from '../screens/NoPhotoDisclaimer'
+import Gallery from '../screens/Gallery'
 import { buildStackNavigator } from '~/components/StackNavigator'
 
 const Navigator = buildStackNavigator(
@@ -13,6 +14,7 @@ const Navigator = buildStackNavigator(
     DescriptionRequest,
     FinishRequest,
     ImageReview,
+    Gallery,
     NoPhotoDisclaimer
   },
   {
@@ -25,8 +27,6 @@ const MainNavigator = createAppContainer(Navigator)
 const allowedRoutesToShowTabBar = ['MainScreen', 'NoPhotoDisclaimer', 'FinishRequest']
 
 MainNavigator.navigationOptions = ({ navigation }) => {
-  if (navigation.state.routes.length <= 1) return {}
-
   const routes = navigation.state.routes
   const latestRouteName = routes[routes.length - 1].routeName
   const tabBarVisible = includes(allowedRoutesToShowTabBar, latestRouteName)

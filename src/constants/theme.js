@@ -3,6 +3,7 @@ import { widthPercentageToDP } from 'react-native-responsive-screen'
 
 const colors = {
   primary: '#5ECE84',
+  primaryAlpha: '#5ECE841A',
   secondary: '#FE9458',
   black: '#4B5057',
   white: '#FFFFFF',

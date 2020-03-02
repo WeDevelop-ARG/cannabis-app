@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { View } from 'react-native'
+import { View, Alert, BackHandler } from 'react-native'
+import CameraRoll from '@react-native-community/cameraroll'
 import * as AnalyticsService from '~/analyticsService'
 import NavigationService from '~/navigationService'
 import * as ImageService from '~/imageService'
-import { ImageSelection } from '~/components'
 import Background from '~/components/Background'
 import ConfirmButton from './components/ConfirmButton'
 import AddMoreImagesButton from './components/AddMoreImagesButton'
@@ -18,9 +18,9 @@ const ImageVisualization = ({ navigation }) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [submitError, setSubmitError] = useState(false)
   const [images, setImages] = useState(imagesFromPreviousStep)
-  const [showImageSelection, setShowImageSelection] = useState(false)
   const [carouselComponent, setCarouselComponent] = useState(null)
   const [imageListComponent, setImageListComponent] = useState(null)
+  const [addedImages, setAddedImages] = useState([])
 
   AnalyticsService.setCurrentScreenName('Image Review')
 
@@ -36,23 +36,8 @@ const ImageVisualization = ({ navigation }) => {
     images.length < MAX_IMAGES
   )
 
-  const waitForImagesRenderingAndSetIndex = (index) => {
-    setTimeout(() => setActiveIndex(index), TIMEOUT_TO_WAIT_FOR_RENDERING)
-  }
-
   const getMorePhotos = () => {
-    setShowImageSelection(true)
-  }
-
-  const onImagesSelected = (newImages) => {
-    const filterDuplicates = newImages.filter(element => !images.includes(element))
-    if (filterDuplicates.length > 0) {
-      const allImages = [...images, ...filterDuplicates]
-
-      setImages(allImages.slice(0, MAX_IMAGES))
-      waitForImagesRenderingAndSetIndex(images.length)
-    }
-    setShowImageSelection(false)
+    navigation.navigate('Gallery', { selectedImages: images, addedImages: addedImages })
   }
 
   const deleteActiveIndexImage = () => {
@@ -84,14 +69,16 @@ const ImageVisualization = ({ navigation }) => {
       const newImages = images.slice()
 
       newImages[activeIndex] = newImage
+
+      CameraRoll.saveToCameraRoll(newImage).catch(() => {
+        Alert.alert('Error', 'No se pudo acceder al almacenamiento del dispositivo. Verifique los permisos de la aplicación.')
+      })
+
+      setAddedImages([newImage, ...addedImages])
       setImages(newImages)
     } catch (error) {
       console.log(error)
     }
-  }
-
-  const goBack = () => {
-    navigation.pop()
   }
 
   useEffect(() => {
@@ -122,18 +109,25 @@ const ImageVisualization = ({ navigation }) => {
     setImageListComponent(buildImageList())
   }, [activeIndex, images])
 
+  useEffect(() => {
+    const handler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        getMorePhotos()
+      }
+    )
+    return () => {
+      handler.remove()
+    }
+  }, [])
+
   return (
     <Background>
       <ReviewHeader
-        goBack={goBack}
+        goBack={getMorePhotos}
         changeImage={changeImage}
         deleteImage={deleteImage}
       />
-      {showImageSelection &&
-        <ImageSelection
-          onCancel={() => setShowImageSelection(false)}
-          onImagesSelected={onImagesSelected}
-        />}
       {carouselComponent}
       {imageListComponent}
       <View>

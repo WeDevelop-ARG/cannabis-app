@@ -33,7 +33,7 @@ export const MainScreen = ({ navigation }) => {
         <Description gray style={styles.description}>
           Agregá un mínimo de 3 fotos en detalle y bien iluminadas para que nuestros expertos puedan darte su opinión.
         </Description>
-        <PrimaryButton variant='black' style={styles.button} onPress={() => setShowImageSelection(true)}>
+        <PrimaryButton variant='black' style={styles.button} onPress={() => navigation.navigate('Gallery')}>
           <Description white>
             Agregar fotos
           </Description>

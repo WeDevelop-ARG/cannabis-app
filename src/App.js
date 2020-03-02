@@ -1,4 +1,5 @@
-import fixtimerbug from '~/bugFixes/fixtimerbug' // this is just an import to load the fix
+import '~/bugFixes/fixtimerbug' // this is just an import to load the fix
+import '~/bugFixes/disableImpossibleToFixWarnings' // this is just an import to load the fix
 import React from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import * as firebase from 'firebase'

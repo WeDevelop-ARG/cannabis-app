@@ -20,6 +20,7 @@ const FinishRequest = ({ navigation }) => {
 
   const goToRequestNewDiagnose = () => {
     navigation.popToTop()
+    navigation.navigate('Gallery')
   }
 
   const goToMyRequests = () => {
