@@ -52,3 +52,18 @@ export const googleLogin = async () => {
     throw new AuthenticationError(error.message)
   }
 }
+
+const reauthenticate = async (lastPassword) => {
+  const currentUser = getCurrentUser()
+  const emailCredential = firebase.auth.EmailAuthProvider.credential(currentUser.email, lastPassword)
+  await currentUser.reauthenticateWithCredential(emailCredential)
+}
+
+const updatePassword = async (newPassword) => {
+  await getCurrentUser().updatePassword(newPassword)
+}
+
+export const changePassword = async (lastPassword, newPassword) => {
+  await reauthenticate(lastPassword)
+  await updatePassword(newPassword)
+}

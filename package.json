@@ -19,7 +19,8 @@
     "all:deploy": "npm run admin:deploy && npm run site:deploy",
     "generate:apk": "cd android && ./gradlew assembleRelease && mv ./app/build/outputs/apk/release/app-release.apk ../release/DrCannabis-$(date +%Y%m%d%H%M).apk",
     "generate:aab": "cd android && ./gradlew bundleRelease && mv ./app/build/outputs/bundle/release/app.aab ../release/DrCannabis-$(date +%Y%m%d%H%M).aab",
-    "devtools": "react-devtools"
+    "devtools": "react-devtools",
+    "clear": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && npm cache clean --force && npm install"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.5.0",

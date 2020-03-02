@@ -3,6 +3,7 @@ import { View, ScrollView } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import * as firebase from 'firebase'
 import { createStackNavigator } from 'react-navigation-stack'
+import { includes } from 'lodash'
 import NavigationService from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
@@ -10,13 +11,17 @@ import MessagingService from '~/messagingService'
 import { Button, Title, Subtitle, Description } from '~/components'
 import Background from '~/components/Background'
 import PrivacyPolicy from '~/screens/PrivacyPolicy'
-import LogOutLogo from './resources/logout_logo.svg'
-import PolicyLogo from './resources/policy_logo.svg'
+import PasswordChange from '../PasswordChange'
+import policyLogo from '~/assets/images/Profile//policy_logo.svg'
+import logOutLogo from '~/assets/images/Profile//logout_logo.svg'
+import passwordChangeLogo from '~/assets/images/Profile//password_change_logo.svg'
 import styles from './styles'
 
 const goToPrivacyPolicyURL = () => {
   NavigationService.navigate('PrivacyPolicy')
 }
+
+const goToPasswordChangeScreen = () => NavigationService.navigate('PasswordChange')
 
 const logOut = async () => {
   try {
@@ -66,8 +71,9 @@ const Profile = () => {
           <Subtitle black style={styles.username}>{username}</Subtitle>
           <Description gray>{email}</Description>
         </View>
-        <ListItem text='Política de privacidad' onPress={goToPrivacyPolicyURL} imgSource={PolicyLogo} />
-        <ListItem text='Cerrar sesión' onPress={logOut} imgSource={LogOutLogo} />
+        <ListItem text='Cambiar contraseña' onPress={goToPasswordChangeScreen} imgSource={passwordChangeLogo} />
+        <ListItem text='Política de privacidad' onPress={goToPrivacyPolicyURL} imgSource={policyLogo} />
+        <ListItem text='Cerrar sesión' onPress={logOut} imgSource={logOutLogo} />
       </ScrollView>
     </Background>
   )
@@ -80,8 +86,21 @@ Profile.navigationOptions = () => ({
 const Navigator = createStackNavigator(
   {
     Profile,
-    PrivacyPolicy
+    PrivacyPolicy,
+    PasswordChange
   }
 )
+
+const allowedRoutesToShowTabBar = ['Profile']
+
+Navigator.navigationOptions = ({ navigation }) => {
+  if (navigation.state.routes.length <= 1) return {}
+
+  const routes = navigation.state.routes
+  const latestRouteName = routes[routes.length - 1].routeName
+  const tabBarVisible = includes(allowedRoutesToShowTabBar, latestRouteName)
+
+  return { tabBarVisible, swipeEnabled: tabBarVisible }
+}
 
 export default Navigator
