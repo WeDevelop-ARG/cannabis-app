@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom'
 import './initFirebase'
@@ -23,6 +23,14 @@ const App = () => {
   }
 
   const onUserLogin = () => setUserLoggedIn(true)
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        onUserLogin()
+      }
+    })
+  }, [])
 
   if (userLoggedIn) {
     return (
