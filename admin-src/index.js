@@ -25,33 +25,31 @@ const App = () => {
     return (
       <>
         <Row>
-          <Button onClick={logOut}>
-            Log out
-          </Button>
+          <Button onClick={logOut}>Log out</Button>
         </Row>
         <Tabs>
           <TabList>
-            <Tab>New Requests</Tab>
-            <Tab>In Discussion</Tab>
+            <Tab>New Activity</Tab>
+            <Tab>In discussion</Tab>
             <Tab>Stale</Tab>
-            <Tab>Solved</Tab>
+            <Tab>Closed</Tab>
             <Tab>Removed</Tab>
           </TabList>
 
           <TabPanel>
-            <h2>New Requests</h2>
+            <h2>New Activity</h2>
             <DiagnoseResponse query={unansweredQuery} />
           </TabPanel>
           <TabPanel>
-            <h2>Requests in Discussion</h2>
+            <h2>In discussion</h2>
             <DiagnoseResponse query={inDiscussionQuery} />
           </TabPanel>
           <TabPanel>
-            <h2>Stale Requests</h2>
+            <h2>Stale</h2>
             <DiagnoseResponse query={staleQuery} />
           </TabPanel>
           <TabPanel>
-            <h2>Solved Requests</h2>
+            <h2>Closed</h2>
             <DiagnoseResponse query={solvedQuery} />
           </TabPanel>
           <TabPanel>

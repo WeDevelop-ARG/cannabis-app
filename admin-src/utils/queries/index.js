@@ -3,11 +3,19 @@ import * as firebase from 'firebase'
 const STALE_STATUS_AFTER_DAYS = 10
 
 export const unansweredQuery = (onSnapshot) => {
+  firebase
+    .firestore()
+    .collectionGroup('requests')
+    .orderBy('createdAt', 'asc')
+    .where('amountOfAnswers', '==', 0)
+    .onSnapshot(onSnapshot)
+
   return firebase
     .firestore()
     .collectionGroup('requests')
-    .where('amountOfAnswers', '==', 0)
-    .onSnapshot(onSnapshot, filterUnanswered)
+    .orderBy('updatedAt')
+    .where('isLastCommentAdmin', '==', false)
+    .onSnapshot(onSnapshot)
 }
 
 export const dateDaysAgo = (daysAgo) => {
@@ -18,7 +26,8 @@ export const dateDaysAgo = (daysAgo) => {
 
 const filterBySolved = (diagnose) => diagnose.solved
 const filterByNotSolved = (diagnose) => !diagnose.solved
-const filterByLastActivity = (diagnose) => (diagnose.updatedAt !== undefined) && diagnose.updatedAt.toDate() >= dateDaysAgo(STALE_STATUS_AFTER_DAYS)
+const filterByLastActivity = (diagnose) =>
+  diagnose.updatedAt !== undefined && diagnose.updatedAt.toDate() >= dateDaysAgo(STALE_STATUS_AFTER_DAYS)
 const filterByAmountOfAnswers = (diagnose) => diagnose.amountOfAnswers > 0
 const filterStale = (diagnose) => !filterByRemoved(diagnose) && !filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
 const filterInDiscussion = (diagnose) => !filterByRemoved(diagnose) && filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
@@ -29,7 +38,8 @@ export const inDiscussionQuery = (onSnapshot) => {
   return firebase
     .firestore()
     .collectionGroup('requests')
-    .where('amountOfAnswers', '>', 0)
+    .where('isLastCommentAdmin', '==', true)
+    .orderBy('updatedAt', 'desc')
     .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterInDiscussion))
 }
 

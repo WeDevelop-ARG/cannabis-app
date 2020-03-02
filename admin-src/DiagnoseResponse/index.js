@@ -8,6 +8,7 @@ import { firebaseTimestampToMoment } from '../utils/date'
 import DiagnoseImages from '../DiagnoseImages'
 import classes from '../stylesheets/admin.css'
 import { getUserUIDFromDiagnoseRef } from '../utils/diagnose'
+import { isEmpty } from 'lodash'
 
 export const DiagnoseResponse = ({ query }) => {
   const [currentDiagnose, setCurrentDiagnose] = useState(null)
@@ -18,15 +19,19 @@ export const DiagnoseResponse = ({ query }) => {
     let newDiagnoses = diagnoses
 
     await Promise.all(
-      querySnapshot.docChanges().map(async docChange => {
+      querySnapshot.docChanges().map(async (docChange) => {
         const doc = docChange.doc
         const changeType = docChange.type
 
         if (changeType === 'added') {
-          if (!newDiagnoses.find(diagnose => diagnose.id === doc.id)) {
+          if (!newDiagnoses.find((diagnose) => diagnose.id === doc.id)) {
             const docData = doc.data()
             const userUID = getUserUIDFromDiagnoseRef(doc.ref)
-            const userSnap = await firebase.firestore().collection('users').doc(userUID).get()
+            const userSnap = await firebase
+              .firestore()
+              .collection('users')
+              .doc(userUID)
+              .get()
             const username = userSnap.get('username')
 
             newDiagnoses.push({
@@ -40,7 +45,7 @@ export const DiagnoseResponse = ({ query }) => {
         }
 
         if (changeType === 'removed') {
-          newDiagnoses = newDiagnoses.filter(diagnose => diagnose.id !== doc.id)
+          newDiagnoses = newDiagnoses.filter((diagnose) => diagnose.id !== doc.id)
         }
       })
     )
@@ -63,9 +68,8 @@ export const DiagnoseResponse = ({ query }) => {
   useEffect(() => {
     const clearScreenIfCurrentDiagnoseWasAnsweredByAnotherOne = () => {
       if (currentDiagnose) {
-        const queryForCurrentDiagnoseInDiagnoses = diagnoses.filter(diagnose => diagnose.id === currentDiagnose.id)
-        const currentDiagnoseDoesNotExist = queryForCurrentDiagnoseInDiagnoses.length === 0
-        if (currentDiagnoseDoesNotExist) {
+        const queryForCurrentDiagnoseInDiagnoses = diagnoses.filter((diagnose) => diagnose.id === currentDiagnose.id)
+        if (isEmpty(queryForCurrentDiagnoseInDiagnoses)) {
           setCurrentDiagnose(null)
         }
       }
@@ -93,7 +97,7 @@ export const DiagnoseResponse = ({ query }) => {
 
     await writeNewResponse()
 
-    setDiagnoses(diagnoses.filter(diagnose => diagnose.id !== currentDiagnose.id))
+    setDiagnoses(diagnoses.filter((diagnose) => diagnose.id !== currentDiagnose.id))
     setCurrentDiagnose(null)
     setIsSubmitting(false)
   }
@@ -110,11 +114,12 @@ export const DiagnoseResponse = ({ query }) => {
   return (
     <div className={classes.row}>
       <ListGroup className={classes.column}>
-        {diagnoses && diagnoses.map((diagnose, index) => (
-          <ListGroup.Item action key={index} onClick={() => fetchDiagnoseImagesAndSetAsCurrent(diagnoses[index])}>
-            {diagnose.id}{' '} - {diagnose.username} ({firebaseTimestampToMoment(diagnose.createdAt).format('LL')})
-          </ListGroup.Item>
-        ))}
+        {diagnoses &&
+          diagnoses.map((diagnose, index) => (
+            <ListGroup.Item action key={index} onClick={() => fetchDiagnoseImagesAndSetAsCurrent(diagnoses[index])}>
+              {diagnose.id} - {diagnose.username} ({firebaseTimestampToMoment(diagnose.createdAt).format('LL')})
+            </ListGroup.Item>
+          ))}
       </ListGroup>
       <div className={classes.diagnoseInfoColumn}>
         {currentDiagnose && <DiagnoseInfo diagnose={currentDiagnose} />}
