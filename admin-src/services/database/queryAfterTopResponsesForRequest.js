@@ -1,6 +1,8 @@
 import * as firebase from 'firebase'
 
-export const queryAllResponsesForRequest = async (userUID, requestUID) => {
+const LIMIT = 5
+
+export const queryAfterTopResponsesForRequest = async (userUID, requestUID, lastCreatedAt) => {
   const path = `users/${userUID}/requests/${requestUID}/responses`
 
   try {
@@ -8,6 +10,8 @@ export const queryAllResponsesForRequest = async (userUID, requestUID) => {
       .firestore()
       .collection(path)
       .orderBy('createdAt', 'desc')
+      .startAfter(lastCreatedAt)
+      .limit(LIMIT)
       .get()
 
     return querySnapshot.docs

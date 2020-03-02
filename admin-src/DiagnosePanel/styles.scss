@@ -1,0 +1,15 @@
+.requestContainer {
+  background-color: white;
+  position: absolute;
+  z-index: 1;
+  top: 90px;
+  right: 25px;
+  width: 50%;
+  min-width: 300px;
+}
+
+.loadingIndicator {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 50%;
+}

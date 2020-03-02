@@ -39,12 +39,15 @@ export const DiagnoseResponseForm = ({ handleSubmit, isSubmitting }) => {
     <Formik
       initialValues={initialValues}
       validationSchema={schema}
-      onSubmit={(values) => handleSubmit(values)}
+      onSubmit={(values, { resetForm }) => {
+        resetForm()
+        handleSubmit(values)
+      }}
     >
       {() => (
         <Form className={classes.answerFormContainer}>
-          <div>
-            <Field className={classes.answerField} component='textarea' name='answer' placeholder='answer here' />
+          <div className={classes.answerField}>
+            <Field component='textarea' name='answer' placeholder='answer here' />
             <ErrorMessage name='answer' />
           </div>
           <div className={classes.adminSelect}>

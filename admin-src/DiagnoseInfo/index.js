@@ -1,6 +1,5 @@
 import React from 'react'
 import { firebaseTimestampToMoment } from '../utils/date'
-import Responses from './components/Responses'
 
 export const DiagnoseInfo = ({ diagnose }) => {
   return (
@@ -17,7 +16,6 @@ export const DiagnoseInfo = ({ diagnose }) => {
       <div>
         DESCRIPTION: {diagnose.text}
       </div>
-      <Responses diagnose={diagnose} />
     </div>
   )
 }

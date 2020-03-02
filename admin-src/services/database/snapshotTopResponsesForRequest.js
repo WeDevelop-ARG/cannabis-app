@@ -1,16 +1,17 @@
 import * as firebase from 'firebase'
 
-export const queryAllResponsesForRequest = async (userUID, requestUID) => {
+const LIMIT = 5
+
+export const snapshotTopResponsesForRequest = (userUID, requestUID, onSnapshot) => {
   const path = `users/${userUID}/requests/${requestUID}/responses`
 
   try {
-    const querySnapshot = await firebase
+    return firebase
       .firestore()
       .collection(path)
       .orderBy('createdAt', 'desc')
-      .get()
-
-    return querySnapshot.docs
+      .limit(LIMIT)
+      .onSnapshot(async (snapshot) => onSnapshot(snapshot))
   } catch (error) {
     throw new Error(error.message)
   }

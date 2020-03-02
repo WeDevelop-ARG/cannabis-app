@@ -8,14 +8,14 @@ export const unansweredQuery = (onSnapshot) => {
     .collectionGroup('requests')
     .orderBy('createdAt', 'asc')
     .where('amountOfAnswers', '==', 0)
-    .onSnapshot(onSnapshot)
+    .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterUnanswered))
 
   return firebase
     .firestore()
     .collectionGroup('requests')
     .orderBy('updatedAt')
     .where('isLastCommentAdmin', '==', false)
-    .onSnapshot(onSnapshot)
+    .onSnapshot(async (snapshot) => onSnapshot(snapshot, filterUnanswered))
 }
 
 export const dateDaysAgo = (daysAgo) => {

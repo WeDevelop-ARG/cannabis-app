@@ -1,0 +1,23 @@
+.logOutButtonContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tab {
+  display: inline-block;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-color: #aaa;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  bottom: -1px;
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+  height: 30px;
+}
+
+.link {
+  top: 50%;
+  padding: 12px 24px;
+}

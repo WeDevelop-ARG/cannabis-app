@@ -1,20 +1,22 @@
 .adminSelect {
   align-self: auto;
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
 }
 
 .answerField {
-  height: auto;
+  flex-grow: 4;
+  min-width: 100px;
+  height: 100%;
   word-wrap: break-word;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  width: 35vw;
 }
 
 .answerFormContainer{
  display: flex;
- justify-content: space-around;
  height: 100px;
+ margin-bottom: 20px;
 }
