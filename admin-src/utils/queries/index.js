@@ -24,14 +24,14 @@ export const dateDaysAgo = (daysAgo) => {
   return date
 }
 
-const filterBySolved = (diagnose) => diagnose.solved
-const filterByNotSolved = (diagnose) => !diagnose.solved
+const filterBySolved = (diagnose) => diagnose.isSolved
+const filterByNotSolved = (diagnose) => !diagnose.isSolved
 const filterByLastActivity = (diagnose) =>
   diagnose.updatedAt !== undefined && diagnose.updatedAt.toDate() >= dateDaysAgo(STALE_STATUS_AFTER_DAYS)
 const filterByAmountOfAnswers = (diagnose) => diagnose.amountOfAnswers > 0
 const filterStale = (diagnose) => !filterByRemoved(diagnose) && !filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
 const filterInDiscussion = (diagnose) => !filterByRemoved(diagnose) && filterByLastActivity(diagnose) && filterByNotSolved(diagnose) && filterByAmountOfAnswers(diagnose)
-const filterUnanswered = (diagnose) => !filterByRemoved(diagnose)
+const filterUnanswered = (diagnose) => !filterByRemoved(diagnose) && filterByNotSolved(diagnose)
 const filterByRemoved = (diagnose) => (diagnose.removedAt)
 
 export const inDiscussionQuery = (onSnapshot) => {
