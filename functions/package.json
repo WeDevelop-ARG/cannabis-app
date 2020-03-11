@@ -17,7 +17,8 @@
     "@sendgrid/mail": "^6.4.0",
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.3.0",
-    "walk-sync": "^2.0.2"
+    "walk-sync": "^2.0.2",
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "eslint": "^5.12.0",
