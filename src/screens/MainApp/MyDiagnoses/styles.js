@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     top: theme.sizes.margin
   },
   flatListContainer: {
-    marginBottom: verticalScale(40),
+    paddingBottom: verticalScale(20),
     width: '100%'
   },
   noDiagnosesActivityIndicator: {

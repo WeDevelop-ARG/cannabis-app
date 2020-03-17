@@ -5,10 +5,11 @@ import { firebaseTimestampToMoment } from '~/mixins/date'
 import { RealThumbnailOrPlaceholder } from '~/components'
 import { Subheader, Body } from '~/components/texts'
 import VerticalSeparator from '~/components/VerticalSeparator'
-import styles from './styles'
+import UnreadCommentsBadge from '../UnreadCommentsBadge'
 import { getURL } from '~/mixins/storage'
+import styles from './styles'
 
-const Diagnose = ({ thumbnail, firebaseTimestamp, description, answerQuantity, solved }) => {
+const Diagnose = ({ thumbnail, firebaseTimestamp, description, answerQuantity, solved, unreadCommentCount }) => {
   const [imageThumbnail, setImageThumbnail] = useState('')
 
   useEffect(() => {
@@ -32,6 +33,11 @@ const Diagnose = ({ thumbnail, firebaseTimestamp, description, answerQuantity, s
           thumbnail={imageThumbnail}
           style={styles.image}
         />
+        {Boolean(unreadCommentCount) && (
+          <View style={styles.badgePositioning}>
+            <UnreadCommentsBadge number={unreadCommentCount} />
+          </View>
+        )}
       </View>
       <View style={styles.information}>
         <View style={styles.dates}>

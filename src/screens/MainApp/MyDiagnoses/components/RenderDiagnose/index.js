@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Animated, { Easing } from 'react-native-reanimated'
 import { verticalScale } from 'react-native-size-matters/extend'
 import NavigationService from '~/navigationService'
+import * as DatabaseService from '~/databaseService'
+import { setRequestOpenTimestamp } from '~/cacheService/requestOpenTimestamp/setRequestOpenTimestamp'
 import Diagnose from '../Diagnose'
 import Button from '~/components/buttons/Button'
 import { isRequestSolved } from '~/mixins/diagnose/isRequestSolved'
@@ -12,18 +14,27 @@ const {
   timing
 } = Animated
 
-const goToDetailedDiagnoseScreen = (diagnose) => {
-  NavigationService.navigate('DetailedDiagnose', { diagnose })
-}
-
 const RenderDiagnose = ({ item, animationDuration }) => {
   const [flex] = useState(new Animated.Value(DIAGNOSE_HEIGHT))
+  const [unreadCommentCount, setUnreadCommentCount] = useState(null)
+  const [error, setError] = useState(null)
+
   const {
     builtDiagnose: diagnose,
     id: key,
     isClosed
   } = item
   const answerQuantity = diagnose.amountOfAnswers || 0
+
+  useEffect(() => {
+    const loadUnreadCommentCount = async () => {
+      const count = await DatabaseService.getUnreadCommentCountForRequest(key)
+
+      setUnreadCommentCount(count)
+    }
+
+    loadUnreadCommentCount()
+  }, [item])
 
   useEffect(() => {
     const config = {
@@ -42,12 +53,23 @@ const RenderDiagnose = ({ item, animationDuration }) => {
     }
   }, [isClosed])
 
+  const goToDetailedDiagnoseScreen = async () => {
+    try {
+      await setRequestOpenTimestamp(diagnose.id)
+      setUnreadCommentCount(0)
+    } catch (error) {
+      setError(error)
+    }
+
+    NavigationService.navigate('DetailedDiagnose', { diagnose })
+  }
+
   return (
     <Animated.View
       style={{ height: flex, overflow: 'hidden' }}
     >
       <Button
-        onPress={() => goToDetailedDiagnoseScreen(diagnose)}
+        onPress={() => goToDetailedDiagnoseScreen()}
         activeOpacity={0.9}
       >
         <Diagnose
@@ -57,6 +79,7 @@ const RenderDiagnose = ({ item, animationDuration }) => {
           description={diagnose.text}
           answerQuantity={answerQuantity}
           solved={isRequestSolved(diagnose)}
+          unreadCommentCount={unreadCommentCount}
         />
       </Button>
     </Animated.View>

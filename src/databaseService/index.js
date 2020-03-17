@@ -3,6 +3,7 @@ import * as firebase from 'firebase'
 import * as AuthenticationService from '~/authenticationService'
 import * as AnalyticsService from '~/analyticsService'
 import DatabaseError from '~/AppErrors/DatabaseError'
+import { getRequestOpenTimestamp } from '../cacheService/requestOpenTimestamp/getRequestOpenTimestamp'
 
 const set = async (docPath, data) => {
   try {
@@ -215,6 +216,42 @@ export const setDiagnoseSolvedMark = async (diagnoseUID, isSolved) => {
   } catch (error) {
     throw new DatabaseError(error.message)
   }
+}
+
+export const getUnreadCommentCountForRequest = async (requestID) => {
+  let count
+
+  try {
+    const currentUserUID = AuthenticationService.getCurrentUserUID()
+    const responsePath = `users/${currentUserUID}/requests/${requestID}/responses`
+    const lastOpenTimestamp = await getRequestOpenTimestamp(requestID)
+    let unreadComments = []
+
+    if (lastOpenTimestamp) {
+      const responsesAfterOpenDateSnapshot = await firebase
+        .firestore()
+        .collection(responsePath)
+        .orderBy('createdAt', 'asc')
+        .startAfter(new Date(lastOpenTimestamp))
+        .get()
+
+      unreadComments = responsesAfterOpenDateSnapshot.docs.filter(doc => doc.data().answeredByUID !== currentUserUID)
+    } else {
+      const responsesAfterOpenDateSnapshot = await firebase
+        .firestore()
+        .collection(responsePath)
+        .orderBy('createdAt', 'asc')
+        .get()
+
+      unreadComments = responsesAfterOpenDateSnapshot.docs
+    }
+
+    count = unreadComments.length
+  } catch (error) {
+    count = 0
+  }
+
+  return count
 }
 
 export default {

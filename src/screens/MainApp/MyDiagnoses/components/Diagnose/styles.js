@@ -12,6 +12,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.gray3,
     alignItems: 'center'
   },
+  badgePositioning: {
+    position: 'absolute',
+    bottom: verticalScale(13),
+    right: scale(-5)
+  },
   image: {
     width: THUMBNAIL_WIDTH,
     height: THUMBNAIL_HEIGHT,
