@@ -11,7 +11,8 @@
 
 .text {
   width: 80%;
-  overflow-wrap: break-word
+  overflow-wrap: break-word;
+  white-space: pre-line;
 }
 
 .adminResponse {
