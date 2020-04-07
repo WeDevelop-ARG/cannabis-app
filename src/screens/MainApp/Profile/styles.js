@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { scale, verticalScale } from 'react-native-size-matters/extend'
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters/extend'
 import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'transparent',
     padding: 0
-
   },
   itemImageContainer: {
     width: scale(26),
@@ -41,6 +40,18 @@ const styles = StyleSheet.create({
   },
   itemText: {
     textAlign: 'left'
+  },
+  passwordChangedContainer: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(47, 141, 252, 0.08)',
+    borderRadius: moderateScale(6, 1),
+    flexDirection: 'row',
+    height: verticalScale(45),
+    justifyContent: 'center',
+    marginTop: verticalScale(31)
+  },
+  checkmark: {
+    marginRight: scale(13.14)
   }
 })
 

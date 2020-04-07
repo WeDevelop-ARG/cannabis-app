@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { formHasBlankValues } from '~/mixins/form/formHasBlankValues'
-import { Description, Body } from '~/components/texts'
+import { Description, Error } from '~/components/texts'
 import { PrimaryButton } from '~/components/buttons'
 import PasswordTextInput from '~/components/inputs/PasswordTextInput'
 import ActivityIndicator from '~/components/ActivityIndicator'
@@ -18,8 +18,8 @@ const initialValues = {
 const schema = Yup.object().shape({
   lastPassword: Yup.string(),
   newPassword: Yup.string()
-    .min(6, 'Contraseña muy corta'),
-  repeatPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Las contraseñas deben coincidir')
+    .min(6, 'Tu contraseña debe tener un mínimo de 6 caracteres'),
+  repeatPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Tus contraseñas no coinciden')
 })
 
 const SubmitButton = ({ disabled, onPress }) => {
@@ -30,17 +30,17 @@ const SubmitButton = ({ disabled, onPress }) => {
       style={styles.submitButton}
     >
       <Description white>
-          Cambiar
+          Guardar cambios
       </Description>
     </PrimaryButton>
   )
 }
 
-const Error = ({ errorText }) => (
+const FormError = ({ errorText }) => (
   Boolean(errorText) && (
-    <Body style={styles.errorMessage}>
+    <Error style={styles.formErrorMessage}>
       {errorText}
-    </Body>
+    </Error>
   )
 )
 
@@ -71,18 +71,20 @@ const Form = ({
           <PasswordTextInput
             onChangeText={formikProps.handleChange('newPassword')}
             onBlur={formikProps.handleBlur('newPassword')}
-            placeholder='Nueva contraseña'
+            placeholder='Contraseña nueva'
+            error={formikProps.errors.newPassword && formikProps.touched.newPassword}
           />
           {formikProps.errors.newPassword && formikProps.touched.newPassword &&
-            <Body style={styles.errorMessage}>{formikProps.errors.newPassword}</Body>}
+            <Error style={styles.errorMessage}>{formikProps.errors.newPassword}</Error>}
           <PasswordTextInput
             onChangeText={formikProps.handleChange('repeatPassword')}
             onBlur={formikProps.handleBlur('repeatPassword')}
-            placeholder='Confirmar contraseña'
+            placeholder='Volvé a escribir tu contraseña nueva'
+            error={formikProps.errors.repeatPassword && formikProps.touched.repeatPassword}
           />
           {formikProps.errors.repeatPassword && formikProps.touched.repeatPassword &&
-            <Body style={styles.errorMessage}>{formikProps.errors.repeatPassword}</Body>}
-          <Error errorText={errorText} />
+            <Error style={styles.errorMessage}>{formikProps.errors.repeatPassword}</Error>}
+          <FormError errorText={errorText} />
           <SubmittingIndicator submitting={submitting} />
           <SubmitButton
             onPress={formikProps.handleSubmit}

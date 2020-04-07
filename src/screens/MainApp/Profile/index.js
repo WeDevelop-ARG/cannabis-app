@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { View, ScrollView } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import * as firebase from 'firebase'
 import { createStackNavigator } from 'react-navigation-stack'
 import { includes } from 'lodash'
-import NavigationService from '~/navigationService'
+import NavigationService, { ForceRerenderOnNavigation } from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
 import MessagingService from '~/messagingService'
-import { Button, Title, Subtitle, Description } from '~/components'
+import { Button, Title, Subtitle, Description, Date } from '~/components'
 import Background from '~/components/Background'
+import Checkmark from '~/components/Checkmark'
 import PrivacyPolicy from '~/screens/PrivacyPolicy'
 import PasswordChange from '../PasswordChange'
 import policyLogo from '~/assets/images/Profile//policy_logo.svg'
@@ -48,11 +49,31 @@ const ListItem = ({ text, onPress, imgSource }) => {
   )
 }
 
-const Profile = () => {
-  AnalyticsService.setCurrentScreenName('Profile')
+const PasswordChangedBadge = () => {
+  return (
+    <View style={styles.passwordChangedContainer}>
+      <Checkmark style={styles.checkmark} />
+      <Date>¡Tu contraseña se actualizó correctamente!</Date>
+    </View>
+  )
+}
 
+const Profile = ({ navigation }) => {
   const [username, setUsername] = useState('')
+  const [passwordChanged, setPasswordChanged] = useState(navigation.state.params && navigation.state.params.passwordChanged)
   const email = firebase.auth().currentUser.email
+
+  useEffect(() => {
+    AnalyticsService.setCurrentScreenName('Profile')
+  }, [])
+
+  useEffect(() => {
+    setPasswordChanged(navigation.state.params && navigation.state.params.passwordChanged)
+  }, [navigation.state.params])
+
+  const resetRelevantStates = useCallback(() => {
+    setPasswordChanged(false)
+  }, [])
 
   useEffect(
     () => {
@@ -65,8 +86,12 @@ const Profile = () => {
 
   return (
     <Background style={styles.container}>
+      <ForceRerenderOnNavigation resetStateFunction={resetRelevantStates} />
       <ScrollView>
         <Title black style={styles.title}>Mi cuenta</Title>
+        {passwordChanged && (
+          <PasswordChangedBadge />
+        )}
         <View style={styles.userContainer}>
           <Subtitle black style={styles.username}>{username}</Subtitle>
           <Description gray>{email}</Description>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
+import NavigationService from '~/navigationService'
 import * as AuthenticationService from '~/authenticationService'
 import * as AnalyticsService from '~/analyticsService'
 import Background from '~/components/Background'
-import { Title } from '~/components/texts'
 import Header from './components/Header'
 import Form from './components/Form'
 import styles from './styles'
@@ -26,7 +26,7 @@ const PasswordChange = ({ navigation }) => {
 
     try {
       await AuthenticationService.changePassword(values.lastPassword, values.newPassword)
-      navigation.pop()
+      NavigationService.navigate('Profile', { passwordChanged: true })
     } catch (error) {
       switch (error.code) {
         case 'auth/wrong-password':
@@ -48,7 +48,6 @@ const PasswordChange = ({ navigation }) => {
     <Background style={styles.container}>
       <Header goBack={goBack} />
       <View style={styles.body}>
-        <Title>Cambiá tu contraseña</Title>
         <Form
           handleSubmit={handleSubmit}
           submitting={submitting}

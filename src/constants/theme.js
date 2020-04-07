@@ -11,7 +11,9 @@ const colors = {
   gray2: '#D3D5D8',
   gray3: '#FAFAFA',
   alpha: 'rgba(255, 255, 255, 0.01)',
-  background: '#FAFAFA'
+  background: '#FAFAFA',
+  shadow: '#F0F0F0',
+  error: '#FF0000'
 }
 
 const sizes = {
@@ -30,7 +32,8 @@ const sizes = {
   h4: moderateScale(14, 1),
   description: moderateScale(16, 1),
   body: moderateScale(14, 1),
-  date: moderateScale(12, 1)
+  date: moderateScale(12, 1),
+  error: moderateScale(12, 1)
 }
 
 const fonts = {
@@ -61,6 +64,10 @@ const fonts = {
   date: {
     fontFamily: 'red-hat-display-medium',
     fontSize: sizes.date
+  },
+  error: {
+    fontFamily: 'red-hat-display-medium',
+    fontSize: sizes.error
   }
 }
 

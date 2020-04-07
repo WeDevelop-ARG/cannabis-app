@@ -1,27 +1,31 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
-import ThemedTextInput from './ThemedTextInput'
+import ThemedTextInputWithError from './ThemedTextInputWithError'
 import PasswordVisibleToggle from '~/components/PasswordVisibleToggle'
 
 const PasswordTextInput = (props) => {
   const [passwordVisible, togglePasswordVisible] = useState(false)
   const {
     placeholder,
+    error,
     ...restProps
   } = props
 
   return (
     <View style={styles.passwordContainer}>
-      <ThemedTextInput
+      <ThemedTextInputWithError
         inputStyle={styles.input}
         placeholder={placeholder}
         secureTextEntry={!passwordVisible}
+        error={error}
         {...restProps}
       />
-      <PasswordVisibleToggle
-        isVisible={passwordVisible}
-        onPress={() => togglePasswordVisible(!passwordVisible)}
-      />
+      {!error && (
+        <PasswordVisibleToggle
+          isVisible={passwordVisible}
+          onPress={() => togglePasswordVisible(!passwordVisible)}
+        />
+      )}
     </View>
   )
 }
