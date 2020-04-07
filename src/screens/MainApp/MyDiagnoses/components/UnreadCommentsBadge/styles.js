@@ -1,15 +1,32 @@
 import { StyleSheet } from 'react-native'
-import { moderateScale } from 'react-native-size-matters/extend'
+import { moderateScale, verticalScale, scale } from 'react-native-size-matters/extend'
 import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   badge: {
-    width: moderateScale(27, 1),
-    height: moderateScale(27, 1),
+    width: moderateScale(29, 1),
+    height: moderateScale(29, 1),
     backgroundColor: theme.colors.black,
-    borderRadius: moderateScale(27, 1) / 2,
+    borderRadius: moderateScale(29, 1) / 2,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  number: {
+    height: verticalScale(22),
+    textAlign: 'center'
+  },
+  textVerticalAlignmentCenter: {
+    textAlignVertical: 'center'
+  },
+  textVerticalAlignmentAuto: {
+    textAlignVertical: 'auto'
+  },
+  textPaddingLeft: {
+    paddingLeft: scale(1)
+  },
+  textPaddingRight: {
+    paddingRight: scale(1)
   }
 })
 
