@@ -63,6 +63,7 @@ const ResponsesChat = ({ diagnose }) => {
             text={response.answer}
             date={date}
             isAdmin={Boolean(response.answeredBy)}
+            images={response.images}
           />
         )
       })

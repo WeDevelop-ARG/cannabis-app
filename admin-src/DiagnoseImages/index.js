@@ -2,7 +2,7 @@ import React, { useState, memo } from 'react'
 import ImgsViewer from 'react-images-viewer'
 import classes from './styles.css'
 
-const DiagnoseImages = ({ images }) => {
+const DiagnoseImages = ({ images, imageClassname = classes.diagnoseImage }) => {
   const [currentImage, setCurrentImage] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -30,7 +30,7 @@ const DiagnoseImages = ({ images }) => {
               key={index}
               onClick={(event) => openImageViewer(index, event)}
             >
-              <img className={classes.diagnoseImage} src={image.src} />
+              <img className={imageClassname} src={image.src} />
             </a>
           ))}
         </div>
