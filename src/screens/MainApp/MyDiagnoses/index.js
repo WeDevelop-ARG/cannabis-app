@@ -150,7 +150,7 @@ const MyDiagnoses = ({ navigation }) => {
   if (isEmpty(diagnoses)) {
     return (
       <Background>
-        <NoDiagnoses />
+        {!downloadingDiagnoses && <NoDiagnoses />}
         <View style={styles.noDiagnosesActivityIndicator}>
           {downloadingDiagnoses && <ActivityIndicator size='large' />}
         </View>
