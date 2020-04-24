@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { theme } from '~/constants'
-import { verticalScale } from 'react-native-size-matters/extend'
+import { verticalScale, scale, moderateScale } from 'react-native-size-matters/extend'
 
 const styles = StyleSheet.create({
   by: {
@@ -15,6 +15,13 @@ const styles = StyleSheet.create({
   metadataContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  image: {
+    width: scale(60),
+    height: verticalScale(60),
+    borderRadius: moderateScale(5, 1),
+    marginTop: verticalScale(11),
+    marginRight: scale(14)
   }
 })
 

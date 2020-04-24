@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { View, ActivityIndicator, Alert } from 'react-native'
 import { isEmpty, includes } from 'lodash'
@@ -15,6 +14,7 @@ import RenderDiagnose from './components/RenderDiagnose'
 import DetailedDiagnose from '../DetailedDiagnose'
 import SolutionRequest from './screens/SolutionRequest'
 import FinishScreen from './screens/FinishScreen'
+import FullScreenImagesView from './screens/FullScreenImagesView'
 import HeaderForScrolling from './components/HeaderForScrolling'
 import { buildStackNavigator } from '~/components/StackNavigator'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
@@ -73,10 +73,9 @@ const MyDiagnoses = ({ navigation }) => {
   const [isListSwipeEnabled, setIsListSwipeEnabled] = useState(true)
   const diagnoseToRemoveRef = useRef(null)
 
-  AnalyticsService.setCurrentScreenName('My Diagnoses')
-
   useEffect(
     () => {
+      AnalyticsService.setCurrentScreenName('My Diagnoses')
       const unsuscribe = DatabaseService.fetchDiagnosesFromCurrentUser(async (snapshot) => {
         setDownloadingDiagnoses(true)
         snapshot.docChanges().map(docChange => {
@@ -207,7 +206,8 @@ const MyDiagnosesStack = buildStackNavigator(
     MyDiagnoses,
     DetailedDiagnose,
     SolutionRequest,
-    FinishScreen
+    FinishScreen,
+    FullScreenImagesView
   },
   {
     initialRouteName: 'MyDiagnoses'

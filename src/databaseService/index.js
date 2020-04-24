@@ -162,8 +162,9 @@ export const addDiagnoseResponse = async (diagnoseUID, response) => {
     const responsePath = `users/${userUID}/requests/${diagnoseUID}/responses`
 
     const responseData = {
-      answer: response,
-      answeredByUID: userUID
+      answer: response.answer,
+      answeredByUID: userUID,
+      imageReferences: response.imageReferences || []
     }
 
     const responseReference = await add(responsePath, responseData)

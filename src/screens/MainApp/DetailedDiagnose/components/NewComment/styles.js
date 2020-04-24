@@ -6,6 +6,7 @@ export const SEND_BUTTON_ICON_WIDTH = moderateScale(14, 1)
 export const SEND_BUTTON_ICON_HEIGHT = moderateScale(30, 1)
 export const INPUT_PADDING_STATIC = moderateScale(8, 1)
 export const INPUT_PADDING_ON_KEYBOARD_OPENED = moderateScale(20, 1)
+export const INPUT_PADDING_WITH_IMAGES = moderateScale(84, 1)
 
 const styles = StyleSheet.create({
   container: {
@@ -19,18 +20,18 @@ const styles = StyleSheet.create({
   inputBorders: {
     position: 'absolute',
     height: verticalScale(45),
-    width: scale(357),
+    width: scale(316),
     padding: moderateScale(8),
-    margin: theme.sizes.margin * 2,
     marginVertical: verticalScale(8),
     borderRadius: moderateScale(5),
     borderWidth: moderateScale(0.5, 1),
-    borderColor: '#DADADA'
+    borderColor: '#DADADA',
+    right: scale(9)
   },
   input: {
+    left: scale(63),
     alignSelf: 'flex-start',
-    width: scale(310),
-    marginHorizontal: theme.sizes.margin,
+    width: scale(250),
     paddingVertical: moderateScale(8),
     marginVertical: verticalScale(8),
     color: theme.colors.black,
@@ -46,6 +47,23 @@ const styles = StyleSheet.create({
     right: scale(14),
     borderRadius: theme.sizes.border,
     backgroundColor: theme.colors.primary
+  },
+  cameraButton: {
+    position: 'absolute',
+    left: scale(12),
+    top: verticalScale(21)
+  },
+  imageSelectionContainer: {
+    position: 'relative',
+    height: verticalScale(300)
+  },
+  galleryContainer: {
+    marginTop: 0,
+    zIndex: 1
+  },
+  newCommentImageListOnTextSubmission: {
+    position: 'absolute',
+    bottom: 0
   }
 })
 

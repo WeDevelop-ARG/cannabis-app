@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash'
 import pluralize from 'pluralize'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
+import * as StorageService from '~/storageService'
 import NavigationService, { ForceCleanUpOnScreenLeave, ForceRerenderOnNavigation } from '~/navigationService'
 import Background from '~/components/Background'
 import { Header as HeaderText } from '~/components/texts'
@@ -76,8 +77,6 @@ const DetailedDiagnose = ({ navigation }) => {
   const { showActionSheetWithOptions } = useActionSheet()
   const date = firebaseTimestampToMoment(diagnose.createdAt, 'es').format('D MMM')
 
-  AnalyticsService.setCurrentScreenName('Detailed Diagnose')
-
   const reopenDiagnose = useCallback(async (diagnose) => {
     try {
       await DatabaseService.setDiagnoseSolvedMark(diagnose.id, false)
@@ -146,6 +145,7 @@ const DetailedDiagnose = ({ navigation }) => {
       setFetchedResponses(true)
     }
 
+    AnalyticsService.setCurrentScreenName('Detailed Diagnose')
     buildResponses()
   }, [])
 
@@ -192,9 +192,25 @@ const DetailedDiagnose = ({ navigation }) => {
     setCarouselSection(buildCarouselSection())
   }, [responses, fetchedResponses, amountOfResponses, solvedText, onThreeDotsPress])
 
-  const onNewComment = async (answer) => {
+  const onNewComment = async (commentBody) => {
     try {
-      const response = await DatabaseService.addDiagnoseResponse(diagnose.id, answer)
+      const imageReferences = []
+
+      if (commentBody.images) {
+        await Promise.all(
+          commentBody.images.map(async (imageURI) => {
+            const imageReference = await StorageService.uploadImageAndReturnReference(imageURI)
+            imageReferences.push(imageReference)
+          })
+        )
+      }
+
+      const responseBody = {
+        answer: commentBody.comment,
+        imageReferences
+      }
+
+      const response = await DatabaseService.addDiagnoseResponse(diagnose.id, responseBody)
       const renderedResponse = await renderResponse(response)
 
       setResponses([renderedResponse, ...responses])
