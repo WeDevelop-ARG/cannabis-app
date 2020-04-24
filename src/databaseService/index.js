@@ -59,6 +59,7 @@ export const queryEmailFromUsername = async (username, collectionPath = 'users')
     const querySnapshot = await firebase.firestore().collection(collectionPath).where('username', '==', username).get()
     if (hasDocuments(querySnapshot)) {
       const json = getFirstDocumentDataFromQuerySnapshot(querySnapshot)
+
       return json && json.email
     }
   } catch (error) {
@@ -71,7 +72,21 @@ export const queryUsernameFromEmail = async (email, collectionPath = 'users') =>
     const querySnapshot = await firebase.firestore().collection(collectionPath).where('email', '==', email).get()
     if (hasDocuments(querySnapshot)) {
       const json = getFirstDocumentDataFromQuerySnapshot(querySnapshot)
+
       return json && json.username
+    }
+  } catch (error) {
+    throw new DatabaseError(error.message)
+  }
+}
+
+export const findUsersWithUsernames = async (usernames, collectionPath = 'users') => {
+  try {
+    const querySnapshot = await firebase.firestore().collection(collectionPath).where('username', 'in', usernames).get()
+    if (hasDocuments(querySnapshot)) {
+      const usedUsernameArray = querySnapshot.docs.map(d => d.data().username)
+
+      return usedUsernameArray
     }
   } catch (error) {
     throw new DatabaseError(error.message)

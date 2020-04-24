@@ -1,15 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { KeyboardAvoidingView, TextInput, ActivityIndicator, View } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import * as AnalyticsService from '~/analyticsService'
 import Background from '~/components/Background'
-import { Body, Description, Subtitle } from '~/components/texts'
-import { PrimaryButton, GrayButton } from '~/components/buttons'
+import { Description, Subtitle, Error } from '~/components/texts'
+import { PrimaryButton, Button } from '~/components/buttons'
 import * as AuthenticationService from '~/authenticationService'
 import * as DatabaseService from '~/databaseService'
 import NavigationService from '~/navigationService'
 import usernameIcon from '~/assets/images/UsernameRequest/usernameIcon.svg'
 import styles, { PLACEHOLDER_TEXT_COLOR, ICON_WIDTH, ICON_HEIGHT } from './styles'
+import SuggestionBox from '~/components/SuggestionBox'
+
+const NUMBER_OF_POSSIBLE_USERNAMES = 9
+const RANDOMIZER_NUMBER = 100
+const SUGGESTION_BOX_LENGTH = 4
+
+const usernamesOcuppied = [
+  'AlFumeta',
+  'THCPower',
+  '25gr',
+  'fernando_cannabis',
+  'sativa_91',
+  'RubenStonner',
+  'CRIPY',
+  'weedow',
+  'ganjahman',
+  'tricoman',
+  'thegreendoctor',
+  'bluesativa',
+  'Sintabaco',
+  'paulaenverde',
+  'joseliyo',
+  'jamaica97',
+  'cannabisIndica',
+  'cogollosano'
+]
 
 const SubmitIndicator = ({ submitting }) => (
   submitting &&
@@ -19,53 +45,47 @@ const SubmitIndicator = ({ submitting }) => (
     />
 )
 
-const Error = ({ error }) => (
+const SubmitButton = ({ disabled, onPress, error }) => (
+  <PrimaryButton
+    onPress={onPress}
+    style={error ? styles.submitButtonWithError : styles.submitButton}
+    disabled={Boolean(error || disabled)}
+  >
+    <Description white>Continuar</Description>
+  </PrimaryButton>
+)
+
+const Icon = () => (
+  <SvgXml
+    width={ICON_WIDTH}
+    height={ICON_HEIGHT}
+    style={styles.icon}
+    xml={usernameIcon}
+  />
+)
+
+const Suggestions = ({ error, suggestions, onSuggestionSelected }) => (
   error && (
-    <Body
-      secondary
-      style={styles.error}
-    >
-      {error}
-    </Body>
+    <View style={styles.suggestionContainer}>
+      {suggestions.map((suggestion, index) => {
+        return (
+          <Button onPress={() => onSuggestionSelected(suggestion)} key={index}>
+            <SuggestionBox boxStyle={(index === (suggestions.length - 1)) ? styles.lastSuggestionBox : {}}>
+              {suggestion}
+            </SuggestionBox>
+          </Button>
+        )
+      })}
+    </View>
   )
 )
 
-const SubmitButton = ({ disabled, onPress }) => {
-  if (disabled) {
-    return (
-      <GrayButton>
-        <Description white>Continuar</Description>
-      </GrayButton>
-    )
-  } else {
-    return (
-      <PrimaryButton
-        onPress={onPress}
-      >
-        <Description white>Continuar</Description>
-      </PrimaryButton>
-    )
-  }
-}
-
-const Icon = () => (
-  <>
-    <View style={styles.iconBackground} />
-    <SvgXml
-      width={ICON_WIDTH}
-      height={ICON_HEIGHT}
-      style={styles.icon}
-      xml={usernameIcon}
-    />
-  </>
-)
-
-const UsernameRequest = (props) => {
+const UsernameRequest = () => {
   const [textInputValue, setTextInputValue] = useState('')
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
-
-  AnalyticsService.setCurrentScreenName('Username Request')
+  const [suggestions, setSuggestions] = useState([null])
+  const [usernameExists, setUsernameExists] = useState(null)
 
   const submitHandler = async () => {
     setSubmitting(true)
@@ -73,8 +93,9 @@ const UsernameRequest = (props) => {
     let newUsernameCreated = false
 
     try {
-      if (await DatabaseService.usernameAlreadyInUse(textInputValue)) {
-        setError('Este nickname ya existe')
+      if (await DatabaseService.usernameAlreadyInUse(textInputValue) || usernamesOcuppied.includes(textInputValue)) {
+        setError(`El usuario "${textInputValue}" no está disponible`)
+        setUsernameExists(true)
       } else {
         const user = await AuthenticationService.getCurrentUser()
 
@@ -82,7 +103,6 @@ const UsernameRequest = (props) => {
           username: textInputValue,
           email: user.email
         })
-
         newUsernameCreated = true
       }
     } catch (error) {
@@ -100,10 +120,43 @@ const UsernameRequest = (props) => {
     setError(null)
   }
 
+  const onSuggestionSelected = (suggestion) => {
+    setTextInputValue(suggestion)
+    setError(false)
+  }
+
+  useEffect(() => {
+    AnalyticsService.setCurrentScreenName('Username Request')
+  }, [])
+
+  useEffect(() => {
+    const createSuggestions = async () => {
+      let possibleUsernames = []
+      let i = 0
+
+      while (i < NUMBER_OF_POSSIBLE_USERNAMES) {
+        possibleUsernames[i] = (textInputValue + '_' + Math.floor(Math.random() * RANDOMIZER_NUMBER))
+        i++
+      }
+      const usedUsernames = await DatabaseService.findUsersWithUsernames(possibleUsernames)
+
+      if (usedUsernames) {
+        possibleUsernames = possibleUsernames.filter(u => !(usedUsernames.includes(u)))
+      }
+      possibleUsernames = possibleUsernames.splice(0, SUGGESTION_BOX_LENGTH)
+      setSuggestions(possibleUsernames)
+    }
+
+    if (usernameExists) {
+      createSuggestions()
+      setUsernameExists(false)
+    }
+  }, [usernameExists])
+
   return (
     <Background>
-      <Icon />
       <KeyboardAvoidingView style={styles.container}>
+        <Icon />
         <Subtitle style={styles.title}>Creá tu nombre de usuario</Subtitle>
         <Description
           gray
@@ -118,10 +171,19 @@ const UsernameRequest = (props) => {
           onChangeText={(text) => handleInputText(text)}
           value={textInputValue}
         />
-        <Error error={error} />
+        {error &&
+          <Error style={styles.error}>  El usuario "{textInputValue}" no está disponible </Error>}
+        {error &&
+          <Subtitle style={styles.suggestionTitle}> Sugerencias </Subtitle>}
+        <Suggestions
+          error={error}
+          suggestions={suggestions}
+          onSuggestionSelected={onSuggestionSelected}
+        />
         <SubmitIndicator submitting={submitting} />
         <SubmitButton
-          disabled={textInputValue === ''}
+          error={error}
+          disabled={(textInputValue === '')}
           onPress={submitHandler}
         />
       </KeyboardAvoidingView>

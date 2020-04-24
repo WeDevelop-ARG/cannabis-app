@@ -6,43 +6,27 @@ export const PLACEHOLDER_TEXT_COLOR = theme.colors.gray
 export const ICON_WIDTH = moderateScale(66.53)
 export const ICON_HEIGHT = moderateScale(51.41)
 
-const ICON_TOP_DISPLACEMENT_IN_DP = 89
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    top: verticalScale(175)
-  },
-  iconBackground: {
-    alignSelf: 'center',
-    position: 'absolute',
-    top: verticalScale(ICON_TOP_DISPLACEMENT_IN_DP + 10),
-    width: moderateScale(62),
-    height: moderateScale(42),
-    backgroundColor: 'rgba(94, 206, 132, 0.2)'
+    alignItems: 'center'
   },
   icon: {
-    alignSelf: 'center',
-    position: 'absolute',
-    top: verticalScale(ICON_TOP_DISPLACEMENT_IN_DP)
+    marginTop: verticalScale(105)
   },
   title: {
-    alignSelf: 'center',
+    marginTop: verticalScale(33),
     marginBottom: verticalScale(12)
   },
   description: {
-    alignSelf: 'center',
     textAlign: 'center',
     width: theme.sizes.containerWidth
   },
   textInput: {
     width: theme.sizes.containerWidth,
     height: theme.sizes.base,
-    marginTop: verticalScale(35),
-    marginBottom: verticalScale(30),
+    marginTop: verticalScale(25),
     padding: theme.sizes.padding,
     paddingLeft: scale(14),
-    alignSelf: 'center',
     borderRadius: theme.sizes.border,
     color: theme.colors.black,
     textDecorationLine: 'none',
@@ -51,12 +35,31 @@ const styles = StyleSheet.create({
     ...theme.shadows
   },
   error: {
-    alignSelf: 'center',
-    marginBottom: theme.sizes.margin
+    marginLeft: scale(24),
+    alignSelf: 'flex-start',
+    marginTop: verticalScale(5),
+    marginBottom: verticalScale(15)
   },
   submitIndicator: {
-    alignSelf: 'center',
     marginBottom: theme.sizes.margin
+  },
+  submitButton: {
+    marginTop: verticalScale(40)
+  },
+  lastSuggestionBox: {
+    borderBottomWidth: scale(0)
+  },
+  submitButtonWithError: {
+    marginTop: verticalScale(20)
+  },
+  suggestionContainer: {
+    borderColor: '#DADADA',
+    borderRadius: scale(5),
+    borderWidth: scale(1)
+  },
+  suggestionTitle: {
+    ...theme.fonts.h3,
+    marginBottom: verticalScale(24)
   }
 })
 
