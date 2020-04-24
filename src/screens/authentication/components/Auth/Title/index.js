@@ -1,10 +1,15 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Title } from '~/components'
-import styles from './styles'
+import { verticalScale } from 'react-native-size-matters/extend'
 
-const AuthTitle = ({ children }) => (
-  <View style={styles.container}>
+const defaultStyle = {
+  marginTop: verticalScale(24),
+  marginBottom: verticalScale(50)
+}
+
+const AuthTitle = ({ children, style }) => (
+  <View style={[defaultStyle, style]}>
     <Title>{children}</Title>
   </View>
 )

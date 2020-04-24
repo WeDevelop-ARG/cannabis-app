@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import NavigationService from '~/navigationService'
 import { Body } from '~/components'
-import styles from './style'
+import styles from './styles'
 
 const goToPrivacyPolicyScreen = () => {
   NavigationService.navigate('PrivacyPolicy', { prevScreen: 'SignUp' })

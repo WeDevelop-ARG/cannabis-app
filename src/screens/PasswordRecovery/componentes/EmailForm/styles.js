@@ -1,23 +1,20 @@
 import { StyleSheet } from 'react-native'
-import { moderateScale, verticalScale } from 'react-native-size-matters'
+import { verticalScale } from 'react-native-size-matters'
 import { theme } from '~/constants'
 
 export const PLACEHOLDER_COLOR = theme.colors.gray
-export const PASSWORD_TOGGLE_ICON_SIZE = moderateScale(16, 1)
 
 const styles = StyleSheet.create({
   error: {
     textAlign: 'center',
-    color: theme.colors.secondary
+    color: theme.colors.error
   },
   errorMessage: {
-    marginLeft: theme.sizes.margin,
-    color: theme.colors.secondary
+    marginLeft: theme.sizes.margin
   },
   submitButton: {
     alignSelf: 'center',
-    marginTop: verticalScale(25),
-    marginBottom: verticalScale(16)
+    marginBottom: verticalScale(21)
   },
   label: {
     width: theme.sizes.containerWidth,
@@ -33,15 +30,6 @@ const styles = StyleSheet.create({
 
     ...theme.fonts.body,
     ...theme.shadows
-  },
-  passwordContainer: {
-    flexDirection: 'row'
-  },
-  togglePasswordButton: {
-    position: 'absolute',
-    alignSelf: 'center',
-    right: (theme.sizes.containerWidth * 0.08),
-    elevation: 5
   }
 })
 

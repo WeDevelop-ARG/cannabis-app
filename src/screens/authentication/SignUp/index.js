@@ -25,6 +25,7 @@ const SignUp = () => {
   return (
     <Auth>
       <Auth.Navigation goTo='Login'>Iniciar sesión</Auth.Navigation>
+      <Auth.Logo />
       <Auth.Title>Creá tu cuenta</Auth.Title>
       <Auth.Form
         handleSubmit={handleSubmit}

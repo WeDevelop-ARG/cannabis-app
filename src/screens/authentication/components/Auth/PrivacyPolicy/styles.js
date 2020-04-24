@@ -1,10 +1,12 @@
 import { StyleSheet } from 'react-native'
-import { verticalScale } from 'react-native-size-matters'
+import { theme } from '~/constants'
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: verticalScale(116)
+    width: theme.sizes.containerWidth
+  },
+  policyText: {
+    textAlign: 'center'
   }
 })
 

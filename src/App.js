@@ -13,6 +13,7 @@ import UsernameRequest from './screens/authentication/UsernameRequest'
 import LoadingScreen from './screens/LoadingScreen'
 import Onboarding from './screens/Onboarding'
 import MainApp from './screens/MainApp'
+import PasswordRecovery from './screens/PasswordRecovery'
 import PrivacyPolicy from './screens/PrivacyPolicy'
 import NoConnection from './screens/NoConnection'
 import { buildStackNavigator } from '~/components/StackNavigator'
@@ -30,7 +31,8 @@ if (firebase.apps.length === 0) {
 const StackNavigator = buildStackNavigator(
   {
     SignUp,
-    PrivacyPolicy
+    PrivacyPolicy,
+    PasswordRecovery
   }
 )
 

@@ -10,7 +10,8 @@ const SocialNetworkButton = ({ style, onPress, children }) => (
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center'
-    }}>
+    }}
+    >
       {children}
     </View>
   </TouchableOpacity>

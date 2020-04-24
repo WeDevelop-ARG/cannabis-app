@@ -96,7 +96,7 @@ const Form = ({
       validationSchema={applyValidation && schema}
     >
       {formikProps => (
-        <KeyboardAvoidingView style={styles.container}>
+        <KeyboardAvoidingView>
           <TextInput
             style={styles.label}
             placeholder={credentialText}
