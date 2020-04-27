@@ -4,7 +4,7 @@ import { verticalScale } from 'react-native-size-matters'
 
 const AuthSeparator = ({ children }) => (
   <Separator style={{
-    marginBottom: verticalScale(30)
+    marginBottom: verticalScale(15)
   }}
   >
     {children}

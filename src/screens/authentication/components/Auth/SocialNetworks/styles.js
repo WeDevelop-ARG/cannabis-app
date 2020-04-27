@@ -4,7 +4,7 @@ import { verticalScale } from 'react-native-size-matters'
 const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
-    marginBottom: verticalScale(30)
+    marginBottom: verticalScale(15)
   }
 })
 
