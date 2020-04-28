@@ -29,7 +29,11 @@ const SolutionRequest = ({ navigation }) => {
     setUploading(true)
     let doNavigate = false
     try {
-      await DatabaseService.addDiagnoseResponse(diagnose.id, description)
+      const responseBody = {
+        answer: description
+      }
+
+      await DatabaseService.addDiagnoseResponse(diagnose.id, responseBody)
       await DatabaseService.setDiagnoseSolvedMark(diagnose.id, true)
 
       setDescription('')
