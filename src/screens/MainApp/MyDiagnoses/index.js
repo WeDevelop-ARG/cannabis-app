@@ -15,11 +15,12 @@ import DetailedDiagnose from '../DetailedDiagnose'
 import SolutionRequest from './screens/SolutionRequest'
 import FinishScreen from './screens/FinishScreen'
 import FullScreenImagesView from './screens/FullScreenImagesView'
-import HeaderForScrolling from './components/HeaderForScrolling'
+import NoDiagnoseScreen from './screens/NoDiagnoseScreen'
 import { buildStackNavigator } from '~/components/StackNavigator'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
 import trashIcon from '~/assets/images/MyDiagnoses/trash.svg'
-import styles from './styles'
+import styles, { inactiveColor, activeColor } from './styles'
+import { TabView, TabBar } from 'react-native-tab-view'
 
 const FLOATING_MESSAGE_DURATION = 3000
 const DIAGNOSE_ANIMATION_DURATION = 500
@@ -72,20 +73,41 @@ const MyDiagnoses = ({ navigation }) => {
   const [messageVisible, setMessageVisible] = useState(false)
   const [isListSwipeEnabled, setIsListSwipeEnabled] = useState(true)
   const diagnoseToRemoveRef = useRef(null)
+  const [index, setIndex] = useState(0)
+  const [tab, setTab] = useState()
+  const [openDiagnoses, setOpenDiagnoses] = useState([])
+  const [closedDiagnoses, setClosedDiagnoses] = useState([])
+
+  const [routes] = useState([
+    { key: 'OpenDiagnoses', title: 'Abiertas' },
+    { key: 'ResolvedDiagnoses', title: 'Resueltas' }
+  ])
+
+  const renderTabBar = props => (
+    <TabBar
+      {...props}
+      activeColor={activeColor}
+      inactiveColor={inactiveColor}
+      indicatorStyle={styles.indicatorStyle}
+      indicatorContainerStyle={styles.indicatorContainer}
+      style={styles.tabBarStyle}
+      labelStyle={styles.label}
+    />
+  )
 
   useEffect(
     () => {
       AnalyticsService.setCurrentScreenName('My Diagnoses')
-      const unsuscribe = DatabaseService.fetchDiagnosesFromCurrentUser(async (snapshot) => {
+      const unsuscribe = DatabaseService.fetchSolvedDiagnosesFromCurrentUser(async (snapshot) => {
         setDownloadingDiagnoses(true)
         snapshot.docChanges().map(docChange => {
           const doc = docChange.doc
           const changeType = docChange.type
 
           switch (changeType) {
-            case 'added': setDiagnoses(v => processAddedDiagnose(v, doc)); break
-            case 'modified': setDiagnoses(v => processModifiedDiagnose(v, doc)); break
-            case 'removed': setDiagnoses(v => processRemovedDiagnose(v, doc)); break
+            case 'added': setClosedDiagnoses(v => processAddedDiagnose(v, doc)); break
+            case 'modified': setClosedDiagnoses(v => processModifiedDiagnose(v, doc)); break
+            case 'removed': setClosedDiagnoses(v => processRemovedDiagnose(v, doc)); break
           }
         })
         setDownloadingDiagnoses(false)
@@ -94,6 +116,38 @@ const MyDiagnoses = ({ navigation }) => {
     },
     []
   )
+
+  useEffect(
+    () => {
+      const unsuscribe = DatabaseService.fetchUnsolvedDiagnosesFromCurrentUser(async (snapshot) => {
+        setDownloadingDiagnoses(true)
+        snapshot.docChanges().map(docChange => {
+          const doc = docChange.doc
+          const changeType = docChange.type
+
+          switch (changeType) {
+            case 'added': setOpenDiagnoses(v => processAddedDiagnose(v, doc)); break
+            case 'modified': setOpenDiagnoses(v => processModifiedDiagnose(v, doc)); break
+            case 'removed': setOpenDiagnoses(v => processRemovedDiagnose(v, doc)); break
+          }
+        })
+        setDownloadingDiagnoses(false)
+      })
+      return () => { unsuscribe() }
+    },
+    []
+  )
+
+  useEffect(() => {
+    if (index === 0) {
+      setDiagnoses(openDiagnoses)
+      setTab('OpenDiagnoses')
+    } else {
+      setDiagnoses(closedDiagnoses)
+      setTab('ResolvedDiagnoses')
+    }
+  },
+  [index, openDiagnoses, closedDiagnoses])
 
   const setDiagnoseIsClosed = useCallback((diagnoseId, isClosed) => {
     const newDiagnoses = [...diagnoses]
@@ -146,10 +200,10 @@ const MyDiagnoses = ({ navigation }) => {
     recoverDiagnose()
   }, [recoverDiagnose])
 
-  if (isEmpty(diagnoses)) {
+  if (isEmpty(openDiagnoses) && isEmpty(closedDiagnoses) && !downloadingDiagnoses) {
     return (
       <Background>
-        {!downloadingDiagnoses && <NoDiagnoses />}
+        {!downloadingDiagnoses && <NoDiagnoseScreen />}
         <View style={styles.noDiagnosesActivityIndicator}>
           {downloadingDiagnoses && <ActivityIndicator size='large' />}
         </View>
@@ -159,33 +213,46 @@ const MyDiagnoses = ({ navigation }) => {
 
   return (
     <Background>
-      <HeaderForScrolling show={scrolling} />
-      {diagnoses &&
-        <SwipeListView
-          ref={flatListRef}
-          data={diagnoses}
-          showsVerticalScrollIndicator={false}
-          style={styles.container}
-          ListHeaderComponent={<StaticHeader />}
-          renderItem={({ item }) => <RenderDiagnose animationDuration={DIAGNOSE_ANIMATION_DURATION} item={item} />}
-          keyExtractor={item => item.id}
-          disableVirtualization={false}
-          contentContainerStyle={styles.flatListContainer}
-          onScroll={({ nativeEvent }) => { setScrolling(isScrollWithinSnapThreshold(nativeEvent)) }}
-          renderHiddenItem={(data, rowMap) => (
-            <View style={[styles.hiddenField]}>
-              <SvgButton
-                height={verticalScale(30)}
-                width={scale(21)}
-                svg={trashIcon}
-              />
-            </View>
-          )}
-          disableRightSwipe
-          disableLeftSwipe={!isListSwipeEnabled}
-          onRowOpen={handleListItemSwipe}
-          rightOpenValue={scale(-375)}
-        />}
+      <SwipeListView
+        ref={flatListRef}
+        data={diagnoses}
+        extraData={tab}
+        showsVerticalScrollIndicator={false}
+        style={styles.container}
+        ListHeaderComponent={
+          <View>
+            <StaticHeader />
+            <TabView
+              navigationState={{ index, routes }}
+              renderScene={() => null}
+              renderTabBar={renderTabBar}
+              onIndexChange={setIndex}
+              swipeEnabled={false}
+              lazy
+            />
+            {isEmpty(closedDiagnoses) && tab === 'ResolvedDiagnoses' && <NoDiagnoses tab={tab} />}
+            {isEmpty(openDiagnoses) && tab === 'OpenDiagnoses' && <NoDiagnoses tab={tab} />}
+          </View>
+        }
+        renderItem={({ item }) => <RenderDiagnose animationDuration={DIAGNOSE_ANIMATION_DURATION} item={item} />}
+        keyExtractor={item => item.id}
+        disableVirtualization={false}
+        contentContainerStyle={styles.flatListContainer}
+        onScroll={({ nativeEvent }) => { setScrolling(isScrollWithinSnapThreshold(nativeEvent)) }}
+        renderHiddenItem={(data, rowMap) => (
+          <View style={[styles.hiddenField]}>
+            <SvgButton
+              height={verticalScale(30)}
+              width={scale(21)}
+              svg={trashIcon}
+            />
+          </View>
+        )}
+        disableRightSwipe
+        disableLeftSwipe={!isListSwipeEnabled}
+        onRowOpen={handleListItemSwipe}
+        rightOpenValue={scale(-375)}
+      />
 
       <FloatingMessage
         text='Solicitud eliminada'

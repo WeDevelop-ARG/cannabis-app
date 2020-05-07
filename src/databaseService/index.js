@@ -211,6 +211,28 @@ export const fetchDiagnosesFromCurrentUser = (onSnapshot) => {
     .onSnapshot(onSnapshot)
 }
 
+export const fetchUnsolvedDiagnosesFromCurrentUser = (onSnapshot) => {
+  const userUID = AuthenticationService.getCurrentUserUID()
+  return firebase
+    .firestore()
+    .collection(`users/${userUID}/requests`)
+    .where('removedAt', '==', 0)
+    .where('isSolved', '==', false)
+    .orderBy('createdAt', 'asc')
+    .onSnapshot(onSnapshot)
+}
+
+export const fetchSolvedDiagnosesFromCurrentUser = (onSnapshot) => {
+  const userUID = AuthenticationService.getCurrentUserUID()
+  return firebase
+    .firestore()
+    .collection(`users/${userUID}/requests`)
+    .where('removedAt', '==', 0)
+    .where('isSolved', '==', true)
+    .orderBy('createdAt', 'asc')
+    .onSnapshot(onSnapshot)
+}
+
 export const setDiagnoseRemovedMark = async (diagnoseUID, isRemoved) => {
   try {
     const userUID = AuthenticationService.getCurrentUserUID()

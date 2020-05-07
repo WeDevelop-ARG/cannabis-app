@@ -2,6 +2,9 @@ import { StyleSheet } from 'react-native'
 import { verticalScale, scale } from 'react-native-size-matters/extend'
 import { theme } from '~/constants'
 
+export const activeColor = theme.colors.primary
+export const inactiveColor = theme.colors.gray
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -28,8 +31,20 @@ const styles = StyleSheet.create({
   toast: {
     color: 'white'
   },
-  swipeRow: {
-
+  tabBarStyle: {
+    backgroundColor: theme.colors.gray3
+  },
+  indicatorContainer: {
+    marginHorizontal: scale(25)
+  },
+  indicatorStyle: {
+    backgroundColor: theme.colors.primary,
+    height: verticalScale(5),
+    borderRadius: verticalScale(4),
+    width: scale(140)
+  },
+  label: {
+    ...theme.fonts.h4
   }
 })
 
