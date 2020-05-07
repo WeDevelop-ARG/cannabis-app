@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
-import {
-  KeyboardAvoidingView,
-  TextInput,
-  View
-} from 'react-native'
+import React from 'react'
+import { KeyboardAvoidingView } from 'react-native'
 import * as Yup from 'yup'
-import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Formik } from 'formik'
-import { isEmpty, values } from 'lodash'
-import { Body, Description, GrayButton, PrimaryButton, Button } from '~/components'
+import { formHasBlankValues } from '~/mixins/form/formHasBlankValues'
+import PasswordTextInput from '~/components/inputs/PasswordTextInput'
+import ThemedTextInputWithError from '~/components/inputs/ThemedTextInputWithError'
+import { Description, PrimaryButton } from '~/components'
+import Error from '~/components/texts/Error'
 import AuthenticatingIndicator from '../../AuthenticatingIndicator'
-import styles, { PLACEHOLDER_COLOR, PASSWORD_TOGGLE_ICON_SIZE } from './styles'
+import styles, { PLACEHOLDER_COLOR } from './styles'
 
 const initialValues = {
   credential: '',
@@ -19,65 +17,32 @@ const initialValues = {
 
 const schema = Yup.object().shape({
   credential: Yup.string()
-    .email('Email inválido')
+    .email('Ops! Este no es un e-mail válido')
     .required('Requerido'),
   password: Yup.string()
-    .min(6, 'Contraseña muy corta')
+    .min(6, 'Tu contraseña debe tener un mínimo de 6 caracteres')
     .required('Requerido')
 })
 
-const Error = ({ error }) => (
+const FormError = ({ error }) => (
   error && (
-    <Body style={styles.error}>
-  Credenciales no aceptadas
-    </Body>
+    <Error style={styles.error}>
+      Credenciales no aceptadas
+    </Error>
   )
 )
 
-const SubmitButton = ({ onPress, blankValuesExist, error, disabled, children }) => {
-  if (blankValuesExist || error) {
-    return (
-      <GrayButton style={styles.submitButton}>
-        <Description white>
-          {children}
-        </Description>
-      </GrayButton>
-    )
-  } else {
-    return (
-      <PrimaryButton
-        onPress={onPress}
-        style={styles.submitButton}
-        disabled={disabled}
-      >
-        <Description white>
-          {children}
-        </Description>
-      </PrimaryButton>
-    )
-  }
-}
-
-const PasswordVisibleToggle = ({ onPress, isVisible }) => {
-  return (
-    <Button
-      onPress={onPress}
-      style={styles.togglePasswordButton}
-    >
-      <Icon
-        type='font-awesome'
-        name={isVisible ? 'eye-slash' : 'eye'}
-        size={PASSWORD_TOGGLE_ICON_SIZE}
-        color={PLACEHOLDER_COLOR}
-      />
-    </Button>
-  )
-}
-
-const formHasBlankValues = (formValues) => {
-  const blankValues = values(formValues).filter(element => element === '')
-  return !isEmpty(blankValues)
-}
+const SubmitButton = ({ onPress, disabled, children }) => (
+  <PrimaryButton
+    onPress={onPress}
+    style={styles.submitButton}
+    disabled={disabled}
+  >
+    <Description white>
+      {children}
+    </Description>
+  </PrimaryButton>
+)
 
 const Form = ({
   handleSubmit,
@@ -87,8 +52,6 @@ const Form = ({
   submitText,
   applyValidation
 }) => {
-  const [passwordVisible, togglePasswordVisible] = useState(false)
-
   return (
     <Formik
       initialValues={initialValues}
@@ -97,40 +60,31 @@ const Form = ({
     >
       {formikProps => (
         <KeyboardAvoidingView>
-          <TextInput
-            style={styles.label}
+          <ThemedTextInputWithError
             placeholder={credentialText}
             placeholderTextColor={PLACEHOLDER_COLOR}
             onChangeText={formikProps.handleChange('credential')}
             onBlur={formikProps.handleBlur('credential')}
             value={formikProps.values.credential}
+            error={formikProps.errors.credential && formikProps.touched.credential}
           />
           {formikProps.errors.credential && formikProps.touched.credential &&
-            <Body style={styles.errorMessage}>{formikProps.errors.credential}</Body>}
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.label}
-              placeholder='Ingresá tu contraseña'
-              placeholderTextColor={PLACEHOLDER_COLOR}
-              secureTextEntry={!passwordVisible}
-              onChangeText={formikProps.handleChange('password')}
-              onBlur={formikProps.handleBlur('password')}
-              value={formikProps.values.password}
-            />
-            <PasswordVisibleToggle
-              isVisible={passwordVisible}
-              onPress={() => togglePasswordVisible(!passwordVisible)}
-            />
-          </View>
+            <Error style={styles.errorMessage}>{formikProps.errors.credential}</Error>}
+          <PasswordTextInput
+            placeholder='Ingresá tu contraseña'
+            placeholderTextColor={PLACEHOLDER_COLOR}
+            onChangeText={formikProps.handleChange('password')}
+            onBlur={formikProps.handleBlur('password')}
+            value={formikProps.values.password}
+            error={formikProps.errors.password && formikProps.touched.password}
+          />
           {formikProps.errors.password && formikProps.touched.password &&
-            <Body style={styles.errorMessage}>{formikProps.errors.password}</Body>}
-          <Error error={error} />
+            <Error style={styles.errorMessage}>{formikProps.errors.password}</Error>}
+          <FormError error={error} />
           <AuthenticatingIndicator authenticating={authenticating} />
           <SubmitButton
             onPress={formikProps.handleSubmit}
-            blankValuesExist={formHasBlankValues(formikProps.values)}
-            error={!formikProps.isValid}
-            disabled={authenticating}
+            disabled={!formikProps.isValid || formHasBlankValues(formikProps.values) || authenticating}
           >
             {submitText}
           </SubmitButton>

@@ -5,7 +5,7 @@ import { verticalScale } from 'react-native-size-matters/extend'
 
 const defaultStyle = {
   marginTop: verticalScale(24),
-  marginBottom: verticalScale(50)
+  marginBottom: verticalScale(40)
 }
 
 const AuthTitle = ({ children, style }) => (
