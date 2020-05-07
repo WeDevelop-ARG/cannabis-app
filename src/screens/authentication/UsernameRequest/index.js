@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { KeyboardAvoidingView, TextInput, ActivityIndicator, View } from 'react-native'
+import { KeyboardAvoidingView, TextInput, ActivityIndicator, View, ScrollView } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import * as AnalyticsService from '~/analyticsService'
 import Background from '~/components/Background'
@@ -155,38 +155,40 @@ const UsernameRequest = () => {
 
   return (
     <Background>
-      <KeyboardAvoidingView style={styles.container}>
-        <Icon />
-        <Subtitle style={styles.title}>Creá tu nombre de usuario</Subtitle>
-        <Description
-          gray
-          style={styles.description}
-        >
-          Escribí un nombre de usuario para identificarte dentro de la plataforma
-        </Description>
-        <TextInput
-          style={styles.textInput}
-          placeholder='Nombre de usuario'
-          placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
-          onChangeText={(text) => handleInputText(text)}
-          value={textInputValue}
-        />
-        {error &&
-          <Error style={styles.error}>  El usuario "{textInputValue}" no está disponible </Error>}
-        {error &&
-          <Subtitle style={styles.suggestionTitle}> Sugerencias </Subtitle>}
-        <Suggestions
-          error={error}
-          suggestions={suggestions}
-          onSuggestionSelected={onSuggestionSelected}
-        />
-        <SubmitIndicator submitting={submitting} />
-        <SubmitButton
-          error={error}
-          disabled={(textInputValue === '')}
-          onPress={submitHandler}
-        />
-      </KeyboardAvoidingView>
+      <ScrollView>
+        <KeyboardAvoidingView style={styles.container}>
+          <Icon />
+          <Subtitle style={styles.title}>Creá tu nombre de usuario</Subtitle>
+          <Description
+            gray
+            style={styles.description}
+          >
+            Escribí un nombre de usuario para identificarte dentro de la plataforma
+          </Description>
+          <TextInput
+            style={styles.textInput}
+            placeholder='Nombre de usuario'
+            placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
+            onChangeText={(text) => handleInputText(text)}
+            value={textInputValue}
+          />
+          {error &&
+            <Error style={styles.error}>  El usuario "{textInputValue}" no está disponible </Error>}
+          {error &&
+            <Subtitle style={styles.suggestionTitle}> Sugerencias </Subtitle>}
+          <Suggestions
+            error={error}
+            suggestions={suggestions}
+            onSuggestionSelected={onSuggestionSelected}
+          />
+          <SubmitIndicator submitting={submitting} />
+          <SubmitButton
+            error={error}
+            disabled={(textInputValue === '')}
+            onPress={submitHandler}
+          />
+        </KeyboardAvoidingView>
+      </ScrollView>
     </Background>
   )
 }
