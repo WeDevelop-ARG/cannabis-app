@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react'
+import React, { memo, useState, useEffect, useCallback } from 'react'
 import FastImage from 'react-native-fast-image'
 import { View, StyleSheet } from 'react-native'
 import { Button, Body } from '~/components'
@@ -17,6 +17,10 @@ const ListItem = ({ item, width, height, selectedIndex, onPress }) => {
   const [baseStyle] = useState(StyleSheet.create({ width, height }))
   const [mutableStyle, setMutableStyle] = useState({})
 
+  const handlePress = useCallback(() => {
+    onPress(item)
+  }, [item, onPress])
+
   useEffect(() => {
     if (!selectedIndex) {
       setMutableStyle(styles.noPadding)
@@ -28,7 +32,7 @@ const ListItem = ({ item, width, height, selectedIndex, onPress }) => {
   return (
     <Button
       style={[styles.imageButton, baseStyle, mutableStyle]}
-      onPress={onPress}
+      onPress={handlePress}
     >
       <MemoizedImage item={item} />
       {(selectedIndex > 0) && (

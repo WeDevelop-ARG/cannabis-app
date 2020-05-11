@@ -30,9 +30,11 @@ if (firebase.apps.length === 0) {
 
 const StackNavigator = buildStackNavigator(
   {
+    Login,
     SignUp,
     PrivacyPolicy,
-    PasswordRecovery
+    PasswordRecovery,
+    NoConnection
   }
 )
 
@@ -40,7 +42,6 @@ const MainNavigator = createSwitchNavigator(
   {
     LoadingScreen,
     MainApp,
-    Login,
     UsernameRequest,
     Onboarding,
     StackNavigator,
