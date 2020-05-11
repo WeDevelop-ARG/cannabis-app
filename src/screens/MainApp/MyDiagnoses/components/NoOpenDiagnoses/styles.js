@@ -9,16 +9,11 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center'
   },
-  CTA: {
+  button: {
     marginTop: verticalScale(50)
   },
   icon: {
     marginTop: verticalScale(168)
-  },
-  title: {
-    marginTop: verticalScale(32),
-    textAlign: 'center',
-    width: '50%'
   },
   description: {
     marginTop: verticalScale(21),

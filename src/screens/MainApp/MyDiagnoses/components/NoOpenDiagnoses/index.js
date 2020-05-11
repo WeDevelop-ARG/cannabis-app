@@ -1,32 +1,29 @@
 import React from 'react'
 import { SvgXml } from 'react-native-svg'
 import Background from '~/components/Background'
-import { Subtitle, Description } from '~/components/texts'
+import { Description } from '~/components/texts'
 import { PrimaryButton } from '~/components/buttons'
 import NavigationService from '~/navigationService'
-import icon from '~/assets/images/MyDiagnoses/NoDiagnosesIcon.svg'
+import emptyBoxIcon from '~/assets/images/emptyBoxIconOutline.svg'
 import styles, { ICON_WIDTH, ICON_HEIGHT } from './styles'
 
 const goToRequest = () => {
   NavigationService.navigate('DiagnoseRequest')
 }
 
-const NoDiagnoseScreen = () => (
+const NoDiagnoses = () => (
   <Background style={styles.container}>
     <SvgXml
       style={styles.icon}
-      xml={icon}
       width={ICON_WIDTH}
       height={ICON_HEIGHT}
+      xml={emptyBoxIcon}
     />
-    <Subtitle style={styles.title}>
-      Aún no realizaste ninguna consulta!
-    </Subtitle>
     <Description gray style={styles.description}>
-      Tus nuevas consultas van a aparecer acá. ¡Sacate todas las dudas con nuestros expertos!
+      ¡Parece que resolviste todas tus consultas!
     </Description>
     <PrimaryButton
-      style={styles.CTA}
+      style={styles.button}
       onPress={goToRequest}
     >
       <Description white>Hacé una nueva consulta</Description>
@@ -34,4 +31,4 @@ const NoDiagnoseScreen = () => (
   </Background>
 )
 
-export default NoDiagnoseScreen
+export default NoDiagnoses

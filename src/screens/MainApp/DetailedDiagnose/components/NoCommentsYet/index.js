@@ -2,8 +2,8 @@ import React from 'react'
 import { View } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import { Body } from '~/components/texts'
-import background from '~/assets/images/DetailedDiagnose/noCommentsYetBackground.svg'
-import outline from '~/assets/images/DetailedDiagnose/noCommentsYetOutline.svg'
+import background from '~/assets/images/emptyBoxIconBackground.svg'
+import outline from '~/assets/images/emptyBoxIconOutline.svg'
 import styles, { ICON_HEIGHT, ICON_WIDTH } from './styles'
 
 const NoCommentsYet = () => (
