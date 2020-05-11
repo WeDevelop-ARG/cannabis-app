@@ -230,8 +230,8 @@ const MyDiagnoses = ({ navigation }) => {
               swipeEnabled={false}
               lazy
             />
-            {isEmpty(closedDiagnoses) && tab === 'ResolvedDiagnoses' && <NoDiagnoses tab={tab} />}
-            {isEmpty(openDiagnoses) && tab === 'OpenDiagnoses' && <NoDiagnoses tab={tab} />}
+            {isEmpty(closedDiagnoses) && !downloadingDiagnoses && tab === 'ResolvedDiagnoses' && <NoDiagnoses tab={tab} />}
+            {isEmpty(openDiagnoses) && !downloadingDiagnoses && tab === 'OpenDiagnoses' && <NoDiagnoses tab={tab} />}
           </View>
         }
         renderItem={({ item }) => <RenderDiagnose animationDuration={DIAGNOSE_ANIMATION_DURATION} item={item} />}
