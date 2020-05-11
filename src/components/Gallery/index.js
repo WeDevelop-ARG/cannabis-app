@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, memo } from 'react'
 import CameraRoll from '@react-native-community/cameraroll'
 import { FlatList, Alert, PermissionsAndroid } from 'react-native'
 import PropTypes from 'prop-types'
+import { identity } from 'lodash'
 import * as ImageService from '~/imageService'
 import { requestReadPermissions, requestWritePermissions } from '~/permissionsService'
 import ListItem from './components/ListItem'
@@ -9,7 +10,7 @@ import ContinueButton from './components/ContinueButton'
 import TakePhotoButton from './components/TakePhotoButton'
 import styles, { SCREEN_WIDTH } from './styles'
 
-const PAGE_SIZE = 5
+const PAGE_SIZE = 10
 const MAX_SELECTION_COUNT = 10
 const MIN_SELECTION_COUNT = 3
 const DEFAULT_COLUMNS_COUNT = 3
@@ -159,27 +160,29 @@ const Gallery = ({ params, minSelectionCount, maxSelectionCount, onSubmit, conta
       )
     }
 
-    const toggleItem = () => toggleSelect(item)
-
     return (
       <ListItem
         item={item}
         width={size}
         height={size}
         selectedIndex={selectedImages.indexOf(item) + 1}
-        onPress={toggleItem}
+        onPress={toggleSelect}
       />
     )
   }, [size, toggleSelect, selectedImages])
+
+  const memoContentContainerStyle = useMemo(() => ([styles.listContainer, containerStyle]), [containerStyle])
 
   return (
     <>
       <FlatList
         data={images}
-        keyExtractor={item => item}
-        contentContainerStyle={[styles.listContainer, containerStyle]}
+        keyExtractor={identity}
+        contentContainerStyle={memoContentContainerStyle}
         onEndReached={loadMore}
         renderItem={renderItem}
+        windowSize={50}
+        removeClippedSubviews
       />
       {(selectedImages.length >= minSelectionCount) && (
         <ContinueButton onPress={onSubmitPress} />
