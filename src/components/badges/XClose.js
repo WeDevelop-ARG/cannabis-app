@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { SvgXml } from 'react-native-svg'
-import { moderateScale } from 'react-native-size-matters/extend'
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters/extend'
 import { theme } from '~/constants'
 import crossSVG from '~/assets/images/DetailedDiagnose/x.svg'
 
@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth * 2
   },
   cross: {
-    marginVertical: moderateScale(3, 1),
-    marginHorizontal: moderateScale(3, 1),
+    marginVertical: verticalScale(3),
+    marginHorizontal: scale(3.7),
     padding: 0
   }
 })

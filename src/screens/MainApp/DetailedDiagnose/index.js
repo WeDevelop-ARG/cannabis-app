@@ -194,16 +194,7 @@ const DetailedDiagnose = ({ navigation }) => {
 
   const onNewComment = async (commentBody) => {
     try {
-      const imageReferences = []
-
-      if (commentBody.images) {
-        await Promise.all(
-          commentBody.images.map(async (imageURI) => {
-            const imageReference = await StorageService.uploadImageAndReturnReference(imageURI)
-            imageReferences.push(imageReference)
-          })
-        )
-      }
+      const imageReferences = await StorageService.uploadImagesAndReturnReferences(commentBody.images)
 
       const responseBody = {
         answer: commentBody.comment,

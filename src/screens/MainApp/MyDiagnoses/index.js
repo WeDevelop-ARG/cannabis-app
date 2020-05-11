@@ -15,6 +15,7 @@ import DetailedDiagnose from '../DetailedDiagnose'
 import SolutionRequest from './screens/SolutionRequest'
 import FinishScreen from './screens/FinishScreen'
 import FullScreenImagesView from './screens/FullScreenImagesView'
+import SolutionGallery from './screens/SolutionGallery'
 import HeaderForScrolling from './components/HeaderForScrolling'
 import { buildStackNavigator } from '~/components/StackNavigator'
 import { OFFSET_THRESHOLD_TO_CHANGE_HEADER } from './constants'
@@ -207,7 +208,8 @@ const MyDiagnosesStack = buildStackNavigator(
     DetailedDiagnose,
     SolutionRequest,
     FinishScreen,
-    FullScreenImagesView
+    FullScreenImagesView,
+    SolutionGallery
   },
   {
     initialRouteName: 'MyDiagnoses'

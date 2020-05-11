@@ -6,6 +6,25 @@ import StorageError from '~/AppErrors/StorageError'
 
 const mime = 'image/jpg'
 
+export const uploadImagesAndReturnReferences = async (imagesPaths, onProgress) => {
+  try {
+    const imageReferences = []
+
+    if (imagesPaths) {
+      await Promise.all(
+        imagesPaths.map(async (imagePath) => {
+          const imageReference = await uploadImageAndReturnReference(imagePath, onProgress)
+          imageReferences.push(imageReference)
+        })
+      )
+    }
+
+    return imageReferences
+  } catch (error) {
+    throw new StorageError('Could not upload images.')
+  }
+}
+
 export const uploadImageAndReturnReference = async (imageURI, onProgress) => {
   try {
     const currentUserUID = AuthenticationService.getCurrentUserUID()

@@ -3,11 +3,11 @@ import { View, FlatList } from 'react-native'
 import ImageWithCloseBadge from '~/components/ImageWithCloseBadge'
 import styles from './styles'
 
-const NewCommentImageList = ({ images, onImagePress, style }) => {
+const ImageList = ({ images, onImagePress, style }) => {
   if (!images) return (null)
 
   return (
-    <View style={[styles.imageContainer, style]}>
+    <View style={style}>
       <FlatList
         horizontal
         data={images}
@@ -25,4 +25,4 @@ const NewCommentImageList = ({ images, onImagePress, style }) => {
   )
 }
 
-export default NewCommentImageList
+export default ImageList

@@ -2,6 +2,8 @@ import { StyleSheet } from 'react-native'
 import { verticalScale, moderateScale, scale } from 'react-native-size-matters'
 import { theme } from '~/constants'
 
+export const INPUT_PLACEHOLDER_COLOR = theme.colors.gray
+
 const styles = StyleSheet.create({
   scroll: {
     padding: theme.sizes.margin * 2
@@ -29,13 +31,21 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(12)
   },
   button: {
-    width: '100%'
+    width: '100%',
+    marginTop: verticalScale(14)
   },
   shadow: {
     marginTop: verticalScale(50)
   },
   cancel: {
     marginRight: scale(20)
+  },
+  addImagesButton: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colors.gray,
+    width: '100%',
+    marginTop: verticalScale(16),
+    marginBottom: 0
   }
 })
 

@@ -1,36 +1,66 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { TextInput, Alert, ScrollView, View, BackHandler } from 'react-native'
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters/extend'
 import { SvgXml } from 'react-native-svg'
 import { BoxShadow } from 'react-native-shadow'
-import { PrimaryButton, Body, Description, Subtitle } from '~/components'
+import { without } from 'lodash'
+import { Body, Description, Subtitle } from '~/components'
+import AlphaButton from '~/components/buttons/AlphaButton'
+import ProgressButton from '~/components/buttons/ProgressButton'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
+import * as StorageService from '~/storageService'
 import Background from '~/components/Background'
-import { theme } from '~/constants'
-import styles from './styles'
+import ImageList from './components/ImageList'
 import logo from '~/assets/images/SolutionRequest/logo.svg'
+import styles, { INPUT_PLACEHOLDER_COLOR } from './styles'
 
 const SolutionRequest = ({ navigation }) => {
-  AnalyticsService.setCurrentScreenName('Solution Request')
+  const images = navigation.state.params.images
+  const diagnose = navigation.state.params.diagnose
 
   const [description, setDescription] = useState('')
   const [inputEnabled, setInputEnabled] = useState(true)
   const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [solvedImages, setSolvedImages] = useState(images)
+  const currentProgress = useRef(0)
 
-  const diagnose = navigation.state.params.diagnose
+  useEffect(() => {
+    AnalyticsService.setCurrentScreenName('Solution Request')
+  }, [])
 
-  const handleInput = (text) => {
+  const removeImageFromList = useCallback((image) => {
+    const chosenImages = without(solvedImages, image)
+    setSolvedImages(chosenImages)
+  }, [solvedImages])
+
+  const goToGallery = useCallback(() => {
+    navigation.navigate('SolutionGallery', { selectedImages: solvedImages })
+  }, [solvedImages])
+
+  useEffect(() => {
+    setSolvedImages(images)
+  }, [images])
+
+  const onProgress = useCallback((snapshot) => {
+    setUploadProgress(currentProgress.current + (snapshot.bytesTransferred / snapshot.totalBytes) * 90 / solvedImages.length)
+  }, [currentProgress.current, solvedImages])
+
+  const handleInput = useCallback((text) => {
     setDescription(text)
-  }
+  }, [])
 
   const handleUpload = async () => {
     setInputEnabled(false)
     setUploading(true)
     let doNavigate = false
     try {
+      const imageReferences = await StorageService.uploadImagesAndReturnReferences(solvedImages, onProgress)
+
       const responseBody = {
-        answer: description
+        answer: description,
+        imageReferences
       }
 
       await DatabaseService.addDiagnoseResponse(diagnose.id, responseBody)
@@ -93,20 +123,30 @@ const SolutionRequest = ({ navigation }) => {
             style={styles.input}
             editable={inputEnabled}
             placeholder='La solución fue...'
-            placeholderTextColor={theme.colors.gray}
+            placeholderTextColor={INPUT_PLACEHOLDER_COLOR}
             numberOfLines={2}
             multiline
           />
         </BoxShadow>
-        <PrimaryButton
+        <ImageList images={solvedImages} onImagePress={removeImageFromList} />
+        <AlphaButton
+          style={styles.addImagesButton}
+          onPress={goToGallery}
+        >
+          <Description gray>
+            Agregar imágenes
+          </Description>
+        </AlphaButton>
+        <ProgressButton
           style={styles.button}
           onPress={handleUpload}
           disabled={!uploadEnabled}
+          progress={uploadProgress}
         >
           <Description white>
             {uploading ? 'Enviando...' : 'Enviar'}
           </Description>
-        </PrimaryButton>
+        </ProgressButton>
       </ScrollView>
     </Background>
   )
