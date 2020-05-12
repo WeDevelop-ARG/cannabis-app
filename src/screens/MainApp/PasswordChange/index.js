@@ -4,6 +4,7 @@ import NavigationService from '~/navigationService'
 import * as AuthenticationService from '~/authenticationService'
 import * as AnalyticsService from '~/analyticsService'
 import Background from '~/components/Background'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import Header from './components/Header'
 import Form from './components/Form'
 import styles from './styles'
@@ -20,7 +21,7 @@ const PasswordChange = ({ navigation }) => {
     navigation.pop()
   }
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = decorateWithNoConnectionCheckAndNavigation(async (values) => {
     setSubmitting(true)
     setErrorText('')
 
@@ -42,7 +43,7 @@ const PasswordChange = ({ navigation }) => {
     } finally {
       setSubmitting(false)
     }
-  }
+  })
 
   return (
     <Background style={styles.container}>

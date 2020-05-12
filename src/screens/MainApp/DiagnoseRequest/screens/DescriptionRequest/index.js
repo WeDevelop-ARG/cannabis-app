@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { TextInput, Alert, ScrollView, BackHandler } from 'react-native'
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters/extend'
 import { BoxShadow } from 'react-native-shadow'
@@ -7,6 +7,7 @@ import * as AnalyticsService from '~/analyticsService'
 import * as StorageService from '~/storageService'
 import * as DatabaseService from '~/databaseService'
 import Background from '~/components/Background'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import { theme } from '~/constants'
 import styles from './styles'
 
@@ -17,12 +18,13 @@ const DescriptionRequest = ({ navigation }) => {
   const [uploadEnabled, setUploadEnabled] = useState(false)
   const [inputEnabled, setInputEnabled] = useState(true)
   const currentProgress = useRef(0)
-
-  AnalyticsService.setCurrentScreenName('Description Request')
-
   const imagesUris = navigation.getParam('images', [])
 
-  React.useEffect(() => {
+  useEffect(() => {
+    AnalyticsService.setCurrentScreenName('Description Request')
+  }, [])
+
+  useEffect(() => {
     if (uploading) {
       navigation.setParams({
         hideBack: true
@@ -54,7 +56,7 @@ const DescriptionRequest = ({ navigation }) => {
     }
   }
 
-  const handleUpload = async () => {
+  const handleUpload = decorateWithNoConnectionCheckAndNavigation(async () => {
     setUploadEnabled(false)
     setInputEnabled(false)
     setUploading(true)
@@ -79,7 +81,7 @@ const DescriptionRequest = ({ navigation }) => {
     } else {
       Alert.alert('No se han podido subir las imagenes. Intente nuevamente o seleccione otras imágenes.')
     }
-  }
+  })
 
   return (
     <Background style={styles.container}>

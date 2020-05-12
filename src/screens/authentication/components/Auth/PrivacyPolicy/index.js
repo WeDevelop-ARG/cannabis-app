@@ -1,12 +1,13 @@
 import React from 'react'
 import { View } from 'react-native'
 import NavigationService from '~/navigationService'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import { Body } from '~/components'
 import styles from './styles'
 
-const goToPrivacyPolicyScreen = () => {
+const goToPrivacyPolicyScreen = decorateWithNoConnectionCheckAndNavigation(() => {
   NavigationService.navigate('PrivacyPolicy', { prevScreen: 'SignUp' })
-}
+})
 
 const PrivacyPolicy = () => (
   <View style={styles.container}>

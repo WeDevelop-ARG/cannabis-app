@@ -1,25 +1,26 @@
 import React, { useState } from 'react'
-import EmailForm from './componentes/EmailForm'
 import * as firebase from 'firebase'
 import { SvgXml } from 'react-native-svg'
+import NavigationService from '~/navigationService'
 import { Title, Description } from '~/components/texts'
 import Background from '~/components/Background'
-import styles, { ICON_HEIGHT, ICON_WIDTH } from './styles'
-import image from '~/assets/images/RecoverPassword/recover.svg'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import GoBackToSignIn from './componentes/GoBackToSignIn'
-import NavigationService from '~/navigationService'
+import EmailForm from './componentes/EmailForm'
+import image from '~/assets/images/RecoverPassword/recover.svg'
+import styles, { ICON_HEIGHT, ICON_WIDTH } from './styles'
 
 const PasswordRecovery = () => {
   const [error, setError] = useState(false)
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = decorateWithNoConnectionCheckAndNavigation(async (values) => {
     try {
       await firebase.auth().sendPasswordResetEmail(values.email)
       NavigationService.navigate('Login', { passwordRecoveryEmailSent: true })
     } catch (error) {
       setError(error)
     }
-  }
+  })
 
   return (
     <Background style={styles.container}>

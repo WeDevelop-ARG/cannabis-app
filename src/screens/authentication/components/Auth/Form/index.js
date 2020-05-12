@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { KeyboardAvoidingView } from 'react-native'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
@@ -9,8 +9,7 @@ import { Description, PrimaryButton } from '~/components'
 import Error from '~/components/texts/Error'
 import AuthenticatingIndicator from '../../AuthenticatingIndicator'
 import styles, { PLACEHOLDER_COLOR } from './styles'
-import useNetworkListener from '~/hooks/useNetworkListener'
-import navigationService from '~/navigationService'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 
 const initialValues = {
   credential: '',
@@ -54,13 +53,6 @@ const Form = ({
   submitText,
   applyValidation
 }) => {
-  const [isInternetAvailable] = useNetworkListener()
-
-  const onSubmit = useCallback((formikHandleSubmit) => {
-    if (!isInternetAvailable) navigationService.navigate('NoConnection')
-    else formikHandleSubmit()
-  }, [isInternetAvailable])
-
   return (
     <Formik
       initialValues={initialValues}
@@ -92,7 +84,7 @@ const Form = ({
           <FormError error={error} />
           <AuthenticatingIndicator authenticating={authenticating} />
           <SubmitButton
-            onPress={() => onSubmit(formikProps.handleSubmit)}
+            onPress={() => decorateWithNoConnectionCheckAndNavigation(formikProps.handleSubmit)()}
             disabled={!formikProps.isValid || formHasBlankValues(formikProps.values) || authenticating}
           >
             {submitText}

@@ -4,6 +4,7 @@ import { SvgXml } from 'react-native-svg'
 import * as firebase from 'firebase'
 import { createStackNavigator } from 'react-navigation-stack'
 import { includes } from 'lodash'
+import NoConnection from '~/screens/NoConnection'
 import NavigationService, { ForceRerenderOnNavigation } from '~/navigationService'
 import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
@@ -12,19 +13,20 @@ import { Button, Title, Subtitle, Description, Date } from '~/components'
 import Background from '~/components/Background'
 import Checkmark from '~/components/Checkmark'
 import PrivacyPolicy from '~/screens/PrivacyPolicy'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import PasswordChange from '../PasswordChange'
 import policyLogo from '~/assets/images/Profile//policy_logo.svg'
 import logOutLogo from '~/assets/images/Profile//logout_logo.svg'
 import passwordChangeLogo from '~/assets/images/Profile//password_change_logo.svg'
 import styles from './styles'
 
-const goToPrivacyPolicyURL = () => {
+const goToPrivacyPolicyURL = decorateWithNoConnectionCheckAndNavigation(() => {
   NavigationService.navigate('PrivacyPolicy')
-}
+})
 
 const goToPasswordChangeScreen = () => NavigationService.navigate('PasswordChange')
 
-const logOut = async () => {
+const logOut = decorateWithNoConnectionCheckAndNavigation(async () => {
   try {
     await MessagingService.deleteFCMTokenForCurrentUser()
     await firebase.auth().signOut()
@@ -32,7 +34,7 @@ const logOut = async () => {
   } catch (error) {
     console.log(error.message)
   }
-}
+})
 
 const ListItem = ({ text, onPress, imgSource }) => {
   return (
@@ -112,7 +114,8 @@ const Navigator = createStackNavigator(
   {
     Profile,
     PrivacyPolicy,
-    PasswordChange
+    PasswordChange,
+    NoConnection
   }
 )
 

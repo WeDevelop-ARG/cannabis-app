@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { KeyboardAvoidingView, TextInput, ActivityIndicator, View, ScrollView } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import * as AnalyticsService from '~/analyticsService'
-import Background from '~/components/Background'
-import { Description, Subtitle, Error } from '~/components/texts'
-import { PrimaryButton, Button } from '~/components/buttons'
 import * as AuthenticationService from '~/authenticationService'
 import * as DatabaseService from '~/databaseService'
 import NavigationService from '~/navigationService'
+import Background from '~/components/Background'
+import { Description, Subtitle, Error } from '~/components/texts'
+import { PrimaryButton, Button } from '~/components/buttons'
+import SuggestionBox from '~/components/SuggestionBox'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import usernameIcon from '~/assets/images/UsernameRequest/usernameIcon.svg'
 import styles, { PLACEHOLDER_TEXT_COLOR, ICON_WIDTH, ICON_HEIGHT } from './styles'
-import SuggestionBox from '~/components/SuggestionBox'
 
 const NUMBER_OF_POSSIBLE_USERNAMES = 9
 const RANDOMIZER_NUMBER = 100
@@ -87,7 +88,7 @@ const UsernameRequest = () => {
   const [suggestions, setSuggestions] = useState([null])
   const [usernameExists, setUsernameExists] = useState(null)
 
-  const submitHandler = async () => {
+  const submitHandler = decorateWithNoConnectionCheckAndNavigation(async () => {
     setSubmitting(true)
     setError(null)
     let newUsernameCreated = false
@@ -113,7 +114,7 @@ const UsernameRequest = () => {
         NavigationService.navigate('MainApp')
       }
     }
-  }
+  })
 
   const handleInputText = (text) => {
     setTextInputValue(text)

@@ -12,6 +12,7 @@ import NoDiagnoses from './components/NoDiagnoses'
 import StaticHeader from './components/StaticHeader'
 import RenderDiagnose from './components/RenderDiagnose'
 import DetailedDiagnose from '../DetailedDiagnose'
+import NoConnection from '~/screens/NoConnection'
 import SolutionRequest from './screens/SolutionRequest'
 import FinishScreen from './screens/FinishScreen'
 import FullScreenImagesView from './screens/FullScreenImagesView'
@@ -209,7 +210,8 @@ const MyDiagnosesStack = buildStackNavigator(
     SolutionRequest,
     FinishScreen,
     FullScreenImagesView,
-    SolutionGallery
+    SolutionGallery,
+    NoConnection
   },
   {
     initialRouteName: 'MyDiagnoses'

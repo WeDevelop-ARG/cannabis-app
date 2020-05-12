@@ -62,7 +62,7 @@ const ProgressButton = (props) => {
     style
   ]
 
-  if (pressed) {
+  if (pressed && progress) {
     buttonStyle.push(styles.pressed)
   }
 

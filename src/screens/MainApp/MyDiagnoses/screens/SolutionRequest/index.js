@@ -11,6 +11,7 @@ import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
 import * as StorageService from '~/storageService'
 import Background from '~/components/Background'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import ImageList from './components/ImageList'
 import logo from '~/assets/images/SolutionRequest/logo.svg'
 import styles, { INPUT_PLACEHOLDER_COLOR } from './styles'
@@ -51,7 +52,7 @@ const SolutionRequest = ({ navigation }) => {
     setDescription(text)
   }, [])
 
-  const handleUpload = async () => {
+  const handleUpload = decorateWithNoConnectionCheckAndNavigation(async () => {
     setInputEnabled(false)
     setUploading(true)
     let doNavigate = false
@@ -78,7 +79,7 @@ const SolutionRequest = ({ navigation }) => {
       setInputEnabled(true)
       if (doNavigate) navigation.navigate('FinishScreen')
     }
-  }
+  })
 
   const uploadEnabled = (description !== '' && !uploading)
 

@@ -10,7 +10,7 @@ import { Title } from '~/components/texts'
 import Logo from '~/components/Logo'
 import styles, { LOGO_WIDTH, LOGO_HEIGHT } from './styles'
 import * as notificationService from '~/notificationService'
-import NetInfo from '@react-native-community/netinfo'
+import isInternetReachable from '~/networkingService/isInternetReachable'
 
 const MILLISECONDS_SHOWING_SPLASH_SCREEN = 1500
 
@@ -26,9 +26,9 @@ const getCurrentUser = () => {
 const getUsernameFromUser = user => DatabaseService.queryUsernameFromEmail(user.email)
 
 const getNextScreen = async () => {
-  const netStatus = await NetInfo.fetch()
+  const noInternet = !await isInternetReachable()
 
-  if (!netStatus.isConnected) return 'NoConnection'
+  if (noInternet) return 'NoConnectionAtStart'
 
   const onboardingSeen = await CacheService.getItem('OnboardingSeen')
 

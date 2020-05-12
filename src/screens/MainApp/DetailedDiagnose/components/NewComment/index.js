@@ -5,6 +5,7 @@ import { theme } from '~/constants'
 import SvgButton from '~/components/buttons/SvgButton'
 import CameraButton from '~/components/buttons/CameraButton'
 import Gallery from '~/components/Gallery'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import NewCommentImageList from '../NewCommentImageList'
 import arrowUpSvg from '~/assets/images/DetailedDiagnose/arrowUp.svg'
 import styles, {
@@ -78,7 +79,7 @@ const NewComment = ({ onNewComment }) => {
     }
   }, [commentImages.length, showImageSelection])
 
-  const handlePress = async () => {
+  const handlePress = decorateWithNoConnectionCheckAndNavigation(async () => {
     const commentBody = {
       comment: comment.slice(),
       images: commentImages
@@ -95,7 +96,7 @@ const NewComment = ({ onNewComment }) => {
     setShowImageSelection(false)
     setInputEnabled(true)
     setSubmitting(false)
-  }
+  })
 
   const toggleGallery = () => {
     Keyboard.dismiss()

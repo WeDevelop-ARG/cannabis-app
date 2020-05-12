@@ -16,6 +16,7 @@ import MainApp from './screens/MainApp'
 import PasswordRecovery from './screens/PasswordRecovery'
 import PrivacyPolicy from './screens/PrivacyPolicy'
 import NoConnection from './screens/NoConnection'
+import NoConnectionAtStart from './screens/NoConnectionAtStart'
 import { buildStackNavigator } from '~/components/StackNavigator'
 import * as notificationService from '~/notificationService'
 import { ActionSheetProvider } from '@expo/react-native-action-sheet'
@@ -45,7 +46,7 @@ const MainNavigator = createSwitchNavigator(
     UsernameRequest,
     Onboarding,
     StackNavigator,
-    NoConnection
+    NoConnectionAtStart
   }
 )
 

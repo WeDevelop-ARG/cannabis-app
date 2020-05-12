@@ -1,0 +1,9 @@
+import NetInfo from '@react-native-community/netinfo'
+
+const isInternetReachable = async () => {
+  const state = await NetInfo.fetch()
+
+  return state.isInternetReachable
+}
+
+export default isInternetReachable

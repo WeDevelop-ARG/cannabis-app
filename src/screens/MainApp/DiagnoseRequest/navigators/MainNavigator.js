@@ -6,6 +6,7 @@ import FinishRequest from '../screens/FinishRequest'
 import ImageReview from '../screens/ImageReview'
 import NoPhotoDisclaimer from '../screens/NoPhotoDisclaimer'
 import Gallery from '../screens/Gallery'
+import NoConnection from '~/screens/NoConnection'
 import { buildStackNavigator } from '~/components/StackNavigator'
 
 const Navigator = buildStackNavigator(
@@ -15,7 +16,8 @@ const Navigator = buildStackNavigator(
     FinishRequest,
     ImageReview,
     Gallery,
-    NoPhotoDisclaimer
+    NoPhotoDisclaimer,
+    NoConnection
   },
   {
     initialRouteName: 'MainScreen'

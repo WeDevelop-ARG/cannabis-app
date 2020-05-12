@@ -4,6 +4,7 @@ import { verticalScale } from 'react-native-size-matters/extend'
 import NavigationService from '~/navigationService'
 import * as DatabaseService from '~/databaseService'
 import { setRequestOpenTimestamp } from '~/cacheService/requestOpenTimestamp/setRequestOpenTimestamp'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import Diagnose from '../Diagnose'
 import Button from '~/components/buttons/Button'
 import { isRequestSolved } from '~/mixins/diagnose/isRequestSolved'
@@ -53,7 +54,7 @@ const RenderDiagnose = ({ item, animationDuration }) => {
     }
   }, [isClosed])
 
-  const goToDetailedDiagnoseScreen = async () => {
+  const goToDetailedDiagnoseScreen = decorateWithNoConnectionCheckAndNavigation(async () => {
     try {
       await setRequestOpenTimestamp(diagnose.id)
       setUnreadCommentCount(0)
@@ -62,7 +63,7 @@ const RenderDiagnose = ({ item, animationDuration }) => {
     }
 
     NavigationService.navigate('DetailedDiagnose', { diagnose })
-  }
+  })
 
   return (
     <Animated.View

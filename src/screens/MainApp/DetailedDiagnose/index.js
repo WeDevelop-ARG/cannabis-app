@@ -6,6 +6,7 @@ import * as AnalyticsService from '~/analyticsService'
 import * as DatabaseService from '~/databaseService'
 import * as StorageService from '~/storageService'
 import NavigationService, { ForceCleanUpOnScreenLeave, ForceRerenderOnNavigation } from '~/navigationService'
+import decorateWithNoConnectionCheckAndNavigation from '~/decorators/decorateWithNoConnectionCheckAndNavigation'
 import Background from '~/components/Background'
 import { Header as HeaderText } from '~/components/texts'
 import VerticalSeparator from '~/components/VerticalSeparator'
@@ -31,9 +32,9 @@ import { OFFSET_THRESHOLD_TO_CHANGE_HEADER, OFFSET_THRESHOLD_TO_HIDE_STATUS_BAR 
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import styles from './styles'
 
-const goToSolveDiagnoseScreen = (diagnose) => {
+const goToSolveDiagnoseScreen = decorateWithNoConnectionCheckAndNavigation((diagnose) => {
   NavigationService.navigate('SolutionRequest', { diagnose })
-}
+})
 
 const removeDiagnose = async (diagnose, navigation) => {
   try {
@@ -77,18 +78,20 @@ const DetailedDiagnose = ({ navigation }) => {
   const { showActionSheetWithOptions } = useActionSheet()
   const date = firebaseTimestampToMoment(diagnose.createdAt, 'es').format('D MMM')
 
-  const reopenDiagnose = useCallback(async (diagnose) => {
-    try {
-      await DatabaseService.setDiagnoseSolvedMark(diagnose.id, false)
-      setSolvedText('En discusión')
-      setSolved(false)
-    } catch (error) {
-      Alert.alert(
-        'Error',
-        'No se pudo volver a abrir su solicitud. Intente nuevamente más tarde.'
-      )
+  const reopenDiagnose = useCallback(decorateWithNoConnectionCheckAndNavigation(
+    async (diagnose) => {
+      try {
+        await DatabaseService.setDiagnoseSolvedMark(diagnose.id, false)
+        setSolvedText('En discusión')
+        setSolved(false)
+      } catch (error) {
+        Alert.alert(
+          'Error',
+          'No se pudo volver a abrir su solicitud. Intente nuevamente más tarde.'
+        )
+      }
     }
-  }, [])
+  ), [])
 
   const handleReturn = () => {
     navigation.goBack()
