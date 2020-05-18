@@ -71,7 +71,6 @@ const MyDiagnoses = ({ navigation }) => {
   const downloadingDiagnoses = openDiagnosesLoading || closedDiagnosesLoading
 
   useEffect(() => {
-    AnalyticsService.setCurrentScreenName('My Diagnoses')
     if (index === 0) {
       setDiagnoses(openDiagnoses)
       setTab('OpenDiagnoses')
@@ -81,6 +80,10 @@ const MyDiagnoses = ({ navigation }) => {
     }
   },
   [index, openDiagnoses, closedDiagnoses])
+
+  useEffect(() => {
+    AnalyticsService.setCurrentScreenName('My Diagnoses')
+  }, [])
 
   const setDiagnoseIsClosed = useCallback((diagnoseId, isClosed) => {
     const newDiagnoses = [...diagnoses]

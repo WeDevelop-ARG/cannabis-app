@@ -32,7 +32,7 @@ const processRemovedDiagnose = (diagnoses, doc) => {
   return diagnoses.filter((diagnose) => diagnose.id !== doc.id)
 }
 
-function useQueryListener ({ fetch, defaultLoadingStatus = false, defaultResults = [] }) {
+function useQueryListener ({ fetch, defaultLoadingStatus = true, defaultResults = [] }) {
   const [loading, setLoading] = useState(defaultLoadingStatus)
   const [results, setResults] = useState(defaultResults)
 
